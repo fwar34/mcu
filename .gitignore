@@ -6,3 +6,5 @@
 */GTAGS
 */TAGS
 */*.log
+*/Objects/*
+*/Listings/*
