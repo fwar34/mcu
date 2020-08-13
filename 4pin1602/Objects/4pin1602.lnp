@@ -1,3 +1,0 @@
-".\Objects\main.obj" 
-TO ".\Objects\4pin1602" 
-PRINT(".\Listings\4pin1602.m51") RAMSIZE(256) 
