@@ -1,0 +1,212 @@
+C51 COMPILER V9.60.0.0   MAIN                                                              08/14/2020 21:28:14 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main
+                    -.lst) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          
+   2          //四总线，只写方式
+   3          //2014.03.11
+   4          //6M晶振,STC12C5604AD(225);
+   5          //
+   6          #include <reg51.h>
+   7          /************自定义字符*********************/
+   8          //汉字字符，12x16点阵，前两列为空，占用4个字符，
+   9          unsigned char code font12x16[][8]=
+  10          {
+  11              {0x00,0x00,0x00,0x07,0x01,0x02,0x04,0x07},//左上 //
+  12              {0x00,0x10,0x08,0x1f,0x00,0x00,0x04,0x1e},//右上  //
+  13              {0x01,0x01,0x01,0x01,0x01,0x02,0x04,0x00},//左下 //
+  14              {0x08,0x08,0x08,0x08,0x08,0x09,0x07,0x00},//右下 // 充
+  15              {0x00,0x00,0x00,0x07,0x04,0x04,0x04,0x07},//左上 //
+  16              {0x00,0x10,0x10,0x1e,0x12,0x12,0x12,0x3e},//右上  //
+  17              {0x04,0x04,0x07,0x00,0x00,0x00,0x00,0x00},//左下 //
+  18              {0x12,0x12,0x1e,0x10,0x10,0x11,0x0f,0x00},//右下 // 电
+  19              {0x00,0x07,0x05,0x05,0x07,0x00,0x00,0x07},//左上 //
+  20              {0x00,0x0e,0x0a,0x0a,0x0e,0x00,0x12,0x1f},//右上  //
+  21              {0x01,0x02,0x04,0x07,0x05,0x05,0x07,0x00},//左下 //
+  22              {0x08,0x07,0x00,0x07,0x05,0x05,0x07,0x00},//右下 // 器
+  23          }
+  24          ;
+  25          
+  26          //#define  LCDdata     P1  //数据输入端口
+  27          sbit LCD1602_RS=P3^2;   // 命令或数据状态
+  28          sbit LCD1602_EN=P3^3;   //使能端
+  29          //sbit led =P3^0;   //背光控制
+  30          sbit io7 = P0^7;
+  31          sbit io6 = P0^6;
+  32          sbit io5 = P0^5;
+  33          sbit io4 = P0^4;
+  34          sbit ACC7 = ACC^7;      //累加器第7位
+  35          sbit ACC6 = ACC^6;      //累加器第6位
+  36          sbit ACC5 = ACC^5;      //累加器第5位
+  37          sbit ACC4 = ACC^4;      //累加器第4位
+  38          sbit ACC3 = ACC^3;      //累加器第3位
+  39          sbit ACC2 = ACC^2;      //累加器第2位
+  40          sbit ACC1 = ACC^1;      //累加器第1位
+  41          sbit ACC0 = ACC^0;      //累加器第0位
+  42          
+  43          #define   LINE1        0
+  44          #define   LINE2        1
+  45          #define   LINE1_HEAD       0x80
+  46          #define   LINE2_HEAD       0xC0
+  47          /*****************************1MS延时***************************************/
+  48          void delay_nms(unsigned int n)
+  49          {
+  50   1          unsigned int u;
+  51   1          while (n--)
+  52   1          {
+  53   2              for(u=0;u<123;u++) //12M晶振,89C51(123);6M晶振,STC12C5604AD(299);
+  54   2              {}
+C51 COMPILER V9.60.0.0   MAIN                                                              08/14/2020 21:28:14 PAGE 2   
+
+  55   2          }
+  56   1      }
+  57          /***************用LCD1602高4位数据线写命令**********************/
+  58          void LCD_com(unsigned char command)
+  59          {
+  60   1          LCD1602_RS = 0;    //写命令
+  61   1          delay_nms(1);
+  62   1          LCD1602_EN = 1; //
+  63   1          ACC=command;
+  64   1          io7=ACC7;
+  65   1          io6=ACC6;
+  66   1          io5=ACC5;
+  67   1          io4=ACC4;
+  68   1          LCD1602_EN = 0;//下降沿将数据写入LCD1602
+  69   1          delay_nms(1);
+  70   1          LCD1602_EN = 1; //
+  71   1          ACC=command;
+  72   1          io7=ACC3;
+  73   1          io6=ACC2;
+  74   1          io5=ACC1;
+  75   1          io4=ACC0;
+  76   1          LCD1602_EN = 0;//下降沿将数据写入LCD1602
+  77   1      }
+  78          /************用LCD1602高4位数据线写数据*********************/
+  79          void LCD_dat(unsigned char dat)
+  80          {
+  81   1          LCD1602_RS = 1; //写数据
+  82   1          delay_nms(1);
+  83   1          LCD1602_EN = 1; //
+  84   1          ACC=dat;
+  85   1          io7=ACC7;
+  86   1          io6=ACC6;
+  87   1          io5=ACC5;
+  88   1          io4=ACC4;
+  89   1          LCD1602_EN = 0;//下降沿将数据写入LCD1602
+  90   1          delay_nms(1);
+  91   1          LCD1602_EN = 1; //
+  92   1          ACC=dat;
+  93   1          io7=ACC3;
+  94   1          io6=ACC2;
+  95   1          io5=ACC1;
+  96   1          io4=ACC0;
+  97   1          LCD1602_EN = 0;//下降沿将数据写入LCD1602
+  98   1      
+  99   1      }
+ 100          
+ 101          /****************设置显示地址******************************/
+ 102          void LCD_set_xy(unsigned char x,unsigned char y)
+ 103          {            
+ 104   1          unsigned char address;
+ 105   1          if(y == LINE1)
+ 106   1              address = LINE1_HEAD + x;
+ 107   1          else    
+ 108   1              address = LINE2_HEAD + x;
+ 109   1          LCD_com(address);
+ 110   1      }
+ 111          /********************写一个字符的数据********************************************/
+ 112          void LCD_write_char( unsigned char x,unsigned char y,unsigned char dat)
+ 113          {
+ 114   1          LCD_set_xy(x,y);
+ 115   1          LCD_dat(dat);
+ 116   1      }
+C51 COMPILER V9.60.0.0   MAIN                                                              08/14/2020 21:28:14 PAGE 3   
+
+ 117          
+ 118          /**********************写一个字符串***********************************************/
+ 119          void LCD_write_string(unsigned char x,unsigned char y,unsigned char *s)
+ 120          {
+ 121   1          LCD_set_xy(x,y);
+ 122   1          while(*s)  
+ 123   1          {
+ 124   2              //LCDdata = *s;
+ 125   2              LCD_dat(*s);  
+ 126   2              s++;
+ 127   2          }
+ 128   1      }
+ 129          /*******************/
+ 130          void LCD_init(void)
+ 131          {
+ 132   1          LCD_com(0x02);//设置4位数据接口set 4 bit data transmission mode
+ 133   1          LCD_com(0x28);//设置4位数据接口，两行显示，5x7点阵字符set 8 bit data transmission mod
+             -e
+ 134   1          LCD_com(0x0C);//开显示，不显示光标，字符不闪烁open display (enable lcd display)
+ 135   1          //LCD_com(0x80);//set lcd first display address
+ 136   1          LCD_com(0x01);//清屏clear screen
+ 137   1          delay_nms(2); //
+ 138   1      }
+ 139          void main(void)
+ 140          {
+ 141   1          unsigned char a,cg,cg1;
+ 142   1          LCD_init();
+ 143   1          delay_nms(2);
+ 144   1          LCD_write_string(0,LINE1,"ABCDEFGHIJKLMNOP");
+ 145   1          LCD_write_string(0,LINE2,"QRSTUVWXYZ012345");
+ 146   1          delay_nms(1000);
+ 147   1          LCD_com(0x01);
+ 148   1          delay_nms(2);
+ 149   1          LCD_write_string(0,LINE1,"text");
+ 150   1          LCD_write_string(0,LINE2,"zj97czb");
+ 151   1          //***********************显示汉字**************
+ 152   1          LCD_com(0x60);
+ 153   1          for(cg1=0;cg1<8;cg1++)
+ 154   1          {
+ 155   2              for(cg=0;cg<8;cg++)
+ 156   2              {
+ 157   3                  LCD_dat(font12x16[cg1][cg]);
+ 158   3              }
+ 159   2          }
+ 160   1      
+ 161   1          //****************************************************
+ 162   1          LCD_write_char(12,LINE1,4);
+ 163   1          LCD_write_char(13,LINE1,5);  //充
+ 164   1          LCD_write_char(12,LINE2,6);
+ 165   1          LCD_write_char(13,LINE2,7);
+ 166   1          //****************************************************
+ 167   1          //****************************************************
+ 168   1          LCD_write_char(14,LINE1,0);
+ 169   1          LCD_write_char(15,LINE1,1);  //电
+ 170   1          LCD_write_char(14,LINE2,2);
+ 171   1          LCD_write_char(15,LINE2,3);
+ 172   1          //****************************************************/
+ 173   1          while(1 )    
+ 174   1          {  
+ 175   2              LCD_write_char(5,LINE1,a/100+48);
+ 176   2              LCD_write_char(6,LINE1,a/10%10+48);
+ 177   2              LCD_write_char(7,LINE1,a%10+48);
+C51 COMPILER V9.60.0.0   MAIN                                                              08/14/2020 21:28:14 PAGE 4   
+
+ 178   2              delay_nms(100);    
+ 179   2              a++;    
+ 180   2          }
+ 181   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    482    ----
+   CONSTANT SIZE    =    143    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       6
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
