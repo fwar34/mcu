@@ -49,7 +49,7 @@
         <MultiCoreRunAll>1</MultiCoreRunAll>
     </Simulator>
     <DebugChecksum>
-        <Checksum>3274113300</Checksum>
+        <Checksum>3953692190</Checksum>
     </DebugChecksum>
     <CallStack>
         <ShowArgs>0</ShowArgs>
@@ -70,7 +70,7 @@
     </TermIOLog>
     <Breakpoints>
         <Bp0>_ "STD_CODE" "{$PROJ_DIR$\ds1302.h}.43.1" 0 0 0 0 "" 0 ""</Bp0>
-        <Bp1>_ "STD_CODE" "{$PROJ_DIR$\main.c}.104.5" 0 0 0 0 "" 0 ""</Bp1>
+        <Bp1>_ "STD_CODE" "{$PROJ_DIR$\main.c}.97.5" 0 0 0 0 "" 0 ""</Bp1>
         <Count>2</Count>
     </Breakpoints>
     <Aliases>

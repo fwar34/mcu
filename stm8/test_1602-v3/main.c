@@ -1,15 +1,6 @@
 #include "stm8s.h"
 #include "delay.h"
   
-#define NULL 0
-#define Pin(p) (1<<p) 
-#define BitGet(bit, i) ((bit>>i)&1)
-#define GPIO_PinSet(GPIOx, pin) SetBit(GPIOx->ODR, pin)
-#define GPIO_PinClr(GPIOx, pin) ClrBit(GPIOx->ODR, pin)
-#define GPIO_PinGet(GPIOx, pin) BitGet(GPIOx->IDR, pin)
-#define GPIO_Pin(GPIOx, pin, v) if(v){SetBit(GPIOx->ODR, pin);}else{ClrBit(GPIOx->ODR, pin);}
-//#define GPIO_PinInit(GPIOx, pin, mode) GPIO_Init(GPIOx, 1<<pin, mode)    lcd1602 #define lcd_clear() lcd_write(0,0x01) void lcd_init(void); lcd_write(unsigned char isdata,unsigned cmd); lcd_locate(unsigned x,unsigned y); lcd_printstring(char* c); util functions util_delay(unsigned int a); #endif
-
 #define RS_PORT GPIOB
 #define E_PORT GPIOB
 #define DB_PORT GPIOB
@@ -20,7 +11,7 @@
 #define DB4_PORT GPIOB
 
 #define RS_PIN GPIO_PIN_0
-#define E_PIN GPIO_PIN_2
+#define E_PIN GPIO_PIN_1
 #define DB7_PIN GPIO_PIN_7
 #define DB6_PIN GPIO_PIN_6
 #define DB5_PIN GPIO_PIN_5
@@ -28,35 +19,31 @@
 
 void LCD_Write(unsigned char isData,unsigned char cmd)
 {
-    delay_us(2000); //Hardcoding delay, keep waiting while the LCD is busy
-      
+    delay_us(600); //Hardcoding delay, keep waiting while the LCD is busy
   
-    GPIO_Pin(RS_PORT, RS_PIN, isData);
-    GPIO_PinClr(E_PORT, E_PIN);
+    if (isData) {
+        GPIO_WriteHigh(RS_PORT, RS_PIN);
+    } else {
+        GPIO_WriteLow(RS_PORT, RS_PIN);
+    }
+    GPIO_WriteLow(E_PORT, E_PIN);
+  
+    GPIO_Write(DB_PORT, (GPIO_ReadOutputData(DB_PORT) & 0x0F) | (cmd & 0xF0));
+    nop();
+    nop();
+    GPIO_WriteHigh(E_PORT, E_PIN);     //E = 1
+    nop();
+    nop();
+    GPIO_WriteLow(E_PORT, E_PIN);     //E = 0
   
   
-    GPIO_Pin(DB7_PORT, DB7_PIN, BitGet(cmd, 7));
-    GPIO_Pin(DB6_PORT, DB6_PIN, BitGet(cmd, 6));
-    GPIO_Pin(DB5_PORT, DB5_PIN, BitGet(cmd, 5));
-    GPIO_Pin(DB4_PORT, DB4_PIN, BitGet(cmd, 4));
+    GPIO_Write(DB_PORT, (GPIO_ReadOutputData(DB_PORT) & 0x0F | (cmd << 4 & 0xF0)));
     nop();
     nop();
-    GPIO_PinSet(E_PORT, E_PIN);     //E = 1
+    GPIO_WriteHigh(E_PORT, E_PIN);     //E = 1
     nop();
     nop();
-    GPIO_PinClr(E_PORT, E_PIN);     //E = 0
-  
-  
-    GPIO_Pin(DB7_PORT, DB7_PIN, BitGet(cmd, 3));
-    GPIO_Pin(DB6_PORT, DB6_PIN, BitGet(cmd, 2));
-    GPIO_Pin(DB5_PORT, DB5_PIN, BitGet(cmd, 1));
-    GPIO_Pin(DB4_PORT, DB4_PIN, BitGet(cmd, 0)); 
-    nop();
-    nop();
-    GPIO_PinSet(E_PORT, E_PIN);     //E = 1
-    nop();
-    nop();
-    GPIO_PinClr(E_PORT, E_PIN);     //E = 0
+    GPIO_WriteLow(E_PORT, E_PIN);     //E = 0
 }
   
 void LCD_Init(void)
@@ -68,14 +55,20 @@ void LCD_Init(void)
     GPIO_Init(DB5_PORT,DB5_PIN,GPIO_MODE_OUT_PP_HIGH_FAST);
     GPIO_Init(DB4_PORT,DB4_PIN,GPIO_MODE_OUT_PP_HIGH_FAST);  
       
-    delay_us(1000);
+    //delay_ms(100);
+    GPIO_WriteHigh(E_PORT, E_PIN);     //E = 1
+    
       
     LCD_Write(0,0x33);
+    //delay_ms(4);
     LCD_Write(0,0x32);
+    //delay_ms(4);
     LCD_Write(0,0x28);           
     LCD_Write(0,0x0c);
+    LCD_Write(0,0x06);
     LCD_Write(0,0x01);  
-    LCD_Write(0,0x80);  
+    //LCD_Write(0,0x80);  
+    //delay_ms(200);
 }
 
 
@@ -96,13 +89,13 @@ void LCD_PrintString(char* c)
 
 void main()
 {
+    char msg[] = "test";
     CLK_HSIPrescalerConfig(CLK_PRESCALER_HSIDIV1);//HSI 不分频，主时钟 16M
     delay_init(16);
     LCD_Init();
 
-    LCD_Write(1,0xC1);
-    LCD_Write(1,0xD9); 
-    LCD_Write(1,0xC9);
+    LCD_Locate(1, 0);
+    LCD_PrintString(msg);
 
     while (1);
 }
