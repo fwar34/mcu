@@ -1,38 +1,89 @@
 //程序参考：http://www.dzdiy.com/html/201305/19/LCD1602.htm
 #include <reg52.h>    //包含单片机寄存器的头文件
 #include <intrins.h>
-#define LCD_data P2
+#define LCD_data P0
 sbit RS=P3^2;
-sbit Rw=P3^3;
 sbit E =P3^4;
+
+sbit STA7 = P0 ^ 7;
 
 unsigned char code digit[ ]={"0123456789"}; //定义字符数组显示数字
 //*****************延时************************
-void delay_nus(unsigned int n) //N us延时函数
+void Delay600us()		//@12.000MHz
 {
-	unsigned int i=0;
-		for (i=0;i<n;i++)
-			_nop_();
+	unsigned char i, j;
+
+	_nop_();
+	_nop_();
+	i = 7;
+	j = 253;
+	do
+	{
+		while (--j);
+	} while (--i);
 }
-void delay_nms(unsigned int n) //N ms延时函数
+
+void Delay4ms()		//@12.000MHz
 {
-	unsigned int i,j;
-		for (i=0;i<n;i++)
-			for (j=0;j<1140;j++);
+	unsigned char i, j;
+
+	_nop_();
+	_nop_();
+	i = 47;
+	j = 173;
+	do
+	{
+		while (--j);
+	} while (--i);
 }
+
+void Delay200ms()		//@12.000MHz
+{
+	unsigned char i, j, k;
+
+	i = 10;
+	j = 31;
+	k = 147;
+	do
+	{
+		do
+		{
+			while (--k);
+		} while (--j);
+	} while (--i);
+}
+
+void Delay50ms()		//@12.000MHz
+{
+	unsigned char i, j, k;
+
+	i = 3;
+	j = 72;
+	k = 161;
+	do
+	{
+		do
+		{
+			while (--k);
+		} while (--j);
+	} while (--i);
+}
+
+
 //*************液晶屏使能****************************
 void LCD_en_write(void) 
 {
 	E=1;
-	delay_nus(1);
+	//delay_nus(1);
 	E=0;
 }
 //*************写命令****************************
 void LCD_write_command(unsigned char command)
 {
-	delay_nus(16);
+	Delay600us();
+    //LCD_check_busy();
 	RS=0;
-	Rw=0;
+	//Rw=0;
 	LCD_data&=0X0f; //清高四位
 	LCD_data|=command&0xf0; //写高四位
 	LCD_en_write();
@@ -44,9 +95,10 @@ void LCD_write_command(unsigned char command)
 //*************写数据****************************
 void LCD_write_data(unsigned char value) 
 {
-	delay_nus(16);
+	Delay600us();
+    //LCD_check_busy();
 	RS=1;
-	Rw=0;
+	//Rw=0;
 	LCD_data&=0X0f; //清高四位
 	LCD_data|=value&0xf0; //写高四位
 	LCD_en_write();
@@ -97,16 +149,16 @@ void display_num(unsigned char x,unsigned char y,unsigned int num)
 //*************液晶初始化****************************
 void LCD_init(void) 
 { 
+    LCD_write_command(0x33);
+    Delay4ms();
+    LCD_write_command(0x32);
+    Delay4ms();
 	LCD_write_command(0x28);
-	delay_nus(40); 
-	LCD_write_command(0x28);
-	delay_nus(40); 
 	LCD_en_write();
-	delay_nus(40);
 	LCD_write_command(0x28); //4位显示！！！！！！！！！！！！！！！！！！
 	LCD_write_command(0x0c); //显示开
 	LCD_write_command(0x01); //清屏
-	delay_nms(2);
+	Delay200ms();
 }
 //*************主函数************************
 void main(void)
@@ -117,7 +169,7 @@ void main(void)
 	while(1)
 	{
 		display_num(0,1,i); 
-		delay_nms(50);
+		Delay50ms();
 		i++;
 	}
 }
