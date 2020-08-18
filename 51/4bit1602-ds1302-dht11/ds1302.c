@@ -14,9 +14,13 @@
 #define DS1302_CLKBURST_REG 0xbe
 #define DS1302_RAM_REG 0xc0
 
-sbit DS1302_RST = P1 ^ 0;
-sbit DS1302_IO = P1 ^ 1;
-sbit DS1302_CLK = P1 ^ 2;
+sbit DS1302_RST = P2 ^ 0;
+sbit DS1302_IO = P2 ^ 1;
+sbit DS1302_CLK = P2 ^ 2;
+
+//sbit DS1302_RST = P2 ^ 7;
+//sbit DS1302_IO = P1 ^ 2;
+//sbit DS1302_CLK = P1 ^ 7;
 
 void ds1302_init()
 {
@@ -27,8 +31,7 @@ void ds1302_init()
 void ds1302_write_byte(unsigned char dat) 
 {
     unsigned char i;
-    for (i = 0; i < 8; i++) { 
-        DS1302_CLK = 0;
+    for (i = 0; i < 8; i++) {        DS1302_CLK = 0;
         if (dat & 0x01) {
             DS1302_IO = 1;
         } else {
