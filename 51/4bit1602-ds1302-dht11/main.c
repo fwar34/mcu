@@ -77,7 +77,7 @@ void display(DS1302_TIME* time)
 
     display_sec(((time->second & 0x70) >> 4) * 10 + (time->second & 0x0F));
     display_min(((time->minute & 0x70) >> 4) * 10 + (time->minute & 0x0F));
-    display_hour(((time->hour & 0x10) >> 4) * 10 + (time->hour & 0x0F));
+    display_hour(((time->hour & 0x30) >> 4) * 10 + (time->hour & 0x0F));
     display_day(((time->day & 0x30) >> 4) * 10 + (time->day & 0x0F));
     display_month(((time->month & 0x10) >> 4) * 10 + (time->month & 0x0F));
     display_week(time->week & 0x07);
@@ -101,13 +101,13 @@ void display(DS1302_TIME* time)
 void main(void)
 {
     //初始时间20年8月16号14点16分55秒星期天 
-    DS1302_TIME start_time = {20, 8, 16, 7, 22, 58, 40};
+    DS1302_TIME start_time = {20, 8, 18, 2, 22, 19, 40};
     DS1302_TIME current_time;
     initLcd1602();
 
-    //if (!ds1302_is_running()) {
+    if (!ds1302_is_running()) {
         ds1302_write_time(&start_time);
-    //}
+    }
 
     while (1)
     {
