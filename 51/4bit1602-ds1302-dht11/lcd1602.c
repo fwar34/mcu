@@ -73,6 +73,7 @@ void write_char(unsigned char x, unsigned char y, unsigned char dat)
     lcdWriteDat(dat);
 }
 
+//4 bit mode driver lcd1602
 void initLcd1602()
 {
     lcdWriteCmd(0x33); 	

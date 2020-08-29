@@ -18,12 +18,6 @@ sbit DS1302_RST = P1 ^ 0;
 sbit DS1302_IO = P1 ^ 1;
 sbit DS1302_CLK = P1 ^ 2;
 
-void ds1302_init()
-{
-    DS1302_RST = 0;
-    DS1302_CLK = 0;
-}
-
 void ds1302_write_byte(unsigned char dat) 
 {
     unsigned char i;
@@ -41,7 +35,7 @@ void ds1302_write_byte(unsigned char dat)
 
 unsigned char ds1302_read_byte()
 {
-    unsigned char i,ret=0;
+    unsigned char i, ret = 0;
     for (i = 0; i < 8; i++) {
         DS1302_CLK = 0;
         ret >>= 1;
@@ -96,13 +90,13 @@ unsigned char ds1302_is_running()
 
 void ds1302_read_time(DS1302_TIME* time) 
 { 
-    time->year = ds1302_read(DS1302_YEAR_REG); //? 
-    time->month = ds1302_read(DS1302_MONTH_REG);//? 
-    time->day = ds1302_read(DS1302_DATE_REG); //? 
-    time->week = ds1302_read(DS1302_DAY_REG); //? 
-    time->hour = ds1302_read(DS1302_HR_REG); //? 
-    time->minute = ds1302_read(DS1302_MIN_REG); //? 
-    time->second = ds1302_read(DS1302_SEC_REG); //? 
+    time->year = ds1302_read(DS1302_YEAR_REG);
+    time->month = ds1302_read(DS1302_MONTH_REG);
+    time->day = ds1302_read(DS1302_DATE_REG);
+    time->week = ds1302_read(DS1302_DAY_REG);
+    time->hour = ds1302_read(DS1302_HR_REG);
+    time->minute = ds1302_read(DS1302_MIN_REG);
+    time->second = ds1302_read(DS1302_SEC_REG);
 }
 
 //

@@ -12,7 +12,6 @@ typedef struct _DS1302_TIME
     unsigned char second;
 } DS1302_TIME;
 
-void ds1302_init();
 void ds1302_read_time(DS1302_TIME* time);
 void ds1302_write_time(DS1302_TIME* time);
 void ds1302_write_ram(unsigned char ram_num, unsigned char dat);

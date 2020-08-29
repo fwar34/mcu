@@ -104,7 +104,6 @@ void main(void)
     DS1302_TIME start_time = {20, 8, 16, 7, 22, 58, 40};
     DS1302_TIME current_time;
     initLcd1602();
-    ds1302_init();
 
     //if (!ds1302_is_running()) {
         ds1302_write_time(&start_time);
