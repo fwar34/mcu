@@ -1,6 +1,9 @@
 #include <reg52.h>
 #include "ds1302.h"
 #include "lcd1602.h"
+#include "dht11.h"
+
+extern unsigned dht11_data[5]; //湿度十位，湿度个位，温度十位，温度个位，校验值
 
 void display_sec(unsigned char x)
 {
@@ -84,38 +87,46 @@ void display(DS1302_TIME* time)
     display_year((time->year >> 4) * 10 + (time->year & 0x0F));
 }
 
-/*void display_dht11()*/
-/*{*/
-    /*unsigned char i, j;*/
-    /*i = dht11_data[0] / 10; //湿度十位*/
-    /*j = dht11_data[0] % 10; //湿度个位*/
-    /*write_char(1, 9, i + '0');*/
-    /*write_char(1, 10, j + '0');*/
+void display_dht11()
+{
+    unsigned char i, j;
+    i = dht11_data[0] / 10; //湿度十位
+    j = dht11_data[0] % 10; //湿度个位
+    write_char(1, 9, i + '0');
+    write_char(1, 10, j + '0');
+    write_char(1, 11, '%');
+    write_char(1, 12, ' ');
+
     
-    /*i = dht11_data[2] / 10; //温度十位*/
-    /*j = dht11_data[2] % 10; //温度个位*/
-    /*write_char(1, 12, i + '0');*/
-    /*write_char(1, 13, j + '0');*/
-/*}*/
+    i = dht11_data[2] / 10; //温度十位
+    j = dht11_data[2] % 10; //温度个位
+    write_char(1, 13, i + '0');
+    write_char(1, 14, j + '0');
+    write_char(1, 15, 'C');
+}
 
 void main(void)
 {
+    unsigned char tmp = 0;
     //初始时间20年8月16号14点16分55秒星期天 
     DS1302_TIME start_time = {20, 8, 18, 2, 22, 19, 40};
     DS1302_TIME current_time;
     initLcd1602();
+    ds1302_init();
 
     if (!ds1302_is_running()) {
         ds1302_write_time(&start_time);
     }
 
+
     while (1)
     {
         ds1302_read_time(&current_time);
         display(&current_time);
-        /*dht11_start();*/
-        /*display_dht11();*/
-        /*uart_sendhex(dht11_data[0]);*/
-        /*uart_sendhex(dht11_data[2]);*/
+        dht11_read_data();
+        /* write_char(0, 14, tmp % 9 + '0'); */
+        /* tmp++; */
+        display_dht11();
+        Delay1000ms();
     }
 }
