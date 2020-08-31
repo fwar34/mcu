@@ -11,10 +11,21 @@ sbit DHT11_DAT = P2 ^ 6;
 unsigned char dht11_data[5]; //湿度十位，湿度个位，温度十位，温度个位，是否更新显示的标志
 unsigned char dht11_temp[5]; //湿度十位，湿度个位，温度十位，温度个位，校验值
 
+unsigned char dht11_check_sum()
+{
+    unsigned int check, sum;
+    check = dht11_temp[4];
+    sum = dht11_temp[0] + dht11_temp[1] + dht11_temp[2] + dht11_temp[3];
+    if (check == sum)
+        return 1;
+    else
+        return 0;
+}
+
 char dht11_read_data()
 {
     unsigned char wait_cnt = 0;
-    unsigned char i = 0;
+    unsigned char i, j = 0;
     unsigned char bit_position = 0;
 
     /* 主机发送起始信号 */
@@ -104,13 +115,4 @@ char dht11_read_data()
     return 0;
 }
 
-unsigned char dht11_check_sum()
-{
-    unsigned int check, sum;
-    check = dht11_temp[4];
-    sum = dht11_temp[0] + dht11_temp[1] + dht11_temp[2] + dht11_temp[3];
-    if (check == sum)
-        return 1;
-    else
-        return 0;
-}
+

@@ -44,8 +44,10 @@ void Timer0InitAuto(void)//50毫秒@12.000MHz
 /* } */
 
 /* Timer0 interrupt routine */
-void tm0_isr() interrupt 1 using 1
+void tm0_isr() interrupt 1
 {
+    //TL0 = 0xB0;//设置定时初值
+    //TH0 = 0x3C;//设置定时初值
     /* TL0 = T1MS;                           //reload timer0 low byte */
     /* TH0 = T1MS >> 8;                  //reload timer0 high byte */
     if (++count == 400) {                //50ms * 400 -> 2s
