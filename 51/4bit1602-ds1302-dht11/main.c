@@ -3,7 +3,7 @@
 #include "lcd1602.h"
 #include "dht11.h"
 
-extern unsigned char dht11_data[5]; //湿度十位，湿度个位，温度十位，温度个位，是否显示的标志
+extern unsigned char dht11_data[5]; //湿度十位，湿度个位，温度十位，温度个位，是否更新显示的标志
 extern void Timer0Init(void); //50毫秒@12.000MHz
 
 void display_sec(unsigned char x)

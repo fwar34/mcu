@@ -8,7 +8,7 @@
 
 sbit DHT11_DAT = P2 ^ 6;
 
-unsigned char dht11_data[5]; //湿度十位，湿度个位，温度十位，温度个位，是否显示的标志
+unsigned char dht11_data[5]; //湿度十位，湿度个位，温度十位，温度个位，是否更新显示的标志
 unsigned char dht11_temp[5]; //湿度十位，湿度个位，温度十位，温度个位，校验值
 
 char dht11_read_data()
@@ -23,7 +23,7 @@ char dht11_read_data()
     DHT11_DAT = 1; // 主机将总线拉高（释放总线），代表起始信号结束。
     Delay30us(); //延时20~40us
 
-    /* 主机接收dht11回传数据 */
+    /* 主机接收dht11响应信号ACK */
     while (!DHT11_DAT) { //DHT11将总线拉低至少80us，作为DHT11的响应信号（ACK）
         Delay5us();
         ++wait_cnt;
@@ -32,7 +32,7 @@ char dht11_read_data()
     }
 
     wait_cnt = 0;
-    while (DHT11_DAT) { //DHT11将总线拉低至少80us，作为DHT11的响应信号（ACK）
+    while (DHT11_DAT) { //DHT11将总线拉高至少80us，为发送传感器数据做准备。
         Delay5us();
         ++wait_cnt;
         if (wait_cnt > 16)
