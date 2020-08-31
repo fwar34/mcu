@@ -3,7 +3,7 @@
 #include "lcd1602.h"
 #include "dht11.h"
 
-extern unsigned dht11_data[4]; //湿度十位，湿度个位，温度十位，温度个位
+extern unsigned dht11_data[5]; //湿度十位，湿度个位，温度十位，温度个位，是否显示的标志
 extern void Timer0Init(void); //50毫秒@12.000MHz
 
 void display_sec(unsigned char x)
@@ -92,18 +92,23 @@ void display(DS1302_TIME* time)
 void display_dht11()
 {
     unsigned char i, j;
-    i = dht11_data[0] / 10; //湿度十位
-    j = dht11_data[0] % 10; //湿度个位
-    write_char(1, 9, i + '0');
-    write_char(1, 10, j + '0');
-    write_char(1, 11, '%');
-    write_char(1, 12, ' ');
+    //dht11因为2秒钟才读一次，所以只需要2秒钟更新下显示就行
+    if (dht11_data[5]) {
+        dht11_data[5] = 0; //清除dht11显示标志
+
+        i = dht11_data[0] / 10; //湿度十位
+        j = dht11_data[0] % 10; //湿度个位
+        write_char(1, 9, i + '0');
+        write_char(1, 10, j + '0');
+        write_char(1, 11, '%');
+        write_char(1, 12, ' ');
     
-    i = dht11_data[2] / 10; //温度十位
-    j = dht11_data[2] % 10; //温度个位
-    write_char(1, 13, i + '0');
-    write_char(1, 14, j + '0');
-    write_char(1, 15, 'C');
+        i = dht11_data[2] / 10; //温度十位
+        j = dht11_data[2] % 10; //温度个位
+        write_char(1, 13, i + '0');
+        write_char(1, 14, j + '0');
+        write_char(1, 15, 'C');
+    }
 }
 
 void main(void)

@@ -4,21 +4,12 @@
 #include "delay.h"
 
 #define DHT11_TIMEOUT -1
+#define DHT11_READ_ERROR -2
+
 sbit DHT11_DAT = P2 ^ 6;
 
 unsigned dht11_data[4]; //湿度十位，湿度个位，温度十位，温度个位
 unsigned dht11_temp[5]; //湿度十位，湿度个位，温度十位，温度个位，校验值
-
-unsigned char dht11_start()
-{
-    DHT11_DAT = 0; //主机把总线拉低
-    Delay20ms();  //主机把总线拉低至少18ms，以保证DHT11可以检测到起始信号
-    DHT11_DAT = 1;  //主机释放总线(主机拉高总线)
-    Delay30us(); //主机将总线拉高20-40us
-    while (!DHT11_DAT); //dht11响应的时候先是拉低dat 80us
-    while (DHT11_DAT);  //在拉高dat 80us
-    return 1;
-}
 
 char dht11_read_data()
 {
@@ -106,7 +97,11 @@ char dht11_read_data()
         for (i = 0; i < 4; ++i) {
             dht11_data[i] = dht11_temp[i];
         }
+    } else {
+        return DHT11_READ_ERROR;
     }
+
+    return 0;
 }
 
 unsigned char dht11_check_sum()

@@ -1,6 +1,7 @@
 #include <stc12c5a60s2.h>
 #include "dht11.h"
 
+extern unsigned dht11_data[5]; //湿度十位，湿度个位，温度十位，温度个位，是否显示的标志
 static unsigned short count = 0;
 
 void Timer0Init(void)//50毫秒@12.000MHz
@@ -14,7 +15,6 @@ void Timer0Init(void)//50毫秒@12.000MHz
 
     ET0  = 1;                           //enable timer0 interrupt
     EA  = 1;                           //open global interrupt switch
-    count = 0;
 }
 
 void Timer0InitAuto(void)//50毫秒@12.000MHz
@@ -29,7 +29,6 @@ void Timer0InitAuto(void)//50毫秒@12.000MHz
 
     ET0  = 1;                           //enable timer0 interrupt
     EA  = 1;                           //open global interrupt switch
-    count = 0;
 }
 
 /* https://zhidao.baidu.com/question/477148677.html */
@@ -51,6 +50,9 @@ void tm0_isr() interrupt 1 using 1
     /* TH0 = T1MS >> 8;                  //reload timer0 high byte */
     if (++count == 400) {                //50ms * 400 -> 2s
         count = 0;                //reset counter
-        dht11_read_data();
+        if (!dht11_read_data()) { 
+            //read success
+            dht11_data[5] = 1;
+        }
     }
 }
