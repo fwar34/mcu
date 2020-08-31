@@ -8,8 +8,8 @@
 
 sbit DHT11_DAT = P2 ^ 6;
 
-unsigned dht11_data[4]; //湿度十位，湿度个位，温度十位，温度个位
-unsigned dht11_temp[5]; //湿度十位，湿度个位，温度十位，温度个位，校验值
+unsigned char dht11_data[5]; //湿度十位，湿度个位，温度十位，温度个位，是否显示的标志
+unsigned char dht11_temp[5]; //湿度十位，湿度个位，温度十位，温度个位，校验值
 
 char dht11_read_data()
 {

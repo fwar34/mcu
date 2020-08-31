@@ -1,7 +1,7 @@
 #include <stc12c5a60s2.h>
 #include "dht11.h"
 
-extern unsigned dht11_data[5]; //湿度十位，湿度个位，温度十位，温度个位，是否显示的标志
+extern unsigned char dht11_data[5]; //湿度十位，湿度个位，温度十位，温度个位，是否显示的标志
 static unsigned short count = 0;
 
 void Timer0Init(void)//50毫秒@12.000MHz
