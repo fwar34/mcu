@@ -3,7 +3,8 @@
 #include "lcd1602.h"
 #include "dht11.h"
 
-extern unsigned dht11_data[5]; //湿度十位，湿度个位，温度十位，温度个位，校验值
+extern unsigned dht11_data[4]; //湿度十位，湿度个位，温度十位，温度个位
+extern void Timer0Init(void); //50毫秒@12.000MHz
 
 void display_sec(unsigned char x)
 {
@@ -58,6 +59,7 @@ void display_year(unsigned char x)
     write_char(0, 2, i + '0');
     write_char(0, 3, j + '0');
 }
+
 void display_week(unsigned char x)
 {
     unsigned char i, j;
@@ -96,7 +98,6 @@ void display_dht11()
     write_char(1, 10, j + '0');
     write_char(1, 11, '%');
     write_char(1, 12, ' ');
-
     
     i = dht11_data[2] / 10; //温度十位
     j = dht11_data[2] % 10; //温度个位
@@ -118,15 +119,12 @@ void main(void)
         ds1302_write_time(&start_time);
     }
 
+    Timer0Init();
 
     while (1)
     {
         ds1302_read_time(&current_time);
         display(&current_time);
-        dht11_read_data();
-        /* write_char(0, 14, tmp % 9 + '0'); */
-        /* tmp++; */
         display_dht11();
-        Delay1000ms();
     }
 }

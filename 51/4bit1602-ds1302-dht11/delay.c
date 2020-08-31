@@ -176,3 +176,12 @@ void Delay600ms()		//@12.000MHz
 		} while (--j);
 	} while (--i);
 }
+
+void Delay5us()//@12.000MHz
+{
+    unsigned char i;
+
+    i = 12;
+    while (--i);
+    
+}
