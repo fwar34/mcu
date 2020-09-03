@@ -124,7 +124,6 @@ void main(void)
         ds1302_write_time(&start_time);
     }
 
-    //Timer0InitAuto();
     Timer0Init();
 
     while (1)

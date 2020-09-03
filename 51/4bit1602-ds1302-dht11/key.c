@@ -1,4 +1,6 @@
 #include <reg52.h>
+#include "key.h"
+#include "ds1302.h"
 
 sbit row1 = P3 ^ 4;
 sbit row2 = P3 ^ 5;
@@ -46,4 +48,16 @@ void key_scan()
         a++;
         delay(1000);
     }
+}
+
+char process_key()
+{
+    char ret = -1;
+    key_scan();
+    if (row && column)
+        ret = process_time_settings();
+    row = 0;
+    column = 0;
+
+    return ret;
 }

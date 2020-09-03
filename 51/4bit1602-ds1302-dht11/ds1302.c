@@ -14,9 +14,14 @@
 #define DS1302_CLKBURST_REG 0xbe
 #define DS1302_RAM_REG 0xc0
 
+//current_setting可以作为下标来取，秒不用设置，所以不在数组里面
+unsigned char ds1302_reg_addr[] = {0, 0x82, 0x84, 0x86, 0x88, 0x8a, 0x8c, 0x8e, 0x90, 0xbe, 0xc0};
+
 sbit DS1302_RST = P2 ^ 0;
 sbit DS1302_IO = P2 ^ 1;
 sbit DS1302_CLK = P2 ^ 2;
+
+unsigned char current_setting;
 
 //sbit DS1302_RST = P2 ^ 7;
 //sbit DS1302_IO = P1 ^ 2;
@@ -31,7 +36,8 @@ void ds1302_init()
 void ds1302_write_byte(unsigned char dat) 
 {
     unsigned char i;
-    for (i = 0; i < 8; i++) {        DS1302_CLK = 0;
+    for (i = 0; i < 8; i++) {
+        DS1302_CLK = 0;
         if (dat & 0x01) {
             DS1302_IO = 1;
         } else {
@@ -99,16 +105,16 @@ unsigned char ds1302_is_running()
 
 void ds1302_read_time(DS1302_TIME* time) 
 { 
-    time->year = ds1302_read(DS1302_YEAR_REG); //? 
-    time->month = ds1302_read(DS1302_MONTH_REG);//? 
-    time->day = ds1302_read(DS1302_DATE_REG); //? 
-    time->week = ds1302_read(DS1302_DAY_REG); //? 
-    time->hour = ds1302_read(DS1302_HR_REG); //? 
-    time->minute = ds1302_read(DS1302_MIN_REG); //? 
-    time->second = ds1302_read(DS1302_SEC_REG); //? 
+    time->year = ds1302_read(DS1302_YEAR_REG);
+    time->month = ds1302_read(DS1302_MONTH_REG);
+    time->day = ds1302_read(DS1302_DATE_REG);
+    time->week = ds1302_read(DS1302_DAY_REG);
+    time->hour = ds1302_read(DS1302_HR_REG);
+    time->minute = ds1302_read(DS1302_MIN_REG);
+    time->second = ds1302_read(DS1302_SEC_REG);
 }
 
-//
+//转换成bcd
 void ds1302_write_convert(unsigned char addr, unsigned char dat)
 {
     ds1302_write(addr, (dat / 10) << 4 | dat % 10);
@@ -141,4 +147,21 @@ unsigned char ds1302_read_ram(unsigned char ram_num)
     unsigned char ret;
     ret = ds1302_read((DS1302_RAM_REG | (ram_num << 2)));
     return ret;
+}
+
+char process_time_settings(unsigned char row, unsigned char column)
+{
+    if (row == 1 && column == 1) { //key1 切换设置项
+        current_setting++;
+    } else if (row == 1 && column == 2) { //key2 确认
+        confirm();
+    } else if (row == 2 && column == 1) { //key3 加
+        plus();
+    } else if (row == 2 && column == 2) { //key4 减
+        minus();
+    } else {
+        return -1; //返回非0表示没有按键按下
+    }
+
+    return 0;
 }
