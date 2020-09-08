@@ -122,7 +122,7 @@ void main(void)
     unsigned char tmp = 0;
     
     //初始时间20年8月16号14点16分55秒星期天 
-    DS1302_TIME start_time = {20, 8, 18, 2, 22, 19, 40};
+    DS1302_TIME start_time = {20, 9, 9, 3, 0, 6, 40};
     DS1302_TIME current_time;
     lcd_light = 0;
     initLcd1602();
