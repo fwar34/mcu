@@ -1,6 +1,7 @@
 #include <stc12c5a60s2.h>
 #include "dht11.h"
 
+sbit led = P3 ^ 7;
 extern unsigned char dht11_data[5]; //湿度十位，湿度个位，温度十位，温度个位，是否显示的标志
 static unsigned short count = 0;
 
@@ -56,5 +57,6 @@ void tm0_isr() interrupt 1
             //read success
             dht11_data[5] = 1;
         }
+        led = !led;
     }
 }

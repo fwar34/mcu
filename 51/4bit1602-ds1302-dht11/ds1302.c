@@ -14,9 +14,9 @@
 #define DS1302_CLKBURST_REG 0xbe
 #define DS1302_RAM_REG 0xc0
 
-sbit DS1302_RST = P2 ^ 0;
-sbit DS1302_IO = P2 ^ 1;
-sbit DS1302_CLK = P2 ^ 2;
+sbit DS1302_RST = P1 ^ 2;
+sbit DS1302_IO = P1 ^ 1;
+sbit DS1302_CLK = P1 ^ 0;
 
 //sbit DS1302_RST = P2 ^ 7;
 //sbit DS1302_IO = P1 ^ 2;

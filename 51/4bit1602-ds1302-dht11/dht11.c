@@ -6,7 +6,7 @@
 #define DHT11_TIMEOUT -1
 #define DHT11_READ_ERROR -2
 
-sbit DHT11_DAT = P2 ^ 6;
+sbit DHT11_DAT = P0 ^ 6;
 
 unsigned char dht11_data[5]; //湿度十位，湿度个位，温度十位，温度个位，是否更新显示的标志
 unsigned char dht11_temp[5]; //湿度十位，湿度个位，温度十位，温度个位，校验值
