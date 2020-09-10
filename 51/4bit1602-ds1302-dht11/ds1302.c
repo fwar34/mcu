@@ -18,6 +18,8 @@ sbit DS1302_RST = P1 ^ 2;
 sbit DS1302_IO = P1 ^ 1;
 sbit DS1302_CLK = P1 ^ 0;
 
+sbit lcd_bk = P0 ^ 3;
+
 //current_setting可以作为下标来取，秒不用设置，所以不在数组里面
 unsigned char ds1302_reg_addr[] = {0, 0x82, 0x84, 0x86, 0x88, 0x8a, 0x8c, 0x8e, 0x90, 0xbe, 0xc0};
 
@@ -153,12 +155,8 @@ char process_time_settings(unsigned char row, unsigned char column)
 {
     if (row == 1 && column == 1) { //key1 切换设置项
         current_setting++;
-    } else if (row == 1 && column == 2) { //key2 确认
-        confirm();
-    } else if (row == 2 && column == 1) { //key3 加
-        plus();
-    } else if (row == 2 && column == 2) { //key4 减
-        minus();
+    } else if (row == 2 && column == 1) { //key3 关闭lcd背光
+        lcd_bk = !lcd_bk;
     } else {
         return -1; //返回非0表示没有按键按下
     }

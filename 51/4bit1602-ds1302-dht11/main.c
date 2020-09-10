@@ -4,11 +4,12 @@
 #include "dht11.h"
 #include "delay.h"
 
-
-sbit p20 = P2 ^ 0;
-sbit led = P0 ^ 5;
+sbit beep = P3 ^ 7;
 sbit lcd_light = P0 ^ 3;
-sbit beep = P0 ^ 7;
+
+#define beep_ring() beep = 0
+#define beep_mute() beep = 1
+
 extern unsigned char dht11_data[5]; //湿度十位，湿度个位，温度十位，温度个位，是否更新显示的标志
 extern void Timer0Init(void); //50毫秒@12.000MHz
 
@@ -133,21 +134,21 @@ void main(void)
     }
 
     Timer0Init();
-
+    beep_mute();
+    
     while (1)
     {
         
         ds1302_read_time(&current_time);
         display(&current_time);
         display_dht11();
- 
-        
+
 //        test = 1;
 //        led = 1;
 //        p20 = 1;
 //        beep = 0;
 //        lcd_light = 0;
-//        Delay1000ms();
+        //Delay1000ms();
 //        led = 0;
 //        Delay1000ms();
 //        Delay2000ms();
