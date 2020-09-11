@@ -431,6 +431,11 @@
               <FileType>1</FileType>
               <FilePath>.\key.c</FilePath>
             </File>
+            <File>
+              <FileName>infrared.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\infrared.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

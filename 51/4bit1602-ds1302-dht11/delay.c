@@ -204,54 +204,26 @@ void Delay2ms()		//@11.0592MHz
 	} while (--i);
 }
 
-void delay_us1(unsigned char count)
+void Delay7ms()		//@11.0592MHz
 {
-    unsigned char i;
-    for (i = 0; i < count; ++i) {
-        _nop_();
-    }
-}
+	unsigned char i, j;
 
-void delay_us2(unsigned char count)
-{
-    unsigned char i;
-    for (i = 0; i < count / 2; ++i) {
-        unsigned char i;
-
-	_nop_();
-	_nop_();
-	i = 2;
-	while (--i);
-    }
-}
-
-void delay_ms1(unsigned char count)
-{
-    unsigned char i;
-    for (i = 0; i < count; ++i) {
-        unsigned char i, j;
-
-        _nop_();
-        i = 11;
-        j = 190;
-        do
-        {
-            while (--j);
-        } while (--i);
-    }
-}
-
-void delay_ms2(unsigned char count)
-{
-    unsigned char i;
-    for (i = 0; i < count / 2; ++i) {
-        unsigned char i, j;
-
-	i = 22;
-	j = 128;
+	i = 76;
+	j = 74;
 	do
 	{
 		while (--j);
 	} while (--i);
-    }
+}
+
+void Delay100us()		//@11.0592MHz
+{
+	unsigned char i, j;
+
+	i = 2;
+	j = 15;
+	do
+	{
+		while (--j);
+	} while (--i);
 }

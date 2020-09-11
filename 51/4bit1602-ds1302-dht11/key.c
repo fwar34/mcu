@@ -14,7 +14,6 @@ unsigned char column;
 
 void key_scan()
 {
-    char a;
     row1 = 0;
     row2 = 0;
     column1 = 1;

@@ -3,6 +3,7 @@
 #include "lcd1602.h"
 #include "dht11.h"
 #include "delay.h"
+#include "infrared.h"
 
 sbit beep = P3 ^ 7;
 sbit lcd_light = P0 ^ 3;
@@ -135,6 +136,7 @@ void main(void)
 
     Timer0Init();
     beep_mute();
+    IrInit();
     
     while (1)
     {

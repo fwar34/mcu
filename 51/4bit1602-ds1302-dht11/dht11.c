@@ -30,16 +30,13 @@ char dht11_read_data()
 
     /* 主机发送起始信号 */
     DHT11_DAT = 0; //主机将总线拉低（时间>=18ms），使得DHT11能够接收到起始信号
-    /* Delay20ms();  //至少 18 ms */
-    delay_ms2(20);
+    Delay20ms();  //至少 18 ms
     DHT11_DAT = 1; // 主机将总线拉高（释放总线），代表起始信号结束。
-    /* Delay30us(); //延时20~40us */
-    delay_us2(30);
+    Delay30us(); //延时20~40us
 
     /* 主机接收dht11响应信号ACK */
     while (!DHT11_DAT) { //DHT11将总线拉低至少80us，作为DHT11的响应信号（ACK）
-        /* Delay5us(); */
-        delay_us1(5);
+        Delay5us();
         ++wait_cnt;
         if (wait_cnt > 16)
             return DHT11_TIMEOUT;
@@ -47,8 +44,7 @@ char dht11_read_data()
 
     wait_cnt = 0;
     while (DHT11_DAT) { //DHT11将总线拉高至少80us，为发送传感器数据做准备。
-        /* Delay5us(); */
-        delay_us1(5);
+        Delay5us();
         ++wait_cnt;
         if (wait_cnt > 16)
             return DHT11_TIMEOUT;
@@ -85,8 +81,7 @@ char dht11_read_data()
         {
             wait_cnt = 0;
             while (!DHT11_DAT) { //拉低50us作为bit信号的起始标志
-                /* Delay5us(); */
-                delay_us1(5);
+                Delay5us();
                 ++wait_cnt;
                 if (wait_cnt > 10)
                     return DHT11_TIMEOUT;
@@ -95,8 +90,7 @@ char dht11_read_data()
 
             wait_cnt = 0;
             while (DHT11_DAT) { //拉高。持续26~28us表示0，持续70us表示1
-                /* Delay5us(); */
-                delay_us1(5);
+                Delay5us();
                 ++wait_cnt;
                 if (wait_cnt > 14)
                     return DHT11_TIMEOUT;
