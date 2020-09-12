@@ -1,3 +1,4 @@
+#include "lcd1602.h"
 #include "ds1302.h"
 #include "common.h"
 
@@ -18,10 +19,6 @@ sbit DS1302_IO = P1 ^ 1;
 sbit DS1302_CLK = P1 ^ 0;
 
 unsigned int new_value = 0;
-
-//sbit DS1302_RST = P2 ^ 7;
-//sbit DS1302_IO = P1 ^ 2;
-//sbit DS1302_CLK = P1 ^ 7;
 
 void ds1302_init()
 {

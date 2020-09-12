@@ -2,6 +2,9 @@
 #include "lcd1602.h"
 #include "delay.h"
 #include "common.h"
+#include "ds1302.h"
+
+extern unsigned int new_value;
 
 sbit IRIN = P3 ^ 3;
 unsigned char IrValue[4];//用于存储数据码，对应前两个是地址位，后两个是数据位和校验位
@@ -30,7 +33,6 @@ void process_ch()
     if (first_ch_flag) {
         if (ch_count * 50 <= 500) { //500ms之内点击两次ch键为进入设置
             ds1302_pause(1);
-            new_value = ds1302_read(DS1302_YEAR_REG);
             current_setting++;
         }
         first_ch_flag = 0;

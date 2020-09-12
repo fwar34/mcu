@@ -5,9 +5,7 @@
 #include "infrared.h"
 #include "common.h"
 
-extern unsigned char dht11_data[5]; //湿度十位，湿度个位，温度十位，温度个位，是否更新显示的标志
-extern void Timer0Init(void); //50毫秒@12.000MHz
-
+extern void Timer0Init(void);		//50毫秒@11.0592MHz
 
 void main(void)
 {

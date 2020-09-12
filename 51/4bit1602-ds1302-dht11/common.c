@@ -7,6 +7,7 @@ unsigned char current_setting; //当前设置项
 
 bit beep_setting = 1; //beep开关
 
+
 //蜂鸣器提醒声
 void beep_ring_1s()
 {

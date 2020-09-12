@@ -8,6 +8,8 @@ sbit LCD_RS = P0 ^ 0;
 sbit LCD_EN = P0 ^ 2;
 sbit LCD_RW = P0 ^ 1;
 
+extern unsigned char dht11_data[5]; //湿度十位，湿度个位，温度十位，温度个位，是否更新显示的标志
+
 void lcdWriteCmd(unsigned char cmd)
 {
     //lcd_check_busy();
