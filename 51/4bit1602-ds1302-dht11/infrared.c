@@ -1,45 +1,98 @@
 /* https://blog.csdn.net/qq_42012736/article/details/80555951 */
-#include <reg52.h>
+#include "lcd1602.h"
 #include "delay.h"
+#include "common.h"
 
-sbit light_back = P0 ^ 3;
-sbit beep = P3 ^ 7;
 sbit IRIN = P3 ^ 3;
 unsigned char IrValue[4];//用于存储数据码，对应前两个是地址位，后两个是数据位和校验位
+unsigned char ch_count; //两次ch键进入设置的时间计数
+bit first_ch_flag = 0; //表示第一次按ch的标志
+unsigned short idle_count = 0; //最后一次设置开始空闲计数
 
-//蜂鸣器提醒声
-void beep_ring_1s()
+void display_key_code()
 {
-    unsigned char i = 0;
-    for (; i < 100; ++i) {
-        Delay100us();
-        beep = !beep;
+    unsigned char i = IrValue[2] / 10;
+    unsigned char j = IrValue[2] % 10;
+    write_char(0, 14, i + '0');
+    write_char(0, 15, j + '0');
+}
+
+void process_ch_minus()
+{
+    if (current_setting == 1)
+        current_setting = 6;
+    else
+        --current_setting;
+}
+
+void process_ch()
+{
+    if (first_ch_flag) {
+        if (ch_count * 50 <= 500) { //500ms之内点击两次ch键为进入设置
+            ds1302_pause(1);
+            new_value = ds1302_read(DS1302_YEAR_REG);
+            current_setting++;
+        }
+        first_ch_flag = 0;
+        ch_count = 0;
+    } else { //第一次点击ch按钮
+        first_ch_flag = 1; //设置标记
+        ch_count = 0;  //开始计数
     }
-    beep = 1;
+}
+
+void process_ch_plus()
+{
+    if (current_setting == 6)
+        current_setting = 1;
+    else
+        ++current_setting;
 }
 
 //遥控器编码十六进制
 //45 46 47
 //44 40 43
-//07 15 D9
+//07 15 09
 //16 19 0D
 //0C 18 5E
 //08 1C 5A
 //42 52 4A
 void process_irkey()
 {
-    bit beep = 0;
     switch (IrValue[2]) {
-    case 0x45: //背光开关
-        light_back = !light_back;
-        beep = 1;
+    case 0x45: //CH－ 前一个设置项
+        process_ch_minus();
+        break;
+    case 0x46: //CH 双击进入设置，单击确认（设置的时候暂停ds1302）
+        process_ch();
+        break;
+    case 0x47: //CH＋ 后一个设置项
+        process_ch_plus();
+        break;
+    case 0x44: //|<< 加10
+        break;
+    case 0x40: //>>| 减10
+        break;
+    case 0x43: //>|| 
+        break;
+    case 0x15: //+ 加1
+        break;
+    case 0x07: //- 减1
+        break;
+    case 0x09: //EQ 确认
+        break;
+    case 0x19: //100+ 背光开关
+        lcd_light_back = !lcd_light_back;
+        break;
+    case 0x0D: //200+ beep开关
+        beep_setting = !beep_setting;
         break;
     default:
         return;
     }
 
-    if (beep)
-        beep_ring_1s();
+    idle_count = 1;
+    beep_ring_1s();
 }
 
 void IrInit()
@@ -119,6 +172,7 @@ void ReadIr() interrupt 2
 
         //下面要对数据进行校验，校验的方式位判断第四位数据是否位第三位数据吗的反码
         if (IrValue[2] == ~IrValue[3]) {
+            display_key_code();
             process_irkey();
         }
     }

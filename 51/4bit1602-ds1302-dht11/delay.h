@@ -19,5 +19,6 @@ void Delay600ms();		//@12.000MHz
 void Delay5us();                //@12.000MHz
 void Delay7ms();		//@11.0592MHz
 void Delay100us();		//@11.0592MHz
+void Delay500ms();		//@11.0592MHz
     
 #endif

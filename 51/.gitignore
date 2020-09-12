@@ -9,3 +9,7 @@
 */Objects/*
 */Listings/*
 */tags
+*.map
+*.lst
+TAGS
+*.m51

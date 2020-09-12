@@ -1,6 +1,5 @@
-#include <reg52.h>
-#include <intrins.h>
 #include "ds1302.h"
+#include "common.h"
 
 #define DS1302_SEC_REG 0x80
 #define DS1302_MIN_REG 0x82
@@ -18,12 +17,7 @@ sbit DS1302_RST = P1 ^ 2;
 sbit DS1302_IO = P1 ^ 1;
 sbit DS1302_CLK = P1 ^ 0;
 
-sbit lcd_bk = P0 ^ 3;
-
-//current_setting可以作为下标来取，秒不用设置，所以不在数组里面
-unsigned char ds1302_reg_addr[] = {0, 0x82, 0x84, 0x86, 0x88, 0x8a, 0x8c, 0x8e, 0x90, 0xbe, 0xc0};
-
-unsigned char current_setting;
+unsigned int new_value = 0;
 
 //sbit DS1302_RST = P2 ^ 7;
 //sbit DS1302_IO = P1 ^ 2;
@@ -153,13 +147,83 @@ unsigned char ds1302_read_ram(unsigned char ram_num)
 
 char process_time_settings(unsigned char row, unsigned char column)
 {
-    if (row == 1 && column == 1) { //key1 切换设置项
-        current_setting++;
-    } else if (row == 2 && column == 1) { //key3 关闭lcd背光
-        lcd_bk = !lcd_bk;
+    if (row == 1 && column == 1) { //key1 beep开关
+        beep_setting = !beep_setting;
+    } else if (row == 2 && column == 1) { //key3 lcd背光开关
+        lcd_light_back = !lcd_light_back;
     } else {
         return -1; //返回非0表示没有按键按下
     }
 
+    beep_ring_1s();
     return 0;
+}
+
+void ds1302_pause(bit flag)
+{
+    unsigned char second = ds1302_read(DS1302_SEC_REG);
+    if (flag)
+        ds1302_write(DS1302_SEC_REG, 0x80 | second);
+    else
+        ds1302_write(DS1302_SEC_REG, 0x7F & second);
+}
+
+void enter_settings()
+{
+    //设置项闪烁
+    switch (current_setting) {
+    case 1: //年
+        new_value = ds1302_read(DS1302_YEAR_REG);
+        flicker_year(new_value);
+        break;
+    case 2: //月
+        new_value = ds1302_read(DS1302_MONTH_REG);
+        flicker_month(new_value);
+        break;
+    case 3: //日
+        new_value = ds1302_read(DS1302_DATE_REG);
+        flicker_day(new_value);
+        break;
+    case 4: //星期
+        new_value = ds1302_read(DS1302_DAY_REG);
+        flicker_week(new_value);
+        break;
+    case 5: //时
+        new_value = ds1302_read(DS1302_HR_REG);
+        flicker_hour(new_value);
+        break;
+    case 6: //分
+        new_value = ds1302_read(DS1302_MIN_REG);
+        flicker_minute(new_value);
+        break;
+    default:
+        return;
+    }
+}
+
+void exit_settings()
+{
+    //设置项退出
+    switch (current_setting) {
+    case 1: //年
+        ds1302_write_convert(DS1302_YEAR_REG, new_value);
+        break;
+    case 2: //月
+        ds1302_write_convert(DS1302_MONTH_REG, new_value);
+        break;
+    case 3: //日
+        ds1302_write_convert(DS1302_DATE_REG, new_value);
+        break;
+    case 4: //星期
+        ds1302_write_convert(DS1302_DAY_REG, new_value);
+        break;
+    case 5: //时
+        ds1302_write_convert(DS1302_HR_REG, new_value);
+        break;
+    case 6: //分
+        ds1302_write_convert(DS1302_MIN_REG, new_value);
+        break;
+    default:
+        return;
+    }
 }
