@@ -8,8 +8,8 @@ extern unsigned int new_value;
 
 sbit IRIN = P3 ^ 3;
 unsigned char IrValue[4];//用于存储数据码，对应前两个是地址位，后两个是数据位和校验位
-unsigned char ch_count; //两次ch键进入设置的时间计数
-bit first_ch_flag = 0; //表示第一次按ch的标志
+unsigned char ch_count = 0; //两次ch键进入设置的时间计数
+bit enter_settings_flag = 0; //进入设置的标志
 unsigned short idle_count = 0; //最后一次设置开始空闲计数
 
 void display_key_code()
@@ -20,26 +20,56 @@ void display_key_code()
     write_char(0, 15, j + '0');
 }
 
+void read_current_setting()
+{
+    switch (current_setting) {
+    case 1:
+        new_value = ds1302_read(DS1302_YEAR_REG);
+        return;
+    case 2:
+        new_value = ds1302_read(DS1302_MONTH_REG);
+        return;
+    case 3:
+        new_value = ds1302_read(DS1302_DATE_REG);
+        return;
+    case 4:
+        new_value = ds1302_read(DS1302_DAY_REG);
+        return;
+    case 5:
+        new_value = ds1302_read(DS1302_HR_REG);
+        return;
+    case 6:
+        new_value = ds1302_read(DS1302_MIN_REG);
+        return;
+    default:
+        return;
+    }
+}
+
 void process_ch_minus()
 {
-    if (current_setting == 1)
-        current_setting = 6;
-    else
-        --current_setting;
+    if (current_setting) {
+        //总共6个设置项
+        if (current_setting == 1)
+            current_setting = 6;
+        else
+            --current_setting;
+        read_current_setting();
+    }
 }
 
 void process_ch()
 {
-    if (first_ch_flag) {
-        if (ch_count * 50 <= 500) { //500ms之内点击两次ch键为进入设置
+    if (ch_count) {
+        if (ch_count <= 500) { //500ms之内点击两次ch键为进入设置
             ds1302_pause(1);
-            current_setting++;
+            new_value = ds1302_read(DS1302_YEAR_REG);
+            ++current_setting;
+            enter_settings_flag = 1;
         }
-        first_ch_flag = 0;
         ch_count = 0;
     } else { //第一次点击ch按钮
-        first_ch_flag = 1; //设置标记
-        ch_count = 0;  //开始计数
+        ch_count = 1;  //开始计数
     }
 }
 
@@ -49,6 +79,7 @@ void process_ch_plus()
         current_setting = 1;
     else
         ++current_setting;
+    read_current_setting();
 }
 
 //遥控器编码十六进制
@@ -59,42 +90,42 @@ void process_ch_plus()
 //0C 18 5E
 //08 1C 5A
 //42 52 4A
-void process_irkey()
+bit process_irkey()
 {
-    switch (IrValue[2]) {
-    case 0x45: //CH－ 前一个设置项
-        process_ch_minus();
-        break;
-    case 0x46: //CH 双击进入设置，单击确认（设置的时候暂停ds1302）
-        process_ch();
-        break;
-    case 0x47: //CH＋ 后一个设置项
-        process_ch_plus();
-        break;
-    case 0x44: //|<< 加10
-        break;
-    case 0x40: //>>| 减10
-        break;
-    case 0x43: //>|| 
-        break;
-    case 0x15: //+ 加1
-        break;
-    case 0x07: //- 减1
-        break;
-    case 0x09: //EQ 确认
-        break;
-    case 0x19: //100+ 背光开关
+    if (IrValue[2] == 0x46) { //CH 双击进入设置，单击确认（设置的时候暂停ds1302）
+        process_ch(); 
+    } else if (IrValue[2] == 0x19) { //100+ 背光开关
         lcd_light_back = !lcd_light_back;
-        break;
-    case 0x0D: //200+ beep开关
+    } else if (IrValue[2] == 0x0D) { //200+ beep开关
         beep_setting = !beep_setting;
-        break;
-    default:
-        return;
+    } else if (enter_settings_flag) {
+        switch (IrValue[2]) {
+        case 0x45: //CH－ 前一个设置项
+            process_ch_minus();
+            break;
+        case 0x47: //CH＋ 后一个设置项
+            process_ch_plus();
+            break;
+        case 0x44: //|<< 加10
+            break;
+        case 0x40: //>>| 减10
+            break;
+        case 0x43: //>|| 
+            break;
+        case 0x15: //+ 加1
+            break;
+        case 0x07: //- 减1
+            break;
+        case 0x09: //EQ 确认
+            break;
+        default:
+            return 0;
+        }
+        return 1;
+    } else {
+        return 0;
     }
-
-    idle_count = 1;
-    beep_ring_1s();
+    return 1;
 }
 
 void IrInit()
@@ -174,8 +205,11 @@ void ReadIr() interrupt 2
 
         //下面要对数据进行校验，校验的方式位判断第四位数据是否位第三位数据吗的反码
         if (IrValue[2] == ~IrValue[3]) {
-            display_key_code();
-            process_irkey();
+            /* display_key_code(); */
+            if (process_irkey()) {
+                beep_ring_1s();
+                idle_count = 1;
+            }
         }
     }
     EX1 = 1; //打开外部中断1

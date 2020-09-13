@@ -5,7 +5,6 @@
 
 extern unsigned char ch_count; //两次ch键进入设置的时间计数
 extern bit first_ch_flag; //表示第一次按ch的标志
-
 extern unsigned char dht11_data[5]; //湿度十位，湿度个位，温度十位，温度个位，是否显示的标志
 extern unsigned short idle_count; //最后一次设置开始空闲计数
 
@@ -13,10 +12,10 @@ static unsigned short count = 0; //dht11更新的计数
 
 void Timer0Init(void)		//50毫秒@11.0592MHz
 {
-    /* AUXR &= 0x7F;		//定时器时钟12T模式 stc12c5a60s2认默是12分频，即传统51的速度，所以不用设置*/
-    TMOD &= 0xF0;		//设置定时器模式，停止定时器1,定时器0工作在16位自动重载模式 */
-    TL0 = 0x00;		//设置定时初值
-    TH0 = 0x4C;		//设置定时初值
+    TMOD = 0x01;                    //set timer0 as mode1 (16-bit)
+    TH0 = 0x4C;
+    TL0 = 0x00;
+
     TF0 = 0;		//清除TF0标志
     TR0 = 1;		//定时器0开始计时
 
@@ -40,23 +39,24 @@ void Timer0Init(void)		//50毫秒@11.0592MHz
 /* Timer0 interrupt routine */
 void tm0_isr() interrupt 1
 {
-    ++ch_count;
-    if (ch_count > 20) { //1s过后没有点击第二次ch按钮的话重置两个字段
-        ch_count = 0;
-        first_ch_flag = 0;
+    TH0 = 0x4C;
+    TL0 = 0x00;
+    if (ch_count > 0) { //第一次点击ch按钮会把ch_count设置成1
+        ++ch_count;
+        if (ch_count > 20) { //1s过后没有点击第二次ch按钮的话重置字段
+            ch_count = 0;
+        }
     }
 
     if (idle_count > 0) { //每一次设置会把idle_count设置成1,所以大于0才判断是否是设置空闲超时
         ++idle_count;
-        if (idle_count > 200) {
+        if (idle_count > 20 * 10) { //设置空闲了10秒之后退出
             exit_settings();
-            current_setting = 0;
-            ds1302_pause(0);
-            idle_count = 0;
         }
     }
 
-    if (++count == 400) {                //50ms * 400 -> 2s更新一次dht11
+    if (++count == 20 * 2) {                //1000ms * 2 -> 2s更新一次dht11
+        /* lcd_light_back = !lcd_light_back ; */
         count = 0;                //reset counter
         if (!dht11_read_data()) { 
             //read success

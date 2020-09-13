@@ -6,6 +6,21 @@
 #include "common.h"
 
 extern void Timer0Init(void);		//50毫秒@11.0592MHz
+extern unsigned short idle_count; //最后一次设置开始空闲计数
+
+extern unsigned char ch_count; //两次ch键进入设置的时间计数
+void display_current_setting()
+{
+    write_char(0, 13, current_setting + '0');
+}
+
+void display_idle_count()
+{
+    unsigned char i = idle_count / 10;
+    unsigned char j = idle_count % 10;
+    write_char(0, 14, i + '0');
+    write_char(0, 15, j + '0');
+}
 
 void main(void)
 {
@@ -25,6 +40,8 @@ void main(void)
     
     while (1)
     {
+        display_current_setting();
+        display_idle_count();
         if (current_setting) {
             enter_settings();
         } else {

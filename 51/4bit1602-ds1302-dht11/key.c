@@ -9,8 +9,8 @@ sbit row2 = P3 ^ 5;
 sbit column1 = P3 ^ 6;
 /* sbit column2 = P3 ^ 7; */
 
-unsigned char row;
-unsigned char column;
+unsigned char row = 0;
+unsigned char column = 0;
 
 void key_scan()
 {

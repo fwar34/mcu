@@ -2,17 +2,8 @@
 #include "ds1302.h"
 #include "common.h"
 
-#define DS1302_SEC_REG 0x80
-#define DS1302_MIN_REG 0x82
-#define DS1302_HR_REG 0x84
-#define DS1302_DATE_REG 0x86
-#define DS1302_MONTH_REG 0x88
-#define DS1302_DAY_REG 0x8a
-#define DS1302_YEAR_REG 0x8c
-#define DS1302_CONTROL_REG 0x8e
-#define DS1302_CHARGER_REG 0x90
-#define DS1302_CLKBURST_REG 0xbe
-#define DS1302_RAM_REG 0xc0
+extern bit enter_settings_flag; //进入设置的标志
+extern unsigned short idle_count; //最后一次设置开始空闲计数
 
 sbit DS1302_RST = P1 ^ 2;
 sbit DS1302_IO = P1 ^ 1;
@@ -170,27 +161,21 @@ void enter_settings()
     //设置项闪烁
     switch (current_setting) {
     case 1: //年
-        new_value = ds1302_read(DS1302_YEAR_REG);
         flicker_year(new_value);
         break;
     case 2: //月
-        new_value = ds1302_read(DS1302_MONTH_REG);
         flicker_month(new_value);
         break;
     case 3: //日
-        new_value = ds1302_read(DS1302_DATE_REG);
         flicker_day(new_value);
         break;
     case 4: //星期
-        new_value = ds1302_read(DS1302_DAY_REG);
         flicker_week(new_value);
         break;
     case 5: //时
-        new_value = ds1302_read(DS1302_HR_REG);
         flicker_hour(new_value);
         break;
     case 6: //分
-        new_value = ds1302_read(DS1302_MIN_REG);
         flicker_minute(new_value);
         break;
     default:
@@ -201,6 +186,11 @@ void enter_settings()
 void exit_settings()
 {
     //设置项退出
+    current_setting = 0;
+    ds1302_pause(0);
+    idle_count = 0;
+    enter_settings_flag = 0;
+
     switch (current_setting) {
     case 1: //年
         ds1302_write_convert(DS1302_YEAR_REG, new_value);

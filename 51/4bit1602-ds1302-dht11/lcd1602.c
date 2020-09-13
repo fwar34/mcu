@@ -112,10 +112,10 @@ void display_min(unsigned char x)
 
 void flicker_minute(unsigned char x)
 {
-    display_min(x);
-    Delay500ms();
     write_char(1, 3, ' ');
     write_char(1, 4, ' ');
+    Delay500ms();
+    display_min(((x & 0x70) >> 4) * 10 + (x & 0x0F));
     Delay500ms();
 }
 
@@ -130,10 +130,10 @@ void display_hour(unsigned char x)
 
 void flicker_hour(unsigned char x)
 {
-    display_hour(x);
-    Delay500ms();
     write_char(1, 0, ' ');
     write_char(1, 1, ' ');
+    Delay500ms();
+    display_hour(((x & 0x30) >> 4) * 10 + (x & 0x0F));
     Delay500ms();
 }
 
@@ -148,10 +148,10 @@ void display_day(unsigned char x)
 
 void flicker_day(unsigned char x)
 {
-    display_day(x);
-    Delay500ms();
     write_char(0, 8, ' ');
     write_char(0, 9, ' ');
+    Delay500ms();
+    display_day(((x & 0x30) >> 4) * 10 + (x & 0x0F));
     Delay500ms();
 }
 
@@ -166,10 +166,10 @@ void display_month(unsigned char x)
 
 void flicker_month(unsigned char x)
 {
-    display_month(x);
-    Delay500ms();
     write_char(0, 5, ' ');
     write_char(0, 6, ' ');
+    Delay500ms();
+    display_month(((x & 0x10) >> 4) * 10 + (x & 0x0F));
     Delay500ms();
 }
 
@@ -184,14 +184,14 @@ void display_year(unsigned char x)
 
 void flicker_year(unsigned char x)
 {
-    write_char(0, 0, '2');
-    write_char(0, 1, '0');
-    display_year(x);
-    Delay500ms();
     write_char(0, 0, ' ');
     write_char(0, 1, ' ');
     write_char(0, 2, ' ');
     write_char(0, 3, ' ');
+    Delay500ms();
+    write_char(0, 0, '2');
+    write_char(0, 1, '0');
+    display_year((x >> 4) * 10 + (x & 0x0F));
     Delay500ms();
 }
 
@@ -206,10 +206,10 @@ void display_week(unsigned char x)
 
 void flicker_week(unsigned char x)
 {
-    display_week(x);
-    Delay500ms();
     write_char(0, 11, ' ');
     write_char(0, 12, ' ');
+    Delay500ms();
+    display_week(x & 0x07);
     Delay500ms();
 }
 
