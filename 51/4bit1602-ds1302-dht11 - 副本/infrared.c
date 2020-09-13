@@ -61,7 +61,7 @@ void process_ch_minus()
 void process_ch()
 {
     if (ch_count) {
-        if (ch_count <= 500) { //500ms之内点击两次ch键为进入设置
+        if (ch_count <= 50) { //500ms之内点击两次ch键为进入设置
             ds1302_pause(1);
             new_value = ds1302_read(DS1302_YEAR_REG);
             ++current_setting;

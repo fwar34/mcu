@@ -5,9 +5,9 @@
 extern bit enter_settings_flag; //进入设置的标志
 extern unsigned short idle_count; //最后一次设置开始空闲计数
 
-sbit DS1302_RST = P1 ^ 2;
-sbit DS1302_IO = P1 ^ 1;
-sbit DS1302_CLK = P1 ^ 0;
+sbit DS1302_RST = P1 ^ 4;
+sbit DS1302_IO = P1 ^ 3;
+sbit DS1302_CLK = P1 ^ 2;
 
 unsigned int new_value = 0;
 
