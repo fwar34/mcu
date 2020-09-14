@@ -12,12 +12,14 @@ unsigned char ch_count = 0; //两次ch键进入设置的时间计数
 bit enter_settings_flag = 0; //进入设置的标志
 unsigned short idle_count = 0; //最后一次设置开始空闲计数
 
+unsigned char hex_array[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+
 void display_key_code()
 {
-    unsigned char i = IrValue[2] / 10;
-    unsigned char j = IrValue[2] % 10;
-    write_char(0, 14, i + '0');
-    write_char(0, 15, j + '0');
+    unsigned char i = IrValue[2] / 16;
+    unsigned char j = IrValue[2] % 16;
+    write_char(0, 14, hex_array[i]);
+    write_char(0, 15, hex_array[j]);
 }
 
 void read_current_setting()
