@@ -149,11 +149,13 @@ char process_time_settings(unsigned char row, unsigned char column)
 
 void ds1302_pause(bit flag)
 {
+    ds1302_write(DS1302_CONTROL_REG, 0x00); //打开写保护
     unsigned char second = ds1302_read(DS1302_SEC_REG);
     if (flag)
         ds1302_write(DS1302_SEC_REG, 0x80 | second);
     else
         ds1302_write(DS1302_SEC_REG, 0x7F & second);
+    ds1302_write(DS1302_CONTROL_REG, 0x80); //关闭写保护
 }
 
 void enter_settings()
@@ -189,6 +191,9 @@ void exit_settings()
     idle_count = 0;
     enter_settings_flag = 0;
 
+    if (current_setting > 0 && current_setting <7)
+        ds1302_write(DS1302_CONTROL_REG, 0x00); //打开写保护
+
     switch (current_setting) {
     case 1: //年
         ds1302_write_convert(DS1302_YEAR_REG, new_value);
@@ -214,4 +219,5 @@ void exit_settings()
 
     current_setting = 0;
     ds1302_pause(0);
+    ds1302_write(DS1302_CONTROL_REG, 0x80); //关闭写保护
 }
