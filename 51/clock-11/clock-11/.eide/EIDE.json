@@ -1,0 +1,60 @@
+{
+    "name": "clock-11",
+    "type": "C51",
+    "mode": "Release",
+    "toolchain": "SDCC",
+    "uploader": "stcgal",
+    "dependenceList": [
+        {
+            "groupName": "custom",
+            "depList": [
+                {
+                    "name": "default",
+                    "incList": [],
+                    "libList": [],
+                    "sourceDirList": [],
+                    "defineList": []
+                }
+            ]
+        },
+        {
+            "groupName": "build-in",
+            "depList": [
+                {
+                    "name": "default",
+                    "incList": [],
+                    "libList": [],
+                    "sourceDirList": [],
+                    "defineList": []
+                },
+                {
+                    "name": "toolchain",
+                    "incList": [
+                        "c:\\Program Files\\SDCC\\include",
+                        "c:\\Program Files\\SDCC\\non-free\\include"
+                    ],
+                    "sourceDirList": [],
+                    "libList": [
+                        "c:\\Program Files\\SDCC\\lib"
+                    ],
+                    "defineList": []
+                }
+            ]
+        }
+    ],
+    "compileConfig": {
+        "options": "null"
+    },
+    "srcDirs": [
+        ".\\src"
+    ],
+    "excludeList": [],
+    "outDir": ".\\out",
+    "deviceName": null,
+    "packDir": null,
+    "uploadConfig": {
+        "bin": ".\\out\\Release\\clock-11.hex",
+        "eepromImgPath": "null",
+        "options": ".eide/stc.flash.json"
+    }
+}

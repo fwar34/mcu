@@ -1,0 +1,44 @@
+{
+    "configurations": [
+        {
+            "name": "win32",
+            "includePath": [
+                "c:\\Program Files\\SDCC\\include",
+                "c:\\Program Files\\SDCC\\non-free\\include",
+                ".\\src"
+            ],
+            "defines": [
+                "__SDCC",
+                "__data=",
+                "__idata=",
+                "__pdata=",
+                "__xdata=",
+                "__code=",
+                "__far=",
+                "__near=",
+                "__bit=char",
+                "__sbit=char",
+                "__sfr=char",
+                "__sfr16=int",
+                "__sfr32=int",
+                "__reentrant=",
+                "__trap=",
+                "__critical=",
+                "__interrupt(x)=",
+                "__using(x)=",
+                "__at(x)=",
+                "__asm__(x)="
+            ],
+            "intelliSenseMode": "${default}",
+            "browse": {
+                "limitSymbolsToIncludedHeaders": true,
+                "path": [
+                    "c:\\Program Files\\SDCC\\include\\*",
+                    "c:\\Program Files\\SDCC\\non-free\\include\\*",
+                    ".\\src\\*"
+                ]
+            }
+        }
+    ],
+    "version": 4
+}
