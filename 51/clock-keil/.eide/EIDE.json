@@ -52,7 +52,7 @@
     "excludeList": [],
     "outDir": ".\\out",
     "uploadConfig": {
-        "bin": ".\\out\\Keil_C51\\mcs51.hex",
+        "bin": ".\\out\\Release\\clock-keil.hex",
         "eepromImgPath": "null",
         "options": "./.EIDE/stc.flash.json"
     }
