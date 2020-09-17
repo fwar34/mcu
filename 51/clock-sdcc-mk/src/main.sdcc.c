@@ -117,6 +117,6 @@ void main(void)
         //lcd_light_back = !lcd_light_back;
         //led = !led;
         //Delay1000ms();
-        P0_5 = !P0_5;
+        /* P0_5 = !P0_5; */
     }
 }
