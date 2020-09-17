@@ -1,7 +1,7 @@
 #ifndef _LCD_1602_H_
 #define _LCD_1602_H_
 
-#include "common.h"
+#include "common.sdcc.h"
 
 void initLcd1602();
 void display(DS1302_TIME* time);

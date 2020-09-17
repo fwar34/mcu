@@ -1,12 +1,12 @@
-#include <8051.h>
+#include <mcs51/8051.h>
 #include "key.sdcc.h"
 #include "ds1302.sdcc.h"
 #include "delay.sdcc.h"
 
-__sbit __at (P3+4) key1;
-__sbit __at (P3+5) key2;
-__sbit __at (P3+6) key3;
-__sbit __at (P3+7) key4;
+#define key1 P3_4
+#define key2 P3_5
+#define key3 P3_6
+#define key4 P3_7
 
 unsigned char row = 0;
 unsigned char column = 0;

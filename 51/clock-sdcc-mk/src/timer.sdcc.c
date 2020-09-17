@@ -26,8 +26,8 @@ static unsigned short count = 0;//dht11更新的计数
 void Timer0Init(void)//10毫秒@24.000MHz
 {
     /* AUXR &= 0x7F;        //定时器时钟12T模式 */
-    TMOD & = 0xF0;//设置定时器模式
-    TMOD | = 0x01;//设置定时器模式
+    TMOD &= 0xF0;//设置定时器模式
+    TMOD |= 0x01;//设置定时器模式
     TL0 = 0xE0;//设置定时初值
     TH0 = 0xB1;//设置定时初值
     TF0 = 0;//清除TF0标志
@@ -52,7 +52,7 @@ void Timer0Init(void)//10毫秒@24.000MHz
 /* } */
 
 /* Timer0 interrupt routine */
-void tm0_isr() interrupt 1
+void tm0_isr() __interrupt 1
 {
     TL0 = 0xE0;//设置定时初值
     TH0 = 0xB1;//设置定时初值
@@ -70,12 +70,12 @@ void tm0_isr() interrupt 1
         }
     }
 
-    if (++count = = 100 * 2) {//1000ms * 2 -> 2s更新一次dht11
+    if (++count == 100 * 2) {//1000ms * 2 -> 2s更新一次dht11
         /* lcd_light_back = !lcd_light_back ; */
         count = 0;//reset counter
         if (!dht11_read_data()) {
             //read success
-            dht11_data[5] = 1;
+            dht11_data[4] = 1;
         }
     }
 

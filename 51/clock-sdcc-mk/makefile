@@ -2,10 +2,16 @@ DEVICE = stc8f2k32s2
 # set compiler path & parameters
 CC_ROOT =
 CC      = sdcc
-CFLAGS  =
+
+# MCU = 16f88
+# ARCH = pic14
+
+# CFLAGS = -m$(ARCH) -p$(MCU) 
+# LDFLAGS = -c -r -w -m I/usr/share/sdcc/lib/$(ARCH)/
 
 # set output folder and target name
-OUTPUT_DIR = ./$(DEVICE)
+# OUTPUT_DIR = ./$(DEVICE)
+OUTPUT_DIR = ./out
 TARGET     = $(OUTPUT_DIR)/$(DEVICE).hex
 
 # set project folder and files (all *.c)
@@ -23,6 +29,9 @@ INCLUDE = -I$(PRJ_SRC_DIR)
 # collect all source directories
 VPATH=$(PRJ_SRC_DIR)
 
+# 以创建变量来创建文件夹
+dummy_build_folder := $(shell mkdir -p $(OUTPUT_DIR))
+
 #.PHONY 虚假的目标，如果有文件名字叫clean不会影响目标clean执行
 .PHONY: clean
 
@@ -32,6 +41,7 @@ all: $(TARGET)
 # 	$(CC) $(CFLAGS) $(INCLUDE) -c $?
 
 $(OUTPUT_DIR)/%.rel: %.c #匹配符 %
+# @mkdir -p $(@D) #创建文件夹
 	$(CC) $(CFLAGS) $(INCLUDE) -c $? -o $@
 
 $(TARGET): $(PRJ_OBJECTS)
@@ -41,4 +51,5 @@ flash: $(TARGET)
 	stcflash $(TARGET)
 
 clean:
-	rm -rf $(OUTPUT_DIR)/*
+# rm -rf $(OUTPUT_DIR)/*
+	rm -rf $(OUTPUT_DIR)

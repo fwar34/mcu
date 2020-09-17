@@ -5,9 +5,9 @@
 extern __bit enter_settings_flag;//进入设置的标志
 extern unsigned short idle_count;//最后一次设置开始空闲计数
 
-__sbit __at (P1 + 4) DS1302_RST;
-__sbit __at (P1 + 3) DS1302_IO;
-__sbit __at (P1 + 2) DS1302_CLK;
+#define DS1302_RST P1_4
+#define DS1302_IO P1_3
+#define DS1302_CLK P1_2
 
 unsigned int new_value = 0;
 
@@ -28,7 +28,7 @@ void ds1302_write_byte(unsigned char dat)
             DS1302_IO = 0;
         }
         DS1302_CLK = 1;
-        dat >> = 1;
+        dat >>= 1;
     }
 }
 
@@ -37,9 +37,9 @@ unsigned char ds1302_read_byte()
     unsigned char i,ret = 0;
     for (i = 0;i < 8;i++) {
         DS1302_CLK = 0;
-        ret >> = 1;
+        ret >>= 1;
         if (DS1302_IO) {
-            ret | = 0x80;
+            ret |= 0x80;
         }
         DS1302_CLK = 1;
     }
@@ -74,7 +74,7 @@ unsigned char ds1302_check()
     unsigned char ret;
     ds1302_write(DS1302_CONTROL_REG, 0x80);
     ret = ds1302_read(DS1302_CONTROL_REG);
-    if (ret = = 0x80)
+    if (ret == 0x80)
         return 1;
     return 0;
 }
@@ -135,9 +135,9 @@ unsigned char ds1302_read_ram(unsigned char ram_num)
 
 char process_time_settings(unsigned char row, unsigned char column)
 {
-    if (row = = 1 && column = = 1) {//key1 beep开关
+    if (row == 1 && column == 1) {//key1 beep开关
         beep_setting = !beep_setting;
-    } else if (row = = 2 && column = = 1) {//key3 lcd背光开关
+    } else if (row == 2 && column == 1) {//key3 lcd背光开关
         lcd_light_back = !lcd_light_back;
     } else {
         return -1;//返回非0表示没有按键按下
@@ -147,7 +147,7 @@ char process_time_settings(unsigned char row, unsigned char column)
     return 0;
 }
 
-void ds1302_pause(bit flag)
+void ds1302_pause(__bit flag)
 {
     unsigned char second = 0;
     ds1302_write(DS1302_CONTROL_REG, 0x00);//关闭写保护
@@ -192,7 +192,7 @@ void exit_settings()
     idle_count = 0;
     enter_settings_flag = 0;
 
-    if (current_setting > 0 && current_setting <7)
+    if (current_setting > 0 && current_setting < 7)
         ds1302_write(DS1302_CONTROL_REG, 0x00);//关闭写保护
 
     switch (current_setting) {

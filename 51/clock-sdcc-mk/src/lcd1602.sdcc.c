@@ -4,9 +4,9 @@
 
 #define LCD_DB P2
 
-__sbit __at (P0+0) LCD_RS;
-__sbit __at (P0+2) LCD_EN;
-__sbit __at (P0+1) LCD_RW;
+#define LCD_RS P0_0
+#define LCD_EN P0_2
+#define LCD_RW P0_1
 
 extern unsigned char dht11_data[5];//湿度十位，湿度个位，温度十位，温度个位，是否更新显示的标志
 
@@ -45,7 +45,7 @@ void lcdSetCursor(unsigned char x, unsigned char y)
 {
     unsigned char addr;
 
-    if (x = = 0)
+    if (x == 0)
         addr = 0x80 + y;
     else
         addr = 0xC0 + y;
@@ -64,7 +64,7 @@ void lcdShowStr(unsigned char x, unsigned char y, unsigned char *str, unsigned c
 void write_str(unsigned char addr_start, unsigned char* str)
 {
     lcdWriteCmd(addr_start);
-    while (*str ! = '\0')
+    while (*str != '\0')
     {
         lcdWriteDat(*str++);
     }
@@ -237,8 +237,8 @@ void display_dht11()
 {
     unsigned char i, j;
     //dht11因为2秒钟才读一次，所以只需要2秒钟更新下显示就行
-    if (dht11_data[5]) {
-        dht11_data[5] = 0;//清除dht11显示标志
+    if (dht11_data[4]) {
+        dht11_data[4] = 0;//清除dht11显示标志
 
         i = dht11_data[0] / 10;//湿度十位
         j = dht11_data[0] % 10;//湿度个位

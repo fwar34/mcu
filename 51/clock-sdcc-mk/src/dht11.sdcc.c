@@ -1,4 +1,4 @@
-#include <8051.h>
+#include <mcs51/8051.h>
 #include "dht11.sdcc.h"
 #include "delay.sdcc.h"
 

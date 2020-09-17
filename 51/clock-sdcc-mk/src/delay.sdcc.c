@@ -5,8 +5,8 @@ void Delay600us()//@11.0592MHz
 {
     unsigned char i, j;
 
-    _nop_();
-    _nop_();
+    NOP();
+    NOP();
     i = 9;
     j = 155;
     do
@@ -19,8 +19,8 @@ void Delay4ms()//@11.0592MHz
 {
     unsigned char i, j;
 
-    _nop_();
-    _nop_();
+    NOP();
+    NOP();
     i = 58;
     j = 112;
     do
@@ -80,7 +80,7 @@ void Delay2us()//@11.0592MHz
 {
     unsigned char i;
 
-    _nop_();
+    NOP();
     i = 5;
     while (--i);
 }
@@ -113,8 +113,8 @@ void Delay30us()//@11.0592MHz
 {
     unsigned char i;
 
-    _nop_();
-    _nop_();
+    NOP();
+    NOP();
     i = 108;
     while (--i);
 }
@@ -123,7 +123,7 @@ void Delay50us()//@11.0592MHz
 {
     unsigned char i;
 
-    _nop_();
+    NOP();
     i = 182;
     while (--i);
 }
@@ -164,7 +164,7 @@ void Delay600ms()//@11.0592MHz
 {
     unsigned char i, j, k;
 
-    _nop_();
+    NOP();
     i = 34;
     j = 170;
     k = 117;
@@ -181,7 +181,7 @@ void Delay5us()//@11.0592MHz
 {
     unsigned char i;
 
-    _nop_();
+    NOP();
     i = 16;
     while (--i);
 }
@@ -190,8 +190,8 @@ void Delay1us()//@11.0592MHz
 {
     unsigned char i;
 
-    _nop_();
-    _nop_();
+    NOP();
+    NOP();
     i = 1;
     while (--i);
 }

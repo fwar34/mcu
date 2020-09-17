@@ -1,14 +1,14 @@
 #ifndef _COMMON_H_
 #define _COMMON_H_
-#include <8051.h>
+#include <mcs51/8051.h>
 
 extern unsigned char current_setting;//当前设置项
 //current_setting可以作为下标来取，秒不用设置，所以不在数组里面
 extern unsigned char ds1302_reg_addr[11];
 
-__sbit __at (P0+3) lcd_light_back;
-__sbit __at (P0+7) beep;
 extern __bit beep_setting;//beep开关
+#define lcd_light_back P0_3
+#define beep P0_7
 
 #define beep_ring() beep = 0
 #define beep_mute() beep = 1

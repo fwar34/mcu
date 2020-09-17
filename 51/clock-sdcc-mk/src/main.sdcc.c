@@ -36,7 +36,8 @@ extern unsigned int new_value;
 
 extern unsigned char ch_count;//两次ch键进入设置的时间计数
 
-__sbit __at (P0+5) led;
+#define led P0_5
+
 void display_current_setting()
 {
     write_char(0, 13, current_setting + '0');
@@ -116,5 +117,6 @@ void main(void)
         //lcd_light_back = !lcd_light_back;
         //led = !led;
         //Delay1000ms();
+        P0_5 = !P0_5;
     }
 }
