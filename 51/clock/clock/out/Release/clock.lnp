@@ -1,3 +1,0 @@
-
-.\out\Release\main.o,.\out\Release\ADC.o,.\out\Release\delay.o,.\out\Release\EEPROM.o,.\out\Release\Exti.o,.\out\Release\GPIO.o,.\out\Release\PCA.o,.\out\Release\Soft_UART.o,.\out\Release\timer.o,.\out\Release\USART.o TO .\out\Release\clock
-PRINT(.\out\Release\clock.map) REMOVEUNUSED

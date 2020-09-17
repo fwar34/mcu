@@ -1,0 +1,20 @@
+############################################
+#https://blog.csdn.net/qq_35867420/article/details/106731928
+# 主程序，根据自己程序更改
+MainFile := Demo                   
+# 所有的c文件，根据运行平台更改
+ALLC := $(shell dir /b *.c)
+############################################
+OBJ := $(patsubst %.c, %.rel, $(ALLC))
+CC := sdcc
+tmp1 := $(strip $(MainFile))$(strip .hex)
+tmp2 := $(strip $(MainFile))$(strip .ihx)
+all: end
+$(OBJ):%.rel: %.c
+	$(CC) -c $^
+ihx: $(OBJ)
+	$(CC) $(OBJ)
+end: ihx
+	packihx $(tmp2)>$(tmp1)
+clean: 
+	del *.hex *.ihx *.map *.asm *.lk *.lst *.mem *.rel *.rst *sym
