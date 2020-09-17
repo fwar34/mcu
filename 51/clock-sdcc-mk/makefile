@@ -7,6 +7,7 @@ CC      = sdcc
 # ARCH = pic14
 
 # CFLAGS = -m$(ARCH) -p$(MCU) 
+CFLAGS = --verbose -V
 # LDFLAGS = -c -r -w -m I/usr/share/sdcc/lib/$(ARCH)/
 
 # set output folder and target name
