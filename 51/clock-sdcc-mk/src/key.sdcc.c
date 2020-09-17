@@ -1,9 +1,8 @@
-#include <reg52.h>
-#include "key.h"
-#include "ds1302.h"
-#include "delay.h"
+#include <8051.h>
+#include "key.sdcc.h"
+#include "ds1302.sdcc.h"
+#include "delay.sdcc.h"
 
-//只能使用第一列的两个按键，因为P37为低电平的话蜂鸣器就会响，第一次画pcb出的问题。。
 __sbit __at (P3+4) key1;
 __sbit __at (P3+5) key2;
 __sbit __at (P3+6) key3;

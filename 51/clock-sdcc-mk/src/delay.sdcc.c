@@ -1,5 +1,5 @@
-#include <intrins.h>
-#include "delay.h"
+#include <compiler.h>
+#include "delay.sdcc.h"
 
 void Delay600us()//@11.0592MHz
 {

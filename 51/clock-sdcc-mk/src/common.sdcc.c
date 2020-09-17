@@ -1,5 +1,5 @@
-#include "common.h"
-#include "delay.h"
+#include "common.sdcc.h"
+#include "delay.sdcc.h"
 
 unsigned char current_setting;//当前设置项
 //current_setting可以作为下标来取，秒不用设置，所以不在数组里面

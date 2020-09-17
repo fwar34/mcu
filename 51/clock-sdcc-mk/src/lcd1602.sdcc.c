@@ -1,6 +1,6 @@
-#include "delay.h"
-#include "lcd1602.h"
-#include "common.h"
+#include "delay.sdcc.h"
+#include "lcd1602.sdcc.h"
+#include "common.sdcc.h"
 
 #define LCD_DB P2
 

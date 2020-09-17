@@ -1,8 +1,8 @@
 /* https://blog.csdn.net/qq_42012736/article/details/80555951 */
-#include "lcd1602.h"
-#include "delay.h"
-#include "common.h"
-#include "ds1302.h"
+#include "lcd1602.sdcc.h"
+#include "delay.sdcc.h"
+#include "common.sdcc.h"
+#include "ds1302.sdcc.h"
 
 extern unsigned int new_value;
 

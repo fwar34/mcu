@@ -1,7 +1,7 @@
-#include "dht11.h"
-#include "key.h"
-#include "ds1302.h"
-#include "common.h"
+#include "dht11.sdcc.h"
+#include "key.sdcc.h"
+#include "ds1302.sdcc.h"
+#include "common.sdcc.h"
 
 extern unsigned char ch_count;//两次ch键进入设置的时间计数
 extern __bit first_ch_flag;//表示第一次按ch的标志

@@ -1,13 +1,13 @@
-#include "lcd1602.h"
-#include "ds1302.h"
-#include "common.h"
+#include "lcd1602.sdcc.h"
+#include "ds1302.sdcc.h"
+#include "common.sdcc.h"
 
 extern __bit enter_settings_flag;//进入设置的标志
 extern unsigned short idle_count;//最后一次设置开始空闲计数
 
-__sbit __at (P1+4) DS1302_RST;
-__sbit __at (P1+3) DS1302_IO;
-__sbit __at (P1+2) DS1302_CLK;
+__sbit __at (P1 + 4) DS1302_RST;
+__sbit __at (P1 + 3) DS1302_IO;
+__sbit __at (P1 + 2) DS1302_CLK;
 
 unsigned int new_value = 0;
 

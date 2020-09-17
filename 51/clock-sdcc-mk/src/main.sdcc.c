@@ -1,10 +1,10 @@
 //#include <stc8.h>
-#include "ds1302.h"
-#include "lcd1602.h"
-#include "dht11.h"
-#include "delay.h"
-#include "infrared.h"
-#include "common.h"
+#include "ds1302.sdcc.h"
+#include "lcd1602.sdcc.h"
+#include "dht11.sdcc.h"
+#include "delay.sdcc.h"
+#include "infrared.sdcc.h"
+#include "common.sdcc.h"
 
 __sfr __at (0x94) P0M0;
 __sfr __at (0x93) P0M1;

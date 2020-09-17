@@ -1,15 +1,16 @@
-//https://www.cnblogs.com/lulipro/p/10815338.html
-#include <reg52.h>
-#include "dht11.h"
-#include "delay.h"
+#include <8051.h>
+#include "dht11.sdcc.h"
+#include "delay.sdcc.h"
 
 #define DHT11_TIMEOUT -1
 #define DHT11_READ_ERROR -2
 
-__sbit __at (P0 + 6) DHT11_DAT;
+/* __sbit __at (P0 + 6) DHT11_DAT; */
+#define DHT11_DAT P0_6
 
 unsigned char dht11_data[5]; //湿度十位，湿度个位，温度十位，温度个位，是否更新显示的标志
 unsigned char dht11_temp[5]; //湿度十位，湿度个位，温度十位，温度个位，校验值
+
 
 unsigned char dht11_check_sum()
 {
@@ -28,7 +29,7 @@ char dht11_read_data()
     unsigned char i, j = 0;
     unsigned char bit_position = 0;
 
-    /* 主机发送起始信号 */
+    /* ä¸»机发送起始信号 */
     DHT11_DAT = 0; //主机将总线拉低（时间>=18ms），使得DHT11能够接收到起始信号
     Delay20ms();  //至少 18 ms
     DHT11_DAT = 1; // 主机将总线拉高（释放总线），代表起始信号结束。
@@ -50,7 +51,7 @@ char dht11_read_data()
             return DHT11_TIMEOUT;
     }
 
-    //主机接收dht11数据
+    //主æº接收dht11数据
     /* for (i = 0; i < 5 * 8; ++i) { */
     /*     wait_cnt = 0; */
     /*     while (!DHT11_DAT) { //拉低50us作为bit信号的起始标志 */
@@ -80,7 +81,7 @@ char dht11_read_data()
         for (i = 0; i < 8; ++i) //读每个字节的8位
         {
             wait_cnt = 0;
-            while (!DHT11_DAT) { //拉低50us作为bit信号的起始标志
+            while (!DHT11_DAT) { //拉ä½50us作为bit信号的起始标志
                 Delay5us();
                 ++wait_cnt;
                 if (wait_cnt > 10)
@@ -114,3 +115,4 @@ char dht11_read_data()
 
     return 0;
 }
+
