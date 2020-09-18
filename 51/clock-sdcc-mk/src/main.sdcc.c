@@ -30,6 +30,7 @@ __sfr __at (0xe1) P7M1;
 #define IRC32KCR (*(unsigned char volatile __xdata *)0xfe04)
 __sfr __at (0xba) P_SW2;
 
+void tm0_isr() __interrupt(1);
 extern void Timer0Init(void);//50毫秒@11.0592MHz
 extern unsigned short idle_count;//最后一次设置开始空闲计数
 extern unsigned int new_value;

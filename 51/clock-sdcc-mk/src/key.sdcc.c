@@ -15,9 +15,9 @@ void key_scan()
 {
 }
 
-char process_key()
+unsigned char process_key()
 {
-    char ret = -1;
+    char ret = 0;
     key_scan();
     /* if (row && column) */
     /*     ret = process_time_settings(row, column); */

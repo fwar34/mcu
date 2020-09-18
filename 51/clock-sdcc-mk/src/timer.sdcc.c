@@ -3,7 +3,7 @@
 #include "ds1302.sdcc.h"
 #include "common.sdcc.h"
 
-extern unsigned char ch_count;//两次ch键进入设置的时间计数
+extern unsigned char ch_count;//两次ch键进入设置的时间计数
 extern __bit first_ch_flag;//表示第一次按ch的标志
 extern unsigned char dht11_data[5];//湿度十位，湿度个位，温度十位，温度个位，是否显示的标志
 extern unsigned short idle_count;//最后一次设置开始空闲计数
@@ -52,10 +52,11 @@ void Timer0Init(void)//10毫秒@24.000MHz
 /* } */
 
 /* Timer0 interrupt routine */
-void tm0_isr() __interrupt 1
+void tm0_isr() __interrupt(1)
+/* void tm0_isr() __interrupt 1 也可以*/
 {
-    TL0 = 0xE0;//设置定时初值
-    TH0 = 0xB1;//设置定时初值
+    /* TL0 = 0xE0;//设置定时初值 */
+    /* TH0 = 0xB1;//设置定时初值 */
     if (ch_count > 0) {//第一次点击ch按钮会把ch_count设置成1
         ++ch_count;
         if (ch_count > 100) {//1s过后没有点击第二次ch按钮的话重置字段

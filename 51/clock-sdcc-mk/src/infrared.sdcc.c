@@ -226,7 +226,8 @@ void IrInit()
     IRIN = 1;//初始化红外端口
 }
 
-void ReadIr() __interrupt 2
+/* void ReadIr() __interrupt 2 也可以*/
+void ReadIr() __interrupt(2)
 {
     unsigned char j, k;//循环控制变量
     unsigned int err;
