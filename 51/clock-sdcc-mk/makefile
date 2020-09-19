@@ -53,5 +53,5 @@ flash: $(TARGET)
 	stcflash $(TARGET)
 
 clean:
-# rm -rf $(OUTPUT_DIR)/*
-	rm -rf $(OUTPUT_DIR)
+	rm -rf $(OUTPUT_DIR)/*
+# rm -rf $(OUTPUT_DIR)

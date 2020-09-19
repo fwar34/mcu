@@ -13,6 +13,7 @@ unsigned char ch_count = 0;//两次ch键进入设置的时间计数
 __bit enter_settings_flag = 0;//进入设置的标志
 unsigned short idle_count = 0;//最后一次设置开始空闲计数
 unsigned char hex_array[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+unsigned int LowTime, HighTime; //储存高、低电平的宽度 
   
 void display_key_code()
 {
@@ -228,7 +229,7 @@ void IrInit()
 }
 
 /* void ReadIr() __interrupt(2) 也可以*/
-void ReadIr() __interrupt 2
+void ReadIr()
 {
     unsigned char j, k;//循环控制变量
     unsigned int duration; //计时变量
@@ -324,4 +325,69 @@ void ReadIr() __interrupt 2
 
     TR1 = 0;
     EX1 = 1;//打开外部中断1
+}
+
+__bit DeCode(void)
+{
+    unsigned char i,j;
+    unsigned char temp = 0;    //储存解码出的数据
+    for(i=0;i<4;i++)      //连续读取4个用户码和键数据码
+    {
+        for(j=0;j<8;j++)  //每个码有8位数字
+        {
+            temp=temp>>1;  //temp中的各数据位右移一位，因为先读出的是高位数据
+            TH1=0;         //定时器清0
+            TL1=0;         //定时器清0
+            TR1=1;         //开启定时器T0
+            while(IRIN==0)   //如果是低电平就等待
+                ;      //低电平计时
+            TR1=0;         //关闭定时器T0
+            LowTime=TH1*256+TL1;    //保存低电平宽度
+            TH1=0;         //定时器清0
+            TL1=0;         //定时器清0
+            TR1=1;         //开启定时器T0
+            while(IRIN==1)   //如果是高电平就等待
+                ;
+            TR1=0;        //关闭定时器T0
+            HighTime=TH1*256+TL1;   //保存高电平宽度
+            if((LowTime<370)||(LowTime>640))
+                return 0;        //如果低电平长度不在合理è围，则认为出错，停止解码
+            if((HighTime>420)&&(HighTime<620))   //如果高电平时间在560微秒左右，即计数560／1.085＝516次
+                temp=temp&0x7f;       //(520-100=420, 520+100=620)，则该位是0
+            if((HighTime>1300)&&(HighTime<1800)) //如果高电平时间在1680微秒左右，即计数1680／1.085＝1548次
+                temp=temp|0x80;       //(1550-250=1300,1550+250=1800),则该位是1
+        }
+        IrValue[i]=temp;//将解码出的字节值å¨存在a[i]
+    }
+    if(IrValue[2]=~IrValue[3])  //验证键数据码和其反码是否相等,一般情况下不必验证用户码
+        return 1;     //解码正确，返回1
+    return 0;
+}
+
+void ReadIr2() __interrupt 2
+{
+    EX1=0;      //关闭外中断1，不再接收二次红外信号的中断，只解码当前红外信号
+    TH1=0;      //定时器T1的高8位清0
+    TL1=0;      //定时器T1的低8位清0
+    TR1=1;    //开启定时器T1
+    while(IRIN==0);          //如果是低电平就等待，给引导码低电平计时
+    TR1=0;                //关闭定时器T1
+    LowTime=TH1*256+TL1;  //保存低电平时间
+    TH1=0;      //定时器T1的高8位清0
+    TL1=0;      //定时器T1的低8位清0
+    TR1=1;    //开启定时器T1
+    while(IRIN==1);  //如果是高电平就等待，给引导码高电平计时
+    TR1=0;        //关闭定时器T1
+    HighTime=TH1*256+TL1;//保存引导码的高电平长度
+    if((LowTime>7800)&&(LowTime<8800)&&(HighTime>3600)&&(HighTime<4700))
+    {
+        //如果是引导码,就开始解码,否则放弃,引导码的低电平计时
+        //次数＝9000us/1.085=8294, 判断区间:8300－500＝7800，8300＋500＝8800.
+        if(DeCode()==1) // 执行遥控解码功能
+        {
+            /* Disp();//调用1602LCD显示函数 */
+            beep_ring_1s();//蜂鸣器响一声 提示解码成功
+        }
+    }
+    EX1=1;   //开启外中断EX1
 }
