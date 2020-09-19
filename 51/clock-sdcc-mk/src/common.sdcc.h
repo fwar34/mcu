@@ -47,4 +47,7 @@ __sfr __at (0xe1) P7M1;
 __sfr __at (0xba) P_SW2;
 __sfr __at (0x8e) AUXR;
 
+__sfr __at (0xd6) T2H;
+__sfr __at (0xd7) T2L;
+
 #endif

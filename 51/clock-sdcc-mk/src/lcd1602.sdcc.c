@@ -11,14 +11,29 @@
 
 extern unsigned char dht11_data[5];//湿度十位，湿度个位，温度十位，温度个位，是否更新显示的标志
 
+void lcd_check_busy()
+{
+    __bit lcd_status;
+
+    LCD_RS = 0;
+    LCD_RW = 1;
+
+    do
+    {
+        LCD_EN = 1;
+        lcd_status = P2_7;
+        LCD_EN = 0;
+    } while (lcd_status);
+}
+
 void lcdWriteCmd(unsigned char cmd)
 {
-    //lcd_check_busy();
+    /* lcd_check_busy(); */
     Delay600us();
     LCD_EN = 0;
     
     LCD_RS = 0;
-    //LCD_RW = 0;
+    /* LCD_RW = 0; */
     LCD_DB = (LCD_DB & 0x0F) | (cmd & 0xF0);
     LCD_EN = 1;
     LCD_EN = 0;
@@ -29,11 +44,11 @@ void lcdWriteCmd(unsigned char cmd)
 
 void lcdWriteDat(unsigned char dat)
 {
-    /*lcd_check_busy();*/
+    /* lcd_check_busy(); */
     Delay600us();
     LCD_EN = 0;
     LCD_RS = 1;
-    //LCD_RW = 0;
+    /* LCD_RW = 0; */
     LCD_DB = (LCD_DB & 0x0F) | (dat & 0xF0);
     LCD_EN = 1;
     LCD_EN = 0;
@@ -254,5 +269,6 @@ void display_dht11()
         write_char(1, 13, i + '0');
         write_char(1, 14, j + '0');
         write_char(1, 15, 'C');
+        /* UART_send_string("dht11_display"); */
     }
 }

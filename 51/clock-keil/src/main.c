@@ -31,6 +31,7 @@ sfr P7M1        =   0xe1;
 sfr P_SW2 = 0xba;
 
 extern void Timer0Init(void);		//50毫秒@11.0592MHz
+extern void Timer1Init(void);       //timer1@11.0592MHz
 extern unsigned short idle_count; //最后一次设置开始空闲计�?
 extern unsigned int new_value;
 
@@ -97,6 +98,7 @@ void main(void)
     }
 
     Timer0Init();
+    Timer1Init();
     beep_mute();
     IrInit();
     lcd_light_back = 1;

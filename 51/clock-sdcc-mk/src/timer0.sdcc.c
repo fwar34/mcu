@@ -8,12 +8,14 @@ extern unsigned char ch_count;//两次ch键进入设置的时间计数
 extern __bit first_ch_flag;//表示第一次按ch的标志
 extern unsigned char dht11_data[5];//湿度十位，湿度个位，温度十位，温度个位，是否显示的标志
 extern unsigned short idle_count;//最后一次设置开始空闲计数
+extern __bit dht11_flag;
 
 static unsigned char count = 0;//dht11更新的计数
 
 void Timer0Init(void)        //50毫秒@11.0592MHz
 {
-    TMOD = 0x01;                    //set timer0 as mode1 (16-bit)
+    TMOD &= 0xF0;
+    TMOD |= 0x01;                    //set timer0 as mode1 (16-bit)
     TH0 = 0x4C;
     TL0 = 0x00;
 
@@ -73,8 +75,8 @@ void tm0_isr() __interrupt 1
     if (++count >= 20 * 2) {//1000ms * 2 -> 2s更新一次dht11
         /* lcd_light_back = !lcd_light_back; */
         count = 0;//reset counter
-        dht11_read_data();
-        P0_5 = !P0_5;
+        dht11_flag = 1;
+        /* P0_5 = !P0_5; */
     }
 
     process_key();//处理物理按键

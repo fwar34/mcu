@@ -8,7 +8,7 @@ sbit LCD_RS = P0 ^ 0;
 sbit LCD_EN = P0 ^ 2;
 sbit LCD_RW = P0 ^ 1;
 
-extern unsigned char dht11_data[5]; //湿度十位，湿度个位，温度十位，温度个位，是否更新显示的标志
+extern unsigned char dht11_data[5]; //湿度十位，湿度个位，温度十位，温度个位，是否更新显示的标�?
 
 void lcdWriteCmd(unsigned char cmd)
 {
@@ -95,8 +95,8 @@ void initLcd1602()
 void display_sec(unsigned char x)
 {
     unsigned char i, j;
-    i = x / 10; //取十位
-    j = x % 10; //取个位
+    i = x / 10; //取十�?
+    j = x % 10; //取个�?
     write_char(1, 6, i + '0');
     write_char(1, 7, j + '0');
 }
@@ -104,8 +104,8 @@ void display_sec(unsigned char x)
 void display_min(unsigned char x)
 {
     unsigned char i, j;
-    i = x / 10; //取十位
-    j = x % 10; //取个位
+    i = x / 10; //取十�?
+    j = x % 10; //取个�?
     write_char(1, 3, i + '0');
     write_char(1, 4, j + '0');
 }
@@ -122,8 +122,8 @@ void flicker_minute(unsigned char x)
 void display_hour(unsigned char x)
 {
     unsigned char i, j;
-    i = x / 10; //取十位
-    j = x % 10; //取个位
+    i = x / 10; //取十�?
+    j = x % 10; //取个�?
     write_char(1, 0, i + '0');
     write_char(1, 1, j + '0');
 }
@@ -140,8 +140,8 @@ void flicker_hour(unsigned char x)
 void display_day(unsigned char x)
 {
     unsigned char i, j;
-    i = x / 10; //取十位
-    j = x % 10; //取个位
+    i = x / 10; //取十�?
+    j = x % 10; //取个�?
     write_char(0, 8, i + '0');
     write_char(0, 9, j + '0');
 }
@@ -158,8 +158,8 @@ void flicker_day(unsigned char x)
 void display_month(unsigned char x)
 {
     unsigned char i, j;
-    i = x / 10; //取十位
-    j = x % 10; //取个位
+    i = x / 10; //取十�?
+    j = x % 10; //取个�?
     write_char(0, 5, i + '0');
     write_char(0, 6, j + '0');
 }
@@ -176,8 +176,8 @@ void flicker_month(unsigned char x)
 void display_year(unsigned char x)
 {
     unsigned char i, j;
-    i = x / 10; //取十位
-    j = x % 10; //取个位
+    i = x / 10; //取十�?
+    j = x % 10; //取个�?
     write_char(0, 2, i + '0');
     write_char(0, 3, j + '0');
 }
@@ -198,8 +198,8 @@ void flicker_year(unsigned char x)
 void display_week(unsigned char x)
 {
     unsigned char i, j;
-    i = x / 10; //取十位
-    j = x % 10; //取个位
+    i = x / 10; //取十�?
+    j = x % 10; //取个�?
     write_char(0, 11, i + '0');
     write_char(0, 12, j + '0');
 }
@@ -236,9 +236,9 @@ void display(DS1302_TIME* time)
 void display_dht11()
 {
     unsigned char i, j;
-    //dht11因为2秒钟才读一次，所以只需要2秒钟更新下显示就行
-    if (dht11_data[5]) {
-        dht11_data[5] = 0; //清除dht11显示标志
+    //dht11因为2秒钟才读一次，所以只需�?2秒钟更新下显示就�?
+    // if (dht11_data[4]) {
+        dht11_data[4] = 0; //清除dht11显示标志
 
         i = dht11_data[0] / 10; //湿度十位
         j = dht11_data[0] % 10; //湿度个位
@@ -252,5 +252,5 @@ void display_dht11()
         write_char(1, 13, i + '0');
         write_char(1, 14, j + '0');
         write_char(1, 15, 'C');
-    }
+    // }
 }
