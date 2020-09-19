@@ -60,7 +60,7 @@ void tm0_isr() interrupt 1
         count = 0;                //reset counter
         if (!dht11_read_data()) { 
             //read success
-            dht11_data[5] = 1;
+            dht11_data[4] = 1;
         }
     }
 

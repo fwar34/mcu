@@ -31,7 +31,7 @@ sfr P7M1        =   0xe1;
 sfr P_SW2 = 0xba;
 
 extern void Timer0Init(void);		//50毫秒@11.0592MHz
-extern unsigned short idle_count; //最后一次设置开始空闲计数
+extern unsigned short idle_count; //最后一次设置开始空闲计�?
 extern unsigned int new_value;
 
 extern unsigned char ch_count; //两次ch键进入设置的时间计数
@@ -54,14 +54,14 @@ void display_idle_count()
 
 void main(void)
 {
-    //初始时间20年8月16号14点16分55秒星期天 
+    //初始时间20�?8�?16�?14�?16�?55秒星期天 
     DS1302_TIME start_time = {20, 9, 9, 3, 0, 6, 40};
     DS1302_TIME current_time;
 
     P_SW2 = 0x80;
     XOSCCR = 0xc0;                              //启动外部晶振
     while (!(XOSCCR & 1));                      //等待时钟稳定
-    CKDIV = 0x00;                               //时钟不分频
+    CKDIV = 0x00;                               //时钟不分�?
     CKSEL = 0x01;                               //选择外部晶振
     P_SW2 = 0x00;
 
