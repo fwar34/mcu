@@ -64,30 +64,6 @@ void main(void)
     CKDIV = 0x00;                               //时钟不分频
     CKSEL = 0x01;                               //选择外部晶振
     P_SW2 = 0x00;
-
-     /*P0M1 = 0x00;
-        P0M0 = 0x00;
-
-        P1M1 = 0x00;         
-        P1M0 = 0x00;
-
-        P2M1 = 0x00;
-        P2M0 = 0x00;
-
-        P3M1 = 0x00;
-        P3M0 = 0x00;
-
-        P4M1 = 0x00;
-        P4M0 = 0x00;
-
-        P5M1 = 0x00;
-        P5M0 = 0x00;
-
-        P6M1 = 0x00;
-        P6M0 = 0x00;
-
-        P7M1 = 0x00;
-        P7M0 = 0x00;*/
     
     initLcd1602();
     ds1302_init();

@@ -14,8 +14,10 @@
 #define XOSCCR (*(unsigned char volatile __xdata *)0xfe03)
 #define IRC32KCR (*(unsigned char volatile __xdata *)0xfe04)
 
+void IrInit();
 void tm0_isr() __interrupt 1;
-void tm3_Isr() __interrupt 19;
+void IrRead() __interrupt 2;
+/* void tm3_Isr() __interrupt 19; */
 extern void Timer0Init(void);//50毫秒@11.0592MHz
 extern void Timer1Init(void);
 extern void Timer3Init(void);//56微秒@11.0592MHz
@@ -45,7 +47,6 @@ void display_idle_count()
 
 void main(void)
 {
-    /* unsigned char msg[] = "hello"; */
     //初始时间20年8月16号14点16分55秒星期天 
     DS1302_TIME start_time = {20, 9, 9, 3, 0, 6, 40};
     DS1302_TIME current_time;
@@ -56,34 +57,11 @@ void main(void)
     CKDIV = 0x00;//时钟不分频
     CKSEL = 0x01;//选择外部晶振
     P_SW2 = 0x00;
-
-    /*P0M1 = 0x00;
-      P0M0 = 0x00;
-
-      P1M1 = 0x00;         
-      P1M0 = 0x00;
-
-      P2M1 = 0x00;
-      P2M0 = 0x00;
-
-      P3M1 = 0x00;
-      P3M0 = 0x00;
-
-      P4M1 = 0x00;
-      P4M0 = 0x00;
-
-      P5M1 = 0x00;
-      P5M0 = 0x00;
-
-      P6M1 = 0x00;
-      P6M0 = 0x00;
-
-      P7M1 = 0x00;
-      P7M0 = 0x00;*/
     
     initLcd1602();
     ds1302_init();
     UartInit();
+    IrInit();
 
     if (!ds1302_is_running()) {
         ds1302_write_time(&start_time);
@@ -93,12 +71,10 @@ void main(void)
     Timer1Init(); //dht11 use
     Timer3Init(); //ir use
     beep_mute();
-    /* IrInit(); */
     lcd_light_back = 1;
 
     while (1)
     {
-        /* UART_send_string("ok"); */
         display_current_setting();
         display_idle_count();
         if (current_setting) {
@@ -113,10 +89,5 @@ void main(void)
             dht11_read_data();
             display_dht11();
         }
-
-        //lcd_light_back = !lcd_light_back;
-        //led = !led;
-        //Delay1000ms();
-        /* P0_5 = !P0_5; */
     }
 }

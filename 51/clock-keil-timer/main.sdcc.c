@@ -1,4 +1,4 @@
-//#include <stc8.h>
+#include <stc8.h>
 #include "ds1302.sdcc.h"
 #include "lcd1602.sdcc.h"
 #include "dht11.sdcc.h"
@@ -8,25 +8,23 @@
 #include "uart_sdcc.h"
 
 
-#define CKSEL (*(unsigned char volatile __xdata *)0xfe00)
-#define CKDIV (*(unsigned char volatile __xdata *)0xfe01)
-#define IRC24MCR (*(unsigned char volatile __xdata *)0xfe02)
-#define XOSCCR (*(unsigned char volatile __xdata *)0xfe03)
-#define IRC32KCR (*(unsigned char volatile __xdata *)0xfe04)
+//#define CKSEL (*(unsigned char volatile __xdata *)0xfe00)
+//#define CLKDIV (*(unsigned char volatile __xdata *)0xfe01)
+//#define IRC24MCR (*(unsigned char volatile __xdata *)0xfe02)
+//#define XOSCCR (*(unsigned char volatile __xdata *)0xfe03)
+//#define IRC32KCR (*(unsigned char volatile __xdata *)0xfe04)
 
-void tm0_isr() __interrupt 1;
-void tm3_Isr() __interrupt 19;
 extern void Timer0Init(void);//50毫秒@11.0592MHz
 extern void Timer1Init(void);
-extern void Timer3Init(void);//56微秒@11.0592MHz
+//extern void Timer3Init(void);//56微秒@11.0592MHz
 extern unsigned short idle_count;//最后一次设置开始空闲计数
 extern unsigned int new_value;
 
 extern unsigned char ch_count;//两次ch键进入设置的时间计数
 
-#define led P0_5
+sbit led = P0 ^ 5;
 
-__bit dht11_flag = 0;
+bit dht11_flag = 0;
 
 void display_current_setting()
 {
@@ -53,33 +51,9 @@ void main(void)
     P_SW2 = 0x80;
     XOSCCR = 0xc0;//启动外部晶振
     while (!(XOSCCR & 1));//等待时钟稳定
-    CKDIV = 0x00;//时钟不分频
+    CLKDIV = 0x00;//时钟不分频
     CKSEL = 0x01;//选择外部晶振
     P_SW2 = 0x00;
-
-    /*P0M1 = 0x00;
-      P0M0 = 0x00;
-
-      P1M1 = 0x00;         
-      P1M0 = 0x00;
-
-      P2M1 = 0x00;
-      P2M0 = 0x00;
-
-      P3M1 = 0x00;
-      P3M0 = 0x00;
-
-      P4M1 = 0x00;
-      P4M0 = 0x00;
-
-      P5M1 = 0x00;
-      P5M0 = 0x00;
-
-      P6M1 = 0x00;
-      P6M0 = 0x00;
-
-      P7M1 = 0x00;
-      P7M0 = 0x00;*/
     
     initLcd1602();
     ds1302_init();
@@ -91,9 +65,9 @@ void main(void)
 
     Timer0Init(); //
     Timer1Init(); //dht11 use
-    Timer3Init(); //ir use
+    //Timer3Init(); //ir use
     beep_mute();
-    /* IrInit(); */
+    IrInit();
     lcd_light_back = 1;
 
     while (1)

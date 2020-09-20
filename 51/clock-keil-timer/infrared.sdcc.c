@@ -1,17 +1,19 @@
 /* https://blog.csdn.net/qq_42012736/article/details/80555951 */
-#if 0
 #include "lcd1602.sdcc.h"
 #include "delay.sdcc.h"
 #include "common.sdcc.h"
 #include "ds1302.sdcc.h"
 #include "uart_sdcc.h"
+#include "infrared.sdcc.h"
 
 extern unsigned int new_value;
 
-#define IRIN P3_3
+sbit leddd = P0 ^ 5;
+
+sbit IRIN = P3 ^ 3;
 unsigned char IrValue[4];//用于存储数据码，对应前两个是地址位，后两个是数据位和校验位
 unsigned char ch_count = 0;//两次ch键进入设置的时间计数
-__bit enter_settings_flag = 0;//进入设置的标志
+bit enter_settings_flag = 0;//进入设置的标志
 unsigned short idle_count = 0;//最后一次设置开始空闲计数
 unsigned char hex_array[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 unsigned int LowTime, HighTime; //储存高、低电平的宽度 
@@ -179,7 +181,7 @@ void process_confirm()
 //0C 18 5E
 //08 1C 5A
 //42 52 4A
-__bit process_irkey()
+bit process_irkey()
 {
     if (IrValue[2] == 0x46) {//CH 双击进入设置，单击确认（设置的时候暂停ds1302）
         process_ch();
@@ -222,25 +224,27 @@ __bit process_irkey()
 
 void IrInit()
 {
-    /* IT1 = 1;//下降沿触发 */
-    /* EX1 = 1;//打开中断1允许 */
-    /* EA = 1;//打开总中断 */
+    IT1 = 1;//下降沿触发
+    EX1 = 1;//打开中断1允许
+    EA = 1;//打开总中断
 
-    /* IRIN = 1;//初始化红外端口 */
+    IRIN = 1;//初始化红外端口
 }
 
+#if 0
 /* void ReadIr() __interrupt(2) 也可以*/
-void ReadIr() __interrupt 2
-{
+void ReadIr() interrupt 2
+{  
     unsigned char j, k;//循环控制变量
     unsigned int duration; //计时变量
 
+    //UART_send_string("ir ReadIr");
     EX1 = 0;//关闭外部中断1,只解码当前红外信号
     /* Delay7ms(); */
     TH1 = 0;
     TL1 = 0;
     TR1 = 1;
-    while (TH1 * 256 + TL1 < 6451); //1.085 * 6451 = 7ms
+    //while (TH1 * 256 + TL1 < 6451); //1.085 * 6451 = 7ms
 
     if (IRIN == 0)//确认是否真的接收到正确的信号；与开关消抖类似
     {
@@ -253,7 +257,7 @@ void ReadIr() __interrupt 2
             if (TH1 * 256 + TL1 > 9216) { //10ms
                 TR1 = 0;
                 EX1 = 1;//打开外部中断1
-                /* UART_send_string("error1"); */
+                UART_send_string("ir error1");
                 return;
             }
         }
@@ -263,10 +267,10 @@ void ReadIr() __interrupt 2
         TL1 = 0;
         while (IRIN == 1)//等待4.5ms的起始高电平过去
         {
-            if (TH1 * 256 + TL1 > 4608) { //5ms还是高电平就退出
+            if (TH1 * 256 + TL1 > 5000) { //5ms还是高电平就退出
                 TR1 = 0;
                 EX1 = 1;//打开外部中断1
-                UART_send_string("error2");
+                UART_send_string("ir error2");
                 return;
             }
         }
@@ -280,10 +284,10 @@ void ReadIr() __interrupt 2
                 TL1 = 0;
                 while (IRIN == 0)//等待信号前面的560us低电平过去
                 {
-                    if (TH1 * 256 + TL1 > 553) { //600us还是低电平就退出
+                    if (TH1 * 256 + TL1 > /*553*/921) { //600us还是低电平就退出
                         TR1 = 0;
                         EX1 = 1;//打开外部中断1
-                        UART_send_string("error3");
+                        UART_send_string("ir error3");
                         return;
                     }
                 }
@@ -292,10 +296,10 @@ void ReadIr() __interrupt 2
                 TL1 = 0;
                 while (IRIN == 1)//计算高电平的时间长度。
                 {
-                    if (TH1 * 256 + TL1 > 1843) { //高电平大于2ms就退出
+                    if (TH1 * 256 + TL1 > /*1843*/2119) { //高电平大于2ms就退出
                         TR1 = 0;
                         EX1 = 1;//打开外部中断1
-                        UART_send_string("error4");
+                        UART_send_string("ir error4");
                         break;
                     }
                 }
@@ -322,8 +326,9 @@ void ReadIr() __interrupt 2
         if (IrValue[2] == ~IrValue[3]) {
             /* display_key_code(); */
             if (process_irkey()) {
-                beep_ring_1s();
+                //beep_ring_1s();
                 idle_count = 1;
+                leddd = !leddd;
             }
         }
     }
@@ -331,9 +336,9 @@ void ReadIr() __interrupt 2
     TR1 = 0;
     EX1 = 1;//打开外部中断1
 }
+#endif
 
-#if 0
-__bit DeCode(void)
+bit DeCode(void)
 {
     unsigned char i,j;
     unsigned char temp = 0;    //储存解码出的数据
@@ -349,7 +354,7 @@ __bit DeCode(void)
                 if (TH1 * 256 + TL1 > 553) {
                     EX1=1;      
                     TR1=0;    //开启定时器T1
-                    UART_send_string("err3");
+                    UART_send_string("ir err3");
                     break;
                 }
             }
@@ -363,7 +368,7 @@ __bit DeCode(void)
                 if (TH1 * 256 + TL1 > 1843) { //2ms
                     EX1=1;      
                     TR1=0;    //开启定时器T1
-                    UART_send_string("err4");
+                    UART_send_string("ir err4");
                     break;
                 }
             };
@@ -383,9 +388,9 @@ __bit DeCode(void)
     return 0;
 }
 
-void ReadIr2() __interrupt 2
+void ReadIr() interrupt 2
 {
-    /* EX1=0;      //关闭外中断1，不再接收二次红外信号的中断，只解码当前红外信号 */
+    EX1=0;      //关闭外中断1，不再接收二次红外信号的中断，只解码当前红外信号
     TH1=0;      //定时器T1的高8位清0
     TL1=0;      //定时器T1的低8位清0
     TR1=1;    //开启定时器T1
@@ -393,7 +398,7 @@ void ReadIr2() __interrupt 2
         if (TH1 * 256 + TL1 > 9216) {
             EX1=1;      //关闭外中断1，不再接收二次红外信号的中断，只解码当前红外信号
             TR1=0;    //开启定时器T1
-            UART_send_string("err1");
+            UART_send_string("ir err1");
             break;
         }
     };          //如果是低电平就等待，给引导码低电平计时
@@ -406,7 +411,7 @@ void ReadIr2() __interrupt 2
         if (TH1 * 256 + TL1 > 4608) {
             EX1=1;      //关闭外中断1，不再接收二次红外信号的中断，只解码当前红外信号
             TR1=0;    //开启定时器T1
-            UART_send_string("err2");
+            UART_send_string("ir err2");
             break;
         }
     };  //如果是高电平就等待，给引导码高电平计时
@@ -420,12 +425,10 @@ void ReadIr2() __interrupt 2
         if(DeCode()==1) // 执行遥控解码功能
         {
             /* Disp();//调用1602LCD显示函数 */
-            beep_ring_1s();//蜂鸣器响一声 提示解码成功
-        }
+            //beep_ring_1s();//蜂鸣器响一声 提示解码成功
+            leddd = !leddd;
+         }
     }
     EX1=1;   //开启外中断EX1
     /* UART_send_string("decode"); */
 }
-#endif
-
-#endif
