@@ -9,6 +9,7 @@ extern unsigned char ds1302_reg_addr[11];
 extern __bit beep_setting;//beep开关
 #define lcd_light_back P0_3
 #define beep P0_7
+#define led P0_5
 
 #define beep_ring() beep = 0
 #define beep_mute() beep = 1
@@ -60,5 +61,11 @@ __sfr __at (0xef) AUXINTIF;
 #define ET2 0x04
 #define ET3 0x20
 #define T3IF 0x02
+
+#define CKSEL (*(unsigned char volatile __xdata *)0xfe00)
+#define CLKDIV (*(unsigned char volatile __xdata *)0xfe01)
+#define IRC24MCR (*(unsigned char volatile __xdata *)0xfe02)
+#define XOSCCR (*(unsigned char volatile __xdata *)0xfe03)
+#define IRC32KCR (*(unsigned char volatile __xdata *)0xfe04)
 
 #endif

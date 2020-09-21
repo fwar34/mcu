@@ -326,7 +326,7 @@ void ReadIr() interrupt 2
         if (IrValue[2] == ~IrValue[3]) {
             /* display_key_code(); */
             if (process_irkey()) {
-                //beep_ring_1s();
+                beep_ring_1s();
                 idle_count = 1;
                 leddd = !leddd;
             }
