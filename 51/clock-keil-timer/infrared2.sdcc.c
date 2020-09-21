@@ -8,12 +8,21 @@
 extern unsigned int new_value;
 
 sbit IRIN = P3 ^ 3;
-unsigned char IrValue[4];//用于存储数据码，对应前两个是地址位，后两个是数据位和校验位
-unsigned char IrRecStep = 0;                  //接收步骤
-unsigned int IrRecCnt = 0;                   //接收时间计数
-unsigned char IrIndex = 0;                    //接收位数
-bit IrRecFlag = 0;                  //接收完标志
+sbit leddd = P0 ^ 5;
+unsigned int SURGE_INTERVAL = 0;
+unsigned char HIGH_WORD = 0;
+unsigned char LOW_WORD = 0;
+unsigned char IR_CODE = 0;
+unsigned int IR_REPEAT_FOLLOW_UP = 0;
+unsigned int IR_REPEAT_COUNT = 0;
+unsigned char SURGE_COUNT = 0;
+unsigned char IR_COMPLAT = 0;
 
+unsigned char IrValue[4];//用于存储数据码，对应前两个是地址位，后两个是数据位和校验位
+unsigned char IR_ID = 0;                  //接收步骤
+/* unsigned int IrRecCnt = 0;                   //接收时间计数 */
+/* unsigned char IrIndex = 0;                    //接收位数 */
+/* __bit IrRecFlag = 0;                  //接收完标志 */
 
 unsigned char ch_count = 0;//两次ch键进入设置的时间计数
 bit enter_settings_flag = 0;//进入设置的标志
@@ -233,121 +242,134 @@ void IrInit()
     IRIN = 1;//初始化红外端口
 }
 
-
 void IrReceive()
 {
-    switch(IrRecStep)
+    switch(IR_ID)
     {
+    //解码开始
     case 0:
-        IrIndex = 0;                   //接收位数
-        while (IRIN==0) // 读入 PD4 的引脚信号  //检测低电平
-        {
-            IrRecCnt++;                 //接收时间计数
-        }
-        if(IRIN==1)
-        {
-            if((IrRecCnt>=155)&&(IrRecCnt<=165)) // 码头低电平时间9ms
-            {
-                IrRecCnt = 1;
-                IrRecStep++;
-                IrValue[0] = 0;
-                IrValue[1] = 0;
-                IrValue[2] = 0;
-                IrValue[3] = 0;
-            }
-            else
-            {
-                IrRecCnt = 0;
-                IrRecStep = 0;
-            }
-        }
-        break;
+    {
+        IR_ID=1;
+        T4T3M |= 0x08; //定时器3开始计时
+        T3H=0;
+        T3L=0;
+    }
+    break;
+    //校验码头
     case 1:
-        if(IRIN==1)
-        {
-            IrRecCnt++;
-            if(IrRecCnt >= 100)   //高电平时间过长,退出
-            {
-                IrRecCnt = 0;
-                IrRecStep = 0;
-                UART_send_string("er1");
-            }
+    {
+        T4T3M &= 0xF7;             //定时器3暂停计时
+        HIGH_WORD=T3H;             //保存高低字节
+        LOW_WORD=T3L;
+        T3H=0;
+        T3L=0;
+        T4T3M |= 0x08;                  //定时器1开
+        SURGE_INTERVAL=0;                 //测量数据整开
+        SURGE_INTERVAL=(unsigned int)HIGH_WORD;
+        SURGE_INTERVAL=SURGE_INTERVAL<<8;
+        SURGE_INTERVAL=SURGE_INTERVAL|LOW_WORD;
+        /* nop(); */
+        //引导码捕捉
+        /* if(SURGE_INTERVAL>=6300&&SURGE_INTERVAL<=7300) { */ 
+        if(SURGE_INTERVAL>=11612&&SURGE_INTERVAL<=13456) { //12.6ms->14.6ms
+            IR_ID=2;                       //遥控头获得位置1
+            SURGE_COUNT=0;
+        } else {
+            IR_ID=0;
+            /* UART_send_byte(0xAA); */
+            UART_send_byte(SURGE_INTERVAL >> 8);
+            UART_send_byte(SURGE_INTERVAL & 0xFF);
         }
-        else
-        {
-            if((IrRecCnt>=75)&&(IrRecCnt<=85))   // 码头高电平时间4.5ms
-            {
-                IrRecCnt = 1;
-                IrRecStep = 2;
-            }
-            else
-            {
-                IrRecCnt =0;
-                IrRecStep = 0;
-            }
-        }
-        break;
+    }
+    break;
+    //解码
     case 2:
-        if(IRIN==0)
+    {
+        T4T3M &= 0xF7;                  //定时器1关
+        HIGH_WORD=T3H;             //保存高低字节
+        LOW_WORD=T3L;
+        T3H=0;
+        T3L=0;
+        T4T3M |= 0x08;                 //定时器2开
+        SURGE_INTERVAL=0;                //测量数据整开
+        SURGE_INTERVAL=(unsigned int)HIGH_WORD;
+        SURGE_INTERVAL=SURGE_INTERVAL<<8;
+        SURGE_INTERVAL=SURGE_INTERVAL|LOW_WORD;
+        if(SURGE_COUNT<32)
         {
-            IrRecCnt++;
-            if(IrRecCnt > 30)            //低电平时间过长,退出
+            /* if(SURGE_INTERVAL>=500&&SURGE_INTERVAL<=650)//0码 */ 
+            if(SURGE_INTERVAL>=921&&SURGE_INTERVAL<=1198)//0码 1ms->1.3ms
             {
-                IrRecCnt = 0;
-                IrRecStep = 0;
-                UART_send_string("er2");
+                IR_CODE=IR_CODE<<1;
+                SURGE_COUNT++;
             }
-        }
-        else
-        {
-            if((IrRecCnt >= 8)&&(IrRecCnt <= 12)) //每位开头0.56ms低电平
+            /* else if(SURGE_INTERVAL>=1000&&SURGE_INTERVAL<=1300)//1码 */
+            else if(SURGE_INTERVAL>=1843&&SURGE_INTERVAL<=2396)//1码 2ms->2.6ms
             {
-                IrRecCnt = 1;
-                IrRecStep = 3;
+                IR_CODE=IR_CODE<<1;
+                IR_CODE=IR_CODE|0x0001;
+                SURGE_COUNT++;
             }
             else
             {
-                IrRecCnt = 0;
-                IrRecStep = 0;
+                /* UART_send_byte(0xBB); */
+                IR_ID=0;
+                IR_CODE=0;
+                SURGE_COUNT=0;
             }
+
+            if (SURGE_COUNT == 32) {
+                /* leddd = !leddd; */
+                /* UART_send_byte(SURGE_COUNT); */
+                SURGE_COUNT = 0;
+                IR_ID = 0;
+            }
+            break;
         }
-        break;
+        else
+        {
+            /* UART_send_byte(0xCC); */
+            IR_COMPLAT=1;
+            IR_ID=3;
+            SURGE_COUNT=0;
+            IR_REPEAT_COUNT=0;             //IR重复码清零
+            break;
+        }
+    }
+    break;
     case 3:
-        if(IRIN==1)
+    {
+        T4T3M &= 0xF7;                  //定时器1关
+        HIGH_WORD=T3H;             //保存高低字节
+        LOW_WORD=T3L;
+        T3H=0;
+        T3L=0;
+        T4T3M |= 0x08;                 //定时器1开
+        SURGE_INTERVAL=0;                //测量数据整开
+        SURGE_INTERVAL=(unsigned int)HIGH_WORD;
+        SURGE_INTERVAL=SURGE_INTERVAL<<8;
+        SURGE_INTERVAL=SURGE_INTERVAL|LOW_WORD;
+        /* if(SURGE_INTERVAL>=5000&&SURGE_INTERVAL<=8000)      //100ms为连加信号 */
+        if(SURGE_INTERVAL>=9216&&SURGE_INTERVAL<=14746)      //100ms为连加信号
         {
-            IrRecCnt++;
-        }
-        else
-        {
-            if((IrRecCnt >= 25)&&(IrRecCnt <= 35))  //高电平时间约为1.68ms,则为数据1
+            IR_REPEAT_FOLLOW_UP=1;
+            IR_ID=3;
+            if(IR_REPEAT_COUNT<250)
             {
-                /* IrValue[IrIndex/8] |= IrCode[IrIndex & 0x07]; //相应位置1 */
-                IrValue[IrIndex/8] >>= 1;
-                IrValue[IrIndex/8] |= 0x80;
-                IrRecCnt = 1;
-                IrIndex++;
-                IrRecStep = 2;
-            }
-            else if((IrRecCnt >= 8)&&(IrRecCnt <= 12))//高电平时间约为0.56ms,则为数据0
-            {
-                IrRecCnt = 1;
-                IrIndex++;
-                IrRecStep = 2;
-            }
-            else
-            {
-                IrRecStep = 0;     //退出
-                IrRecCnt = 0;
-            }
-            if(IrIndex >= 32)    //是否接收完32位
-            {
-                IrRecStep = 0;
-                IrRecFlag = 1;
-                beep_ring_1s();
-                UART_send_string("beep 1s");
+                IR_REPEAT_COUNT++;
             }
         }
+        /* UART_send_byte(0xDD); */
+    }
+    break;
+    default:
         break;
     }
+}
+
+void IrRead() interrupt 2
+{
+    leddd = !leddd;
+    IrReceive();
 }
 #endif

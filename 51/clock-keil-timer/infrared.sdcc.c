@@ -391,6 +391,8 @@ bit DeCode(void)
 void ReadIr() interrupt 2
 {
     EX1=0;      //关闭外中断1，不再接收二次红外信号的中断，只解码当前红外信号
+
+    leddd = !leddd;
     TH1=0;      //定时器T1的高8位清0
     TL1=0;      //定时器T1的低8位清0
     TR1=1;    //开启定时器T1
@@ -426,7 +428,7 @@ void ReadIr() interrupt 2
         {
             /* Disp();//调用1602LCD显示函数 */
             //beep_ring_1s();//蜂鸣器响一声 提示解码成功
-            leddd = !leddd;
+            /* leddd = !leddd; */
          }
     }
     EX1=1;   //开启外中断EX1

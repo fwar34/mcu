@@ -3,9 +3,11 @@
 #include "delay.h"
 #include "common.h"
 #include "ds1302.h"
+#include "uart_sdcc.h"
 
 extern unsigned int new_value;
 
+sbit leddd = P0 ^ 5;
 sbit IRIN = P3 ^ 3;
 unsigned char IrValue[4];//用于存储数据码，对应前两个是地址位，后两个是数据位和校验位
 unsigned char ch_count = 0; //两次ch键进入设置的时间计数
@@ -232,6 +234,8 @@ void ReadIr() interrupt 2
     unsigned int err;
     unsigned char Time = 0;//计时变量，
 
+    leddd = !leddd;
+
     EX1 = 0;   //关闭外部中断1,只解码当前红外信号
     Delay7ms();
     if (IRIN == 0)     //确认是否真的接收到正确的信号；与开关消抖类似
@@ -276,6 +280,7 @@ void ReadIr() interrupt 2
                         if (Time > 30) //超时太久时退出
                         {
                             EX1 = 1; //打开外部中断1
+                            UART_send_string("fuben err1");
                             return;
                         }
                     }
