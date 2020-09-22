@@ -76,6 +76,8 @@ void tm0_isr() __interrupt 1
         /* lcd_light_back = !lcd_light_back; */
         count = 0;//reset counter
         dht11_flag = 1;
+        dht11_read_data();
+        /* UART_send_string("read dht11"); */
         /* P0_5 = !P0_5; */
     }
 

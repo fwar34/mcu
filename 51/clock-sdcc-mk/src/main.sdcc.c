@@ -75,8 +75,9 @@ void main(void)
 
         if (dht11_flag) {
             dht11_flag = 0;
-            dht11_read_data();
+            /* dht11_read_data(); */
             display_dht11();
+            /* UART_send_string("main dht11"); */
         }
 
         //lcd_light_back = !lcd_light_back;

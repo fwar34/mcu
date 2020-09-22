@@ -244,7 +244,7 @@ __bit DeCode(void)
                 if (TH1 > 0xEE) {
                     EX1=1;      
                     TR1=0;    //开启定时器T1
-                    UART_send_string("ir err3");
+                    /* UART_send_string("ir err3"); */
                     return 0;
                 }
             }
@@ -258,7 +258,7 @@ __bit DeCode(void)
                 if (TH1 > 0xEE) {
                     EX1=1;      
                     TR1=0;    //开启定时器T1
-                    UART_send_string("ir err4");
+                    /* UART_send_string("ir err4"); */
                     return 0;
                 }
             };
@@ -274,7 +274,9 @@ __bit DeCode(void)
         IrValue[i]=temp;//将解码出的字节值保存在a[i]
     }
     if(IrValue[2]=~IrValue[3])  //验证键数据码和其反码是否相等,一般情况下不必验证用户码
+    {
         return 1;     //解码正确，返回1
+    }
     return 0;
 }
 
@@ -319,7 +321,7 @@ void ReadIr() __interrupt 2
         if(DeCode()==1) // 执行遥控解码功能
         {
             /* Disp();//调用1602LCD显示函数 */
-            /* beep_ring_1s();//蜂鸣器响一声 提示解码成功 */
+            UART_send_byte(IrValue[2]);
             led = !led;
          }
     }

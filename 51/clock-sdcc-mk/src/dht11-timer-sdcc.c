@@ -49,7 +49,7 @@ void dht11_read_data()
     /* 主机接收dht11响应信号ACK */
     while (!DHT11_DAT) { //DHT11将总线拉低至少80us，作为DHT11的响应信号（ACK）
         if (TH1 * 256 + TL1 > 85) { //85 × 1.085 = 92.2us
-            UART_send_string("error1");
+            UART_send_string("dht11 error1");
             TR1 = 0;
             return;
         }
@@ -59,16 +59,11 @@ void dht11_read_data()
     TL1 = 0;
     while (DHT11_DAT) { //DHT11将总线拉高至少80us，为发送传感器数据做准备。
         if (TH1 * 256 + TL1 > 95) { //90 × 1.085 = 97.65us
-            UART_send_string("error2");
+            UART_send_string("dht11 error2");
             TR1 = 0;
             return;
         }
     }
-    /* TR1 = 0; */
-    /* UART_send_byte(0xAA); */
-    /* UART_send_byte(TH1); */
-    /* UART_send_byte(0xBB); */
-    /* UART_send_byte(TL1); */
 
     //主机接收dht11数据
     for (j = 0; j < 5; ++j) //dht每次返回5个字节
@@ -79,7 +74,7 @@ void dht11_read_data()
             TL1 = 0;
             while (!DHT11_DAT) { //拉低54us作为bit信号的起始标志
                 if (TH1 * 256 + TL1 > 60) { //60 × 1.085 = 65us
-                    UART_send_string("error3");
+                    UART_send_string("dht11 error3");
                     TR1 = 0;
                     return;
                 }
@@ -90,7 +85,7 @@ void dht11_read_data()
             TL1 = 0;
             while (DHT11_DAT) { //拉高。持续26~28us表示0，持续70us表示1
                 if (TH1 * 256 + TL1 > 64) { //64 × 1.085 = 70us
-                    UART_send_string("error4");
+                    UART_send_string("dht11 error4");
                     TR1 = 0;
                     return;
                 }
