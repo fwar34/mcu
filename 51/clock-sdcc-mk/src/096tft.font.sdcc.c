@@ -7,10 +7,9 @@
 #include<absacc.h>
 #include<intrins.h>
 #include<string.h>
-#include<font.h>
+#include "font.sdcc.h"
 #define uchar unsigned char
 #define uint unsigned int
-
 
 //测试硬件平台：STC12C5A60S2/STC12LE5A60S2
 //主时钟：12MHZ
@@ -18,31 +17,30 @@
 //#define USE_LANDSCAPE//测试程序横竖屏切换，横屏请开启此宏，竖屏请屏蔽
 #define MCU_STC12//如果您使用的单片机不是STC12系列(如STC89C52)请屏蔽此宏定义
 #ifdef MCU_STC12
-sfr P3M1  = 0xB1;//P3M1.n,P3M0.n =00--->Standard,01--->push-pull
-sfr P3M0  = 0xB2;//=10--->pure input,11--->open drain
+sfr P3M1 = 0xB1;//P3M1.n,P3M0.n =00--->Standard,01--->push-pull
+sfr P3M0 = 0xB2;//=10--->pure input,11--->open drain
 #endif
-
 
 //---------------------------液晶屏接线说明-------------------------------------//
 //接线前请参考液晶屏说明书第10页引脚定义
-sbit bl        =P1^5;//接模块BL引脚，背光可以采用IO控制或者PWM控制，也可以直接接到高电平常亮
-sbit scl       =P1^0;//接模块CLK引脚,接裸屏Pin9_SCL
-sbit sda       =P1^1;//接模块DIN/MOSI引脚，接裸屏Pin8_SDA
-sbit rs        =P1^3;//接模块D/C引脚，接裸屏Pin7_A0
-sbit cs        =P1^4;//接模块CE引脚，接裸屏Pin12_CS
-sbit reset     =P1^2;//接模块RST引脚，接裸屏Pin6_RES
-//---------------------------End of液晶å±接线---------------------------------//
+sbit bl = P1^5;//接模块BL引脚，背光可以采用IO控制或者PWM控制，也可以直接接到高电平常亮
+sbit scl = P1^0;//接模块CLK引脚,接裸屏Pin9_SCL
+sbit sda = P1^1;//接模块DIN/MOSI引脚，接裸屏Pin8_SDA
+sbit rs = P1^3;//接模块D/C引脚，接裸屏Pin7_A0
+sbit cs = P1^4;//接模块CE引脚，接裸屏Pin12_CS
+sbit reset = P1^2;//接模块RST引脚，接裸屏Pin6_RES
+//---------------------------End of液晶屏接线---------------------------------//
 
 //定义常用颜色
-#define RED  0xf800
-#define GREEN0x07e0
+#define RED 0xf800
+#define GREEN 0x07e0
 #define BLUE 0x001f
-#define WHITE0xffff
-#define BLACK0x0000
-#define YELLOW  0xFFE0
-#define GRAY0   0xEF7D
-#define GRAY1   0x8410
-#define GRAY2   0x4208
+#define WHITE 0xffff
+#define BLACK 0x0000
+#define YELLOW 0xFFE0
+#define GRAY0 0xEF7D
+#define GRAY1 0x8410
+#define GRAY2 0x4208
 
 
 void Contrast_Adjust();
