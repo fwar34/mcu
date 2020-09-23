@@ -153,9 +153,9 @@ void ds1302_pause(__bit flag)
     ds1302_write(DS1302_CONTROL_REG, 0x00);//关闭写保护
     second = ds1302_read(DS1302_SEC_REG);
     if (flag)
-        ds1302_write(DS1302_SEC_REG, 0x80 | second);
+        ds1302_write(DS1302_SEC_REG, 0x80 | second); //暂停ds1302
     else
-        ds1302_write(DS1302_SEC_REG, 0x7F & second);
+        ds1302_write(DS1302_SEC_REG, 0x7F & second); //继续ds1302
     ds1302_write(DS1302_CONTROL_REG, 0x80);//打开写保护
 }
 

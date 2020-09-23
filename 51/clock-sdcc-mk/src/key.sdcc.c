@@ -19,10 +19,10 @@ unsigned char process_key()
 {
     char ret = 0;
     key_scan();
-    /* if (row && column) */
-    /*     ret = process_time_settings(row, column); */
-    /* row = 0; */
-    /* column = 0; */
+    if (row && column)
+        ret = process_time_settings(row, column);
+    row = 0;
+    column = 0;
 
     return ret;
 }

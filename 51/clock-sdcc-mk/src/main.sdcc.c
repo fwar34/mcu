@@ -9,19 +9,10 @@
 
 void tm0_isr() __interrupt 1;
 extern void Timer0Init(void);//50毫秒@11.0592MHz
-extern void Timer1Init(void);
+extern void Timer1Init(void); //dht11和ir在使用
 extern void Timer3Init(void);
-extern unsigned short idle_count;//最后一次设置开始空闲计数
+
 extern unsigned int new_value;
-
-extern unsigned char ch_count;//两次ch键进入设置的时间计数
-
-__bit dht11_flag = 0;
-
-void display_current_setting()
-{
-    write_char(0, 13, current_setting + '0');
-}
 
 void display_idle_count()
 {
@@ -36,7 +27,7 @@ void display_idle_count()
 void main(void)
 {
     /* unsigned char msg[] = "hello"; */
-    //初始时间20年8月16号14点16分55秒星期天 
+    //初始时间20年8月16号14点16分55秒星期天
     DS1302_TIME start_time = {20, 9, 9, 3, 0, 6, 40};
     DS1302_TIME current_time;
 
@@ -57,32 +48,16 @@ void main(void)
 
     Timer0Init(); //
     Timer1Init(); //dht11 use
-    Timer3Init();
+    /* Timer3Init(); */
     beep_mute();
     IrInit();
     lcd_light_back = 1;
 
     while (1)
     {
-        display_current_setting();
         display_idle_count();
-        if (current_setting) {
-            enter_settings();
-        } else {
-            ds1302_read_time(&current_time);
-            display(&current_time);
-        }
 
-        if (dht11_flag) {
-            dht11_flag = 0;
-            /* dht11_read_data(); */
-            display_dht11();
-            /* UART_send_string("main dht11"); */
-        }
-
-        //lcd_light_back = !lcd_light_back;
-        //led = !led;
-        //Delay1000ms();
-        /* P0_5 = !P0_5; */
+        ds1302_read_time(&current_time);
+        display(&current_time);
     }
 }

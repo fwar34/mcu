@@ -11,12 +11,12 @@ __bit beep_setting = 1;//beep开关
 //蜂鸣器提醒声
 void beep_ring_1s()
 {
-    if (beep_setting) {
-        unsigned char i = 0;
-        for (;i < 100;++i) {
-            Delay100us();
-            beep = !beep;
-        }
-        beep = 1;
-    }
+    /* if (beep_setting) { */
+    /*     unsigned char i = 0; */
+    /*     for (;i < 100;++i) { */
+    /*         Delay100us(); */
+    /*         beep = !beep; */
+    /*     } */
+    /*     beep = 1; */
+    /* } */
 }

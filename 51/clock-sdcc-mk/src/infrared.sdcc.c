@@ -5,8 +5,6 @@
 #include "ds1302.sdcc.h"
 #include "uart_sdcc.h"
 
-extern unsigned int new_value;
-
 #define IRIN P3_3
 unsigned char IrValue[4];//用于存储数据码，对应前两个是地址位，后两个是数据位和校验位
 unsigned char ch_count = 0;//两次ch键进入设置的时间计数
@@ -14,7 +12,15 @@ __bit enter_settings_flag = 0;//进入设置的标志
 unsigned short idle_count = 0;//最后一次设置开始空闲计数
 unsigned char hex_array[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 unsigned int LowTime, HighTime; //储存高、低电平的宽度 
-  
+
+extern unsigned int new_value;
+extern unsigned char ch_count;//两次ch键进入设置的时间计数
+
+void display_current_setting()
+{
+    write_char(0, 13, current_setting + '0');
+}
+
 void display_key_code()
 {
     unsigned char i = IrValue[2] / 16;
@@ -64,7 +70,7 @@ void process_ch_minus()
 void process_ch()
 {
     if (ch_count) {
-        if (ch_count <= 50) {//500ms之内点击两次ch键为进入设置
+        if (ch_count <= 10) {//500ms之内点击两次ch键为进入设置
             ds1302_pause(1);
             new_value = ds1302_read(DS1302_YEAR_REG);
             ++current_setting;
@@ -241,7 +247,7 @@ __bit DeCode(void)
             TL1=0;         //定时器清0
             TR1=1;         //开启定时器T0
             while(IRIN==0) { //如果是低电平就等待 //低电平计时
-                if (TH1 > 0xEE) {
+                if (TH1 > 0xEE) {//时间过长的话退出循环
                     EX1=1;      
                     TR1=0;    //开启定时器T1
                     /* UART_send_string("ir err3"); */
@@ -255,7 +261,7 @@ __bit DeCode(void)
             TR1=1;         //开启定时器T0
             while(IRIN==1)   //如果是高电平就等待
             {
-                if (TH1 > 0xEE) {
+                if (TH1 > 0xEE) {//时间过长的话退出循环
                     EX1=1;      
                     TR1=0;    //开启定时器T1
                     /* UART_send_string("ir err4"); */
@@ -289,9 +295,9 @@ void ReadIr() __interrupt 2
     TL1=0;      //定时器T1的低8位清0
     TR1=1;    //开启定时器T1
     while(IRIN==0) { //如果是低电平就等待，给引导码低电平计时
-        if (TH1 > 0xEE) {
+        if (TH1 > 0xEE) {//时间过长的话退出循环
             EX1=1;
-            TR1=0;    //开启定时器T1
+            TR1=0;
             /* UART_send_string("ir err1"); */
             return;
         }
@@ -304,7 +310,7 @@ void ReadIr() __interrupt 2
     TR1=1;    //开启定时器T1
 
     while(IRIN==1) { //如果是高电平就等待，给引导码高电平计时
-        if (TH1 > 0xEE) {
+        if (TH1 > 0xEE) {//时间过长的话退出循环
             EX1=1;
             TR1=0;    //开启定时器T1
             /* UART_send_string("ir err2"); */
@@ -321,9 +327,13 @@ void ReadIr() __interrupt 2
         if(DeCode()==1) // 执行遥控解码功能
         {
             /* Disp();//调用1602LCD显示函数 */
+            process_irkey();
+            enter_settings();
+            display_current_setting();
+
             UART_send_byte(IrValue[2]);
             led = !led;
-         }
+        }
     }
     EX1=1;   //开启外中断EX1
 }

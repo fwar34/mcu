@@ -8,7 +8,6 @@ extern unsigned char ch_count;//两次ch键进入设置的时间计数
 extern __bit first_ch_flag;//表示第一次按ch的标志
 extern unsigned char dht11_data[5];//湿度十位，湿度个位，温度十位，温度个位，是否显示的标志
 extern unsigned short idle_count;//最后一次设置开始空闲计数
-extern __bit dht11_flag;
 
 static unsigned char count = 0;//dht11更新的计数
 
@@ -68,6 +67,7 @@ void tm0_isr() __interrupt 1
     if (idle_count > 0) {//每一次设置会把idle_count设置成1,所以大于0才判断是否是设置空闲超时
         ++idle_count;
         if (idle_count > 20 * 10) {//设置空闲了10秒之后退出
+            idle_count = 0;
             exit_settings();
         }
     }
@@ -75,10 +75,7 @@ void tm0_isr() __interrupt 1
     if (++count >= 20 * 2) {//1000ms * 2 -> 2s更新一次dht11
         /* lcd_light_back = !lcd_light_back; */
         count = 0;//reset counter
-        dht11_flag = 1;
         dht11_read_data();
-        /* UART_send_string("read dht11"); */
-        /* P0_5 = !P0_5; */
     }
 
     process_key();//处理物理按键
