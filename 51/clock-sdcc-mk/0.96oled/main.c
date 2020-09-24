@@ -1,71 +1,71 @@
 //////////////////////////////////////////////////////////////////////////////////	 
-//±¾³ÌĞòÖ»¹©Ñ§Ï°Ê¹ÓÃ£¬Î´¾­×÷ÕßĞí¿É£¬²»µÃÓÃÓÚÆäËüÈÎºÎÓÃÍ¾
+//æœ¬ç¨‹åºåªä¾›å­¦ä¹ ä½¿ç”¨ï¼Œæœªç»ä½œè€…è®¸å¯ï¼Œä¸å¾—ç”¨äºå…¶å®ƒä»»ä½•ç”¨é€”
 
-//  ÎÄ ¼ş Ãû   : main.c
-//  °æ ±¾ ºÅ   : v2.0
-//  ×÷    Õß   : HuangKai
-//  Éú³ÉÈÕÆÚ   : 2014-0101
-//  ×î½üĞŞ¸Ä   : 
-//  ¹¦ÄÜÃèÊö   : OLED 4½Ó¿ÚÑİÊ¾Àı³Ì(51ÏµÁĞ)
-//              ËµÃ÷: 
+//  æ–‡ ä»¶ å   : main.c
+//  ç‰ˆ æœ¬ å·   : v2.0
+//  ä½œ    è€…   : HuangKai
+//  ç”Ÿæˆæ—¥æœŸ   : 2014-0101
+//  æœ€è¿‘ä¿®æ”¹   : 
+//  åŠŸèƒ½æè¿°   : OLED 4æ¥å£æ¼”ç¤ºä¾‹ç¨‹(51ç³»åˆ—)
+//              è¯´æ˜: 
 //              ----------------------------------------------------------------
-//              GND    µçÔ´µØ
-//              VCC  ½Ó5V»ò3.3vµçÔ´
-//              D0   P1^0£¨SCL£©
-//              D1   P1^1£¨SDA£©
-//              RES  ½ÓP12
-//              DC   ½ÓP13
-//              CS   ½ÓP14               
+//              GND    ç”µæºåœ°
+//              VCC  æ¥5Væˆ–3.3vç”µæº
+//              D0   P1^0ï¼ˆSCLï¼‰
+//              D1   P1^1ï¼ˆSDAï¼‰
+//              RES  æ¥P12
+//              DC   æ¥P13
+//              CS   æ¥P14               
 //              ----------------------------------------------------------------
-// ĞŞ¸ÄÀúÊ·   :
-// ÈÕ    ÆÚ   : 
+// ä¿®æ”¹å†å²   :
+// æ—¥    æœŸ   : 
 //All rights reserved
 //******************************************************************************/
 #include "REG51.h"
 #include "oled.h"
 #include "bmp.h"
 
- int main(void)
- {	u8 t;
-			OLED_Init();			//³õÊ¼»¯OLED  
-		OLED_Clear()  	; 
-	
-		t=' ';
-		OLED_ShowCHinese(54,0,3);//µç
-		OLED_ShowCHinese(72,0,4);//×Ó
-		OLED_ShowCHinese(90,0,5);//¿Æ
-		OLED_ShowCHinese(108,0,6);//¼¼
-	while(1) 
-	{		
-		OLED_Clear();
-		OLED_ShowCHinese(54,0,3);//µç
-		OLED_ShowCHinese(72,0,4);//×Ó
-		OLED_ShowCHinese(90,0,5);//¿Æ
-		OLED_ShowCHinese(108,0,6);//¼¼
-		OLED_ShowString(6,3,"0.96' OLED TEST",16);
-		OLED_ShowString(0,6,"ASCII:",16);  
-		OLED_ShowString(63,6,"CODE:",16);  
-		OLED_ShowChar(48,6,t,16);//ÏÔÊ¾ASCII×Ö·û	   
-		t++;
-		if(t>'~')t=' ';
-		OLED_ShowNum(103,6,t,3,16);//ÏÔÊ¾ASCII×Ö·ûµÄÂëÖµ 	
-			delay_ms(8000);
-		delay_ms(8000);
+int main(void)
+{	u8 t;
+    OLED_Init();			//åˆå§‹åŒ–OLED  
+    OLED_Clear()  	; 
+        
+    t=' ';
+    OLED_ShowCHinese(54,0,3);//ç”µ
+    OLED_ShowCHinese(72,0,4);//å­
+    OLED_ShowCHinese(90,0,5);//ç§‘
+    OLED_ShowCHinese(108,0,6);//æŠ€
+    while(1) 
+    {		
+        OLED_Clear();
+        OLED_ShowCHinese(54,0,3);//ç”µ
+        OLED_ShowCHinese(72,0,4);//å­
+        OLED_ShowCHinese(90,0,5);//ç§‘
+        OLED_ShowCHinese(108,0,6);//æŠ€
+        OLED_ShowString(6,3,"0.96' OLED TEST",16);
+        OLED_ShowString(0,6,"ASCII:",16);  
+        OLED_ShowString(63,6,"CODE:",16);  
+        OLED_ShowChar(48,6,t,16);//æ˜¾ç¤ºASCIIå­—ç¬¦	   
+        t++;
+        if(t>'~')t=' ';
+        OLED_ShowNum(103,6,t,3,16);//æ˜¾ç¤ºASCIIå­—ç¬¦çš„ç å€¼ 	
+        delay_ms(8000);
+        delay_ms(8000);
 
-					delay_ms(8000);
-		delay_ms(8000);
-		delay_ms(8000);
-		OLED_DrawBMP(0,0,128,8,BMP1);  //Í¼Æ¬ÏÔÊ¾(Í¼Æ¬ÏÔÊ¾É÷ÓÃ£¬Éú³ÉµÄ×Ö±í½Ï´ó£¬»áÕ¼ÓÃ½Ï¶à¿Õ¼ä£¬FLASH¿Õ¼ä8KÒÔÏÂÉ÷ÓÃ)
-		delay_ms(8000);
-					delay_ms(8000);
-		delay_ms(8000);
-		delay_ms(8000);
-		OLED_DrawBMP(0,0,128,8,BMP1);
-		delay_ms(8000);
-					delay_ms(8000);
-		delay_ms(8000);
-		delay_ms(8000);
-	}	  
+        delay_ms(8000);
+        delay_ms(8000);
+        delay_ms(8000);
+        OLED_DrawBMP(0,0,128,8,BMP1);  //å›¾ç‰‡æ˜¾ç¤º(å›¾ç‰‡æ˜¾ç¤ºæ…ç”¨ï¼Œç”Ÿæˆçš„å­—è¡¨è¾ƒå¤§ï¼Œä¼šå ç”¨è¾ƒå¤šç©ºé—´ï¼ŒFLASHç©ºé—´8Kä»¥ä¸‹æ…ç”¨)
+        delay_ms(8000);
+        delay_ms(8000);
+        delay_ms(8000);
+        delay_ms(8000);
+        OLED_DrawBMP(0,0,128,8,BMP1);
+        delay_ms(8000);
+        delay_ms(8000);
+        delay_ms(8000);
+        delay_ms(8000);
+    }	  
 	
 }
 	

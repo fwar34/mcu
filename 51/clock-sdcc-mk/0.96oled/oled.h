@@ -1,24 +1,24 @@
 //////////////////////////////////////////////////////////////////////////////////	 
-//±¾³ÌĞòÖ»¹©Ñ§Ï°Ê¹ÓÃ£¬Î´¾­×÷ÕßĞí¿É£¬²»µÃÓÃÓÚÆäËüÈÎºÎÓÃÍ¾
+//æœ¬ç¨‹åºåªä¾›å­¦ä¹ ä½¿ç”¨ï¼Œæœªç»ä½œè€…è®¸å¯ï¼Œä¸å¾—ç”¨äºå…¶å®ƒä»»ä½•ç”¨é€”
 
-//  ÎÄ ¼ş Ãû   : main.c
-//  °æ ±¾ ºÅ   : v2.0
-//  ×÷    Õß   : HuangKai
-//  Éú³ÉÈÕÆÚ   : 2014-0101
-//  ×î½üĞŞ¸Ä   : 
-//  ¹¦ÄÜÃèÊö   : OLED 4½Ó¿ÚÑİÊ¾Àı³Ì(51ÏµÁĞ)
-//              ËµÃ÷: 
+//  æ–‡ ä»¶ å   : main.c
+//  ç‰ˆ æœ¬ å·   : v2.0
+//  ä½œ    è€…   : HuangKai
+//  ç”Ÿæˆæ—¥æœŸ   : 2014-0101
+//  æœ€è¿‘ä¿®æ”¹   : 
+//  åŠŸèƒ½æè¿°   : OLED 4æ¥å£æ¼”ç¤ºä¾‹ç¨‹(51ç³»åˆ—)
+//              è¯´æ˜: 
 //              ----------------------------------------------------------------
-//              GND    µçÔ´µØ
-//              VCC  ½Ó5V»ò3.3vµçÔ´
-//              D0   P1^0£¨SCL£©
-//              D1   P1^1£¨SDA£©
-//              RES  ½ÓP12
-//              DC   ½ÓP13
-//              CS   ½ÓP14               
+//              GND    ç”µæºåœ°
+//              VCC  æ¥5Væˆ–3.3vç”µæº
+//              D0   P1^0ï¼ˆSCLï¼‰
+//              D1   P1^1ï¼ˆSDAï¼‰
+//              RES  æ¥P12
+//              DC   æ¥P13
+//              CS   æ¥P14               
 //              ----------------------------------------------------------------
-// ĞŞ¸ÄÀúÊ·   :
-// ÈÕ    ÆÚ   : 
+// ä¿®æ”¹å†å²   :
+// æ—¥    æœŸ   : 
 //All rights reserved
 //******************************************************************************/
 #include "REG51.h"
@@ -28,13 +28,13 @@
 //#include "stdlib.h"	  
 #define  u8 unsigned char 
 #define  u32 unsigned int 
-#define OLED_CMD  0	//Ğ´ÃüÁî
-#define OLED_DATA 1	//Ğ´Êı¾İ
+#define OLED_CMD  0	//å†™å‘½ä»¤
+#define OLED_DATA 1	//å†™æ•°æ®
 #define OLED_MODE 0
 
 
-sbit OLED_SCL=P0^4;//Ê±ÖÓ D0£¨SCLK£
-sbit OLED_SDIN=P0^0;//D1£¨MOSI£© Êı¾İ
+sbit OLED_SCL=P0^4;//æ—¶é’Ÿ D0ï¼ˆSCLK£
+sbit OLED_SDIN=P0^0;//D1ï¼ˆMOSIï¼‰ æ•°æ®
 
 
 #define OLED_CS_Clr()  OLED_CS=0
@@ -56,9 +56,9 @@ sbit OLED_SDIN=P0^0;//D1£¨MOSI£© Êı¾İ
 
 
 
-//OLEDÄ£Ê½ÉèÖÃ
-//0:4Ïß´®ĞĞÄ£Ê½
-//1:²¢ĞĞ8080Ä£Ê½
+//OLEDæ¨¡å¼è®¾ç½®
+//0:4çº¿ä¸²è¡Œæ¨¡å¼
+//1:å¹¶è¡Œ8080æ¨¡å¼
 
 #define SIZE 16
 #define XLevelL		0x02
@@ -68,12 +68,12 @@ sbit OLED_SDIN=P0^0;//D1£¨MOSI£© Êı¾İ
 #define	Brightness	0xFF 
 #define X_WIDTH 	128
 #define Y_WIDTH 	64	    						  
-//-----------------OLED¶Ë¿Ú¶¨Òå----------------  					   
+//-----------------OLEDç«¯å£å®šä¹‰----------------  					   
 
 void delay_ms(unsigned int ms);
 
 
-//OLED¿ØÖÆÓÃº¯Êı
+//OLEDæ§åˆ¶ç”¨å‡½æ•°
 void OLED_WR_Byte(unsigned dat,unsigned cmd);  
 void OLED_Display_On(void);
 void OLED_Display_Off(void);	   							   		    
@@ -98,7 +98,7 @@ void Write_IIC_Data(unsigned char IIC_Data);
 void Write_IIC_Byte(unsigned char IIC_Byte);
 void IIC_Wait_Ack();
 #endif  
-	 
+         
 
 
 
