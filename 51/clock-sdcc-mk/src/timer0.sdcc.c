@@ -3,6 +3,7 @@
 #include "ds1302.sdcc.h"
 #include "common.sdcc.h"
 #include "uart_sdcc.h"
+#include "lcd1602.sdcc.h"
 
 extern unsigned char ch_count;//两次ch键进入设置的时间计数
 extern __bit first_ch_flag;//表示第一次按ch的标志
@@ -10,6 +11,7 @@ extern unsigned char dht11_data[5];//湿度十位，湿度个位，温度十位�
 extern unsigned short idle_count;//最后一次设置开始空闲计数
 
 static unsigned char count = 0;//dht11更新的计数
+DS1302_TIME current_time;
 
 void Timer0Init(void)        //50毫秒@11.0592MHz
 {
@@ -57,6 +59,9 @@ void Timer0Init(void)        //50毫秒@11.0592MHz
 /* void tm0_isr() __interrupt(1)  也可以*/
 void tm0_isr() __interrupt 1
 {
+    ds1302_read_time(&current_time);
+    display(&current_time);
+        
     if (ch_count > 0) {//第一次点击ch按钮会把ch_count设置成1
         ++ch_count;
         if (ch_count > 20) {//1s过后没有点击第二次ch按钮的话重置字段
@@ -76,6 +81,7 @@ void tm0_isr() __interrupt 1
         /* lcd_light_back = !lcd_light_back; */
         count = 0;//reset counter
         dht11_read_data();
+        display_dht11();
     }
 
     process_key();//处理物理按键
