@@ -162,5 +162,3 @@ unsigned char code BMP2[] =
 };
 
 #endif
-
-

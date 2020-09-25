@@ -26,9 +26,10 @@
 #include "bmp.h"
 
 int main(void)
-{	u8 t;
+{
+    u8 t;
     OLED_Init();			//初始化OLED  
-    OLED_Clear()  	; 
+    OLED_Clear(); 
         
     t=' ';
     OLED_ShowCHinese(54,0,3);//电
@@ -66,6 +67,4 @@ int main(void)
         delay_ms(8000);
         delay_ms(8000);
     }	  
-	
 }
-	
