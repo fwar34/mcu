@@ -57,7 +57,6 @@ void delay_ms(unsigned int ms)
 **********************************************/
 void IIC_Start()
 {
-
     OLED_SCLK_Set() ;
     OLED_SDIN_Set();
     OLED_SDIN_Clr();
@@ -73,12 +72,10 @@ void IIC_Stop()
 //	OLED_SCLK_Clr();
     OLED_SDIN_Clr();
     OLED_SDIN_Set();
-        
 }
 
 void IIC_Wait_Ack()
 {
-
     //GPIOB->CRH &= 0XFFF0FFFF;	//设置PB12为上拉输入模式
     //GPIOB->CRH |= 0x00080000;
 //	OLED_SDA = 1;
@@ -153,18 +150,11 @@ void Write_IIC_Data(unsigned char IIC_Data)
 }
 void OLED_WR_Byte(unsigned dat,unsigned cmd)
 {
-    if(cmd)
-    {
-
+    if(cmd) {
         Write_IIC_Data(dat);
-   
-    }
-    else {
+    } else {
         Write_IIC_Command(dat);
-                
     }
-
-
 }
 
 /********************************************
