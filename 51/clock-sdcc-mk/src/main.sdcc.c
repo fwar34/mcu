@@ -24,6 +24,7 @@ void display_idle_count()
     write_char(0, 15, j + '0');
 }
 
+
 void main(void)
 {
     /* unsigned char msg[] = "hello"; */
@@ -52,6 +53,10 @@ void main(void)
     beep_mute();
     IrInit();
     lcd_light_back = 1;
+
+    wait_for_dht11();
+    lcdWriteCmd(0x01); //1602清屏
+    TR0 = 1;
 
     while (1)
     {

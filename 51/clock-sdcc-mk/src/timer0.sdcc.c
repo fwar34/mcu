@@ -10,7 +10,7 @@ extern __bit first_ch_flag;//表示第一次按ch的标志
 extern unsigned char dht11_data[5];//湿度十位，湿度个位，温度十位，温度个位，是否显示的标志
 extern unsigned short idle_count;//最后一次设置开始空闲计数
 
-static unsigned char count = 0;//dht11更新的计数
+static unsigned char count = 40;//dht11更新的计数
 DS1302_TIME current_time;
 
 void Timer0Init(void)        //50毫秒@11.0592MHz
@@ -21,27 +21,11 @@ void Timer0Init(void)        //50毫秒@11.0592MHz
     TL0 = 0x00;
 
     TF0 = 0;     //清除TF0标志
-    TR0 = 1;     //定时器0开始计时
-
     ET0  = 1;                           //enable timer0 interrupt
+
+    /* TR0 = 1;     //定时器0开始计时 */
     EA  = 1;                           //open global interrupt switch
 }
-
-/* void Timer0Init(void)//10毫秒@24.000MHz */
-/* { */
-/*     /\* AUXR &= 0x7F;        //定时器时钟12T模式 *\/ */
-/*     TMOD &= 0xF0;//设置定时器模式 */
-/*     TMOD |= 0x01;//设置定时器模式 */
-/*     TL0 = 0xE0;//设置定时初值 */
-/*     TH0 = 0xB1;//设置定时初值 */
-/*     TF0 = 0;//清除TF0标志 */
-/*     TR0 = 1;//定时器0开始计时 */
-
-/*     ET0 = 1;//enable timer0 interrupt */
-/*     EA = 1;//open global interrupt switch */
-/* } */
-
-
 
 /* https://zhidao.baidu.com/question/477148677.html */
 /* void Timer0Delay1s() interrupt 1 */

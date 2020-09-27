@@ -4,7 +4,9 @@
 #include "common.sdcc.h"
 
 void initLcd1602();
+void wait_for_dht11();
 void display(DS1302_TIME* time);
+void lcdWriteCmd(unsigned char cmd);
 void write_str(unsigned char addr_start, unsigned char* str);
 void write_char(unsigned char x, unsigned char y, unsigned char dat);
 void display_dht11();

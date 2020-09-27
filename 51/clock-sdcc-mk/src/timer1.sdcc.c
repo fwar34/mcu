@@ -13,5 +13,5 @@ void Timer1Init(void)        //timer1@11.0592MHz
     /* ET1  = 1;                           //enable timer1 interrupt */
     TR1 = 0;     //定时器1关闭
     /* TR1 = 1;     //定时器1打开 */
-    EA  = 1;                           //open global interrupt switch
+    /* EA  = 1;                           //open global interrupt switch */
 }

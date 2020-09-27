@@ -11,6 +11,7 @@
 
 extern unsigned char dht11_data[5];//湿度十位，湿度个位，温度十位，温度个位，是否更新显示的标志
 
+
 void lcd_check_busy()
 {
     __bit lcd_status;
@@ -105,6 +106,20 @@ void initLcd1602()
     lcdWriteCmd(0x06);
     lcdWriteCmd(0x01);
     Delay200ms();
+}
+
+void wait_for_dht11()
+{
+    unsigned char i;
+    for (i = 0; i < 16; ++i) {
+        write_char(0, i, '>');
+        Delay50ms();
+    }
+
+    for (i = 15; i == 0; --i) {
+        write_char(1, i, '<');
+        Delay50ms();
+    }
 }
 
 //--------------------------------------------------------------------------
