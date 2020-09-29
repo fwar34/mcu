@@ -14,6 +14,29 @@ extern void Timer3Init(void);
 
 extern unsigned int new_value;
 
+typedef struct {
+    unsigned char bit0:1;
+    unsigned char bit1:1;
+    unsigned char bit2:1;
+    unsigned char bit3:1;
+    unsigned char bit4:1;
+    unsigned char bit5:1;
+    unsigned char bit6:1;
+    unsigned char bit7:1;
+}Test;
+
+#define __IO_REG8_BIT(NAME, ADDRESS, BIT_STRUCT)        \
+    volatile unsigned char __at (ADDRESS) NAME;         \
+    volatile BIT_STRUCT __at (ADDRESS) NAME##_bit
+
+volatile unsigned char __at (0x80) PB;
+volatile Test __at (0x80) PB_bit;
+
+#define T0 PB_bit.bit0
+
+__IO_REG8_BIT(PA, 0x80, Test);
+
+
 void display_idle_count()
 {
     /* unsigned char i = idle_count / 10; */
@@ -31,6 +54,13 @@ void main(void)
     //初始时间20年8月16号14点16分55秒星期天
     DS1302_TIME start_time = {20, 9, 9, 3, 0, 6, 40};
     /* DS1302_TIME current_time; */
+
+    PB = 1;
+    PB_bit.bit0 = 1;
+    T0 = 1;
+
+    PA = 1;
+    PA_bit.bit2 = 1;
 
     P_SW2 = 0x80;
     XOSCCR = 0xc0;//启动外部晶振
