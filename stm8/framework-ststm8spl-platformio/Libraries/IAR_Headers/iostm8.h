@@ -52,11 +52,11 @@
 #endif /* __SDCC */
 
 
-#ifdef __SDCC
-#pragma system_include
-#pragma language=save
-#pragma language=extended
-#endif
+/* #ifdef __SDCC */
+/* #pragma system_include */
+/* #pragma language=save */
+/* #pragma language=extended */
+/* #endif */
 
 /*-------------------------------------------------------------------------
  *      Port A register definitions
@@ -4985,9 +4985,9 @@ __IO_REG8    (DM_ENFCTR,   0x7F9A, __READ_WRITE);
 #define FLASH_EOP_vector                     0x1A - 2
 #define FLASH_WR_PG_DIS_vector               0x1A - 2
 
-#ifdef __SDCC
-#pragma language=restore
-#endif
+/* #ifdef __SDCC */
+/* #pragma language=restore */
+/* #endif */
 
 #endif    /* __IOSTM8S208MB_H__ */
 

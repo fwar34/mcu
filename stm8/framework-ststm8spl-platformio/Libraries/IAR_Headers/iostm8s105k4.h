@@ -4778,9 +4778,9 @@ __IO_REG8    (DM_ENFCTR,   0x7F9A, __READ_WRITE);
 #define FLASH_EOP_vector                     26 - 2 /* IRQ No. in STM8 manual: 24 */
 #define FLASH_WR_PG_DIS_vector               26 - 2 /* IRQ No. in STM8 manual: 24 */
 
-#ifdef __SDCC
-#pragma language=restore
-#endif
+/* #ifdef __SDCC */
+/* #pragma language=restore */
+/* #endif */
 
 #endif    /* __IOSTM8S105K4_H__ */
 
