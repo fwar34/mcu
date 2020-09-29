@@ -22,7 +22,8 @@ CC      = sdcc
 CFLAGS  = -mstm8 -lstm8 --opt-code-size
 
 # set output folder and target name
-OUTPUT_DIR = ./$(DEVICE)
+# OUTPUT_DIR = ./$(DEVICE)
+OUTPUT_DIR = ./out
 TARGET     = $(OUTPUT_DIR)/$(DEVICE).hex
 
 # set project folder and files (all *.c)
