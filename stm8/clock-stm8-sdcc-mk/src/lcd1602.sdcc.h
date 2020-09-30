@@ -3,7 +3,7 @@
 
 #include "common.sdcc.h"
 
-void initLcd1602();
+void lcd1602_init();
 void wait_for_dht11();
 void display(DS1302_TIME* time);
 void lcdWriteCmd(unsigned char cmd);

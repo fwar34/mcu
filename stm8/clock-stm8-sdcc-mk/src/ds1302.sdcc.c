@@ -1,33 +1,47 @@
+#include "stm8s.h"
 #include "lcd1602.sdcc.h"
 #include "ds1302.sdcc.h"
 #include "common.sdcc.h"
 
-extern __bit enter_settings_flag;//进入设置的标志
+extern unsigned char enter_settings_flag;//进入设置的标志
 extern unsigned short idle_count;//最后一次设置开始空闲计数
 
-#define DS1302_RST P1_4
-#define DS1302_IO P1_3
-#define DS1302_CLK P1_2
+#define DS1302_CLK_PORT GPIOC
+#define DS1302_CLK_PIN GPIO_PIN_3
+
+#define DS1302_IO_CE_PORT GPIOD
+#define DS1302_IO_PIN GPIO_PIN_0
+#define DS1302_RST_PIN GPIO_PIN_2
 
 unsigned int new_value = 0;
 
 void ds1302_init()
 {
-    DS1302_RST = 0;
-    DS1302_CLK = 0;
+    GPIO_Init(DS1302_CLK_PORT, DS1302_CLK_PIN, GPIO_MODE_OUT_PP_LOW_FAST);
+    GPIO_Init(DS1302_IO_CE_PORT, DS1302_RST_PIN, GPIO_MODE_OUT_PP_LOW_FAST);
 }
+
+#define DS1302_CLK_CLR() GPIO_WriteLow(DS1302_CLK_PORT, DS1302_CLK_PIN)
+#define DS1302_CLK_SET() GPIO_WriteHigh(DS1302_CLK_PORT, DS1302_CLK_PIN)
+
+#define DS1302_RST_CLR() GPIO_WriteLow(DS1302_IO_CE_PORT, DS1302_RST_PIN)
+#define DS1302_RST_SET() GPIO_WriteHigh(DS1302_IO_CE_PORT, DS1302_RST_PIN)
+
+#define DS1302_IO_CLR() GPIO_WriteLow(DS1302_IO_CE_PORT, DS1302_IO_PIN)
+#define DS1302_IO_SET() GPIO_WriteHigh(DS1302_IO_CE_PORT, DS1302_IO_PIN)
 
 void ds1302_write_byte(unsigned char dat)
 {
     unsigned char i;
+    GPIO_Init(DS1302_IO_CE_PORT, DS1302_IO_PIN, GPIO_MODE_OUT_PP_HIGH_FAST);
     for (i = 0;i < 8;i++) {
-        DS1302_CLK = 0;
+        DS1302_CLK_CLR();
         if (dat & 0x01) {
-            DS1302_IO = 1;
+            DS1302_IO_SET();
         } else {
-            DS1302_IO = 0;
+            DS1302_IO_CLR();
         }
-        DS1302_CLK = 1;
+        DS1302_CLK_SET();
         dat >>= 1;
     }
 }
@@ -35,37 +49,38 @@ void ds1302_write_byte(unsigned char dat)
 unsigned char ds1302_read_byte()
 {
     unsigned char i,ret = 0;
+    GPIO_Init(DS1302_IO_CE_PORT, DS1302_IO_PIN, GPIO_MODE_IN_PU_NO_IT);
     for (i = 0;i < 8;i++) {
-        DS1302_CLK = 0;
+        DS1302_CLK_CLR();
         ret >>= 1;
-        if (DS1302_IO) {
+        if (GPIO_ReadInputPin(DS1302_IO_CE_PORT, DS1302_IO_PIN)) {
             ret |= 0x80;
         }
-        DS1302_CLK = 1;
+        DS1302_CLK_SET();
     }
     return ret;
 }
 
 void ds1302_write(unsigned char address, unsigned char dat)
 {
-    DS1302_RST = 0;
-    DS1302_CLK = 0;
-    DS1302_RST = 1;
+    DS1302_RST_CLR();
+    DS1302_CLK_CLR();
+    DS1302_RST_SET();
     ds1302_write_byte(address);
     ds1302_write_byte(dat);
-    DS1302_RST = 0;
+    DS1302_RST_CLR();
 }
 
 /****************************************************************************/
 unsigned char ds1302_read(unsigned char address)
 {
     unsigned char ret;
-    DS1302_RST = 0;
-    DS1302_CLK = 0;
-    DS1302_RST = 1;
+    DS1302_RST_CLR();
+    DS1302_CLK_CLR();
+    DS1302_RST_SET();
     ds1302_write_byte(address | 0x01);//读最低位是1
     ret = ds1302_read_byte();
-    DS1302_RST = 0;
+    DS1302_RST_CLR();
     return ret;
 }
 
@@ -138,7 +153,7 @@ char process_time_settings(unsigned char row, unsigned char column)
     if (row == 1 && column == 1) {//key1 beep开关
         beep_setting = !beep_setting;
     } else if (row == 2 && column == 1) {//key3 lcd背光开关
-        lcd_light_back = !lcd_light_back;
+        GPIO_WriteReverse(LCD_BK_PORT, LCD_BK_PIN);
     } else {
         return -1;//返回非0表示没有按键按下
     }
@@ -147,7 +162,7 @@ char process_time_settings(unsigned char row, unsigned char column)
     return 0;
 }
 
-void ds1302_pause(__bit flag)
+void ds1302_pause(unsigned char flag)
 {
     unsigned char second = 0;
     ds1302_write(DS1302_CONTROL_REG, 0x00);//关闭写保护

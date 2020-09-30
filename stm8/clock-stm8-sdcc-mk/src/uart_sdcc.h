@@ -1,11 +1,8 @@
 #ifndef _UART_SDCC_H_
 #define _UART_SDCC_H_
 
-#include <stdint.h>
-
-void UART_init();
-void UartInit(); //9600bps@11.0592MHz
-void UART_send_string(uint8_t *buf);
-void UART_send_byte(uint8_t dat);
+void uart_init();//9600bps@16MHz
+void uart_send_string(unsigned char *buf);
+void uart_send_byte(unsigned char dat);
 
 #endif

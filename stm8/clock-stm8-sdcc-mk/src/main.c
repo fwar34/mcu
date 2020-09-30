@@ -37,14 +37,30 @@
 #include "common.sdcc.h"
 #include "uart_sdcc.h"
 
-extern void Timer0Init(void);//50毫秒@11.0592MHz
-extern void Timer1Init(void); //dht11和ir在使用
-extern void Timer3Init(void);
-
 extern unsigned int new_value;
 
+void Timer2Init(void)        //timer2@1MHz, dht11和ir在使用
+{
+    TIM2_PrescalerConfig(TIM2_PRESCALER_2, TIM2_PSCRELOADMODE_IMMEDIATE); //2分频
+    TIM1_TimeBaseInit(0x0000, TIM1_COUNTERMODE_UP, 0x0000, 0x00);
+    TIM1_ITConfig(TIM1_IT_UPDATE, DISABLE);
+    TIM2_GenerateEvent(TIM2_EVENTSOURCE_UPDATE); //软件产生更新事件，可以立即更新预分频寄存器
+    TIM2_Cmd(DISABLE);
+}
+
+void Timer3Init(void)        //0.5微秒@2MHz
+{
+}
+
+void Timer4Init(void)        //50毫秒@2MHz
+{
+    TIM4_TimeBaseInit(TIM4_PRESCALER_1, 100);
+    TIM4_ITConfig(TIM4_IT_UPDATE, ENABLE);
+    TIM4_Cmd(ENABLE);
+}
+
 /**
- * @addtogroup GPIO_Toggle
+ * @addtogroup clock-stm8-sdcc-mk
  * @{
  */
 
@@ -81,6 +97,7 @@ void display_idle_count()
  */
 void main(void)
 {
+    disableInterrupts();
     /* Initialize I/Os in Output Mode */
     GPIO_Init(LED_GPIO_PORT, (GPIO_Pin_TypeDef)LED_GPIO_PINS, GPIO_MODE_OUT_PP_LOW_FAST);
 
@@ -89,24 +106,25 @@ void main(void)
     DS1302_TIME start_time = {20, 9, 9, 3, 0, 6, 40};
     /* DS1302_TIME current_time; */
 
-    initLcd1602();
+    common_gpio_init();
+    lcd1602_init();
     ds1302_init();
-    UartInit();
+    uart_init();
 
     if (!ds1302_is_running()) {
         ds1302_write_time(&start_time);
     }
 
-    Timer0Init(); //
-    Timer1Init(); //dht11 use
+    Timer2Init();
     Timer3Init();
+    Timer4Init();
     beep_mute();
     IrInit();
-    lcd_light_back = 1;
 
     wait_for_dht11();
     lcdWriteCmd(0x01); //1602清屏
-    TR0 = 1;
+
+    enableInterrupts();
 
     while (1)
     {

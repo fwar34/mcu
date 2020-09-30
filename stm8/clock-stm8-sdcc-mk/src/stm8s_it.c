@@ -28,6 +28,22 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm8s_it.h"
 
+#include "dht11.sdcc.h"
+#include "key.sdcc.h"
+#include "ds1302.sdcc.h"
+#include "common.sdcc.h"
+#include "uart_sdcc.h"
+#include "lcd1602.sdcc.h"
+#include "infrared.sdcc.h"
+
+extern unsigned char ch_count;//两次ch键进入设置的时间计数
+extern unsigned char first_ch_flag;//表示第一次按ch的标志
+extern unsigned char dht11_data[5];//湿度十位，湿度个位，温度十位，温度个位，是否显示的标志
+extern unsigned short idle_count;//最后一次设置开始空闲计数
+
+static unsigned char count = 40;//dht11更新的计数
+DS1302_TIME current_time;
+
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
@@ -147,6 +163,8 @@ INTERRUPT_HANDLER(EXTI_PORTD_IRQHandler, 6)
     /* In order to detect unexpected events during development,
        it is recommended to set a breakpoint on the following instruction.
     */
+    ReadIr();
+    key_scan();
 }
 
 /**
@@ -459,6 +477,33 @@ INTERRUPT_HANDLER(TIM4_UPD_OVF_IRQHandler, 23)
     /* In order to detect unexpected events during development,
        it is recommended to set a breakpoint on the following instruction.
     */
+    TIM4_ClearITPendingBit(TIM2_IT_UPDATE);
+    ds1302_read_time(&current_time);
+    display(&current_time);
+        
+    if (ch_count > 0) {//第一次点击ch按钮会把ch_count设置成1
+        ++ch_count;
+        if (ch_count > 20) {//1s过后没有点击第二次ch按钮的话重置字段
+            ch_count = 0;
+        }
+    }
+
+    if (idle_count > 0) {//每一次设置会把idle_count设置成1,所以大于0才判断是否是设置空闲超时
+        ++idle_count;
+        if (idle_count > 20 * 10) {//设置空闲了10秒之后退出
+            idle_count = 0;
+            exit_settings();
+        }
+    }
+
+    if (++count >= 20 * 2) {//1000ms * 2 -> 2s更新一次dht11
+        /* lcd_light_back = !lcd_light_back; */
+        count = 0;//reset counter
+        dht11_read_data();
+        display_dht11();
+    }
+
+    process_key();//处理物理按键
 }
 #endif /*STM8S903*/
 

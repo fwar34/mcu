@@ -1,14 +1,17 @@
 /* https://blog.csdn.net/qq_42012736/article/details/80555951 */
+#include "stm8s.h"
 #include "lcd1602.sdcc.h"
 #include "delay.sdcc.h"
 #include "common.sdcc.h"
 #include "ds1302.sdcc.h"
 #include "uart_sdcc.h"
 
-#define IRIN P3_3
+#define INFRARED_PORT GPIOD
+#define INFRARED_PIN GPIO_PIN_3
+
 unsigned char IrValue[4];//用于存储数据码，对应前两个是地址位，后两个是数据位和校验位
 unsigned char ch_count = 0;//两次ch键进入设置的时间计数
-__bit enter_settings_flag = 0;//进入设置的标志
+unsigned char enter_settings_flag = 0;//进入设置的标志
 unsigned short idle_count = 0;//最后一次设置开始空闲计数
 unsigned char hex_array[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 unsigned int LowTime, HighTime; //储存高、低电平的宽度 
@@ -184,12 +187,12 @@ void process_confirm()
 //0C 18 5E
 //08 1C 5A
 //42 52 4A
-__bit process_irkey()
+unsigned char process_irkey()
 {
     if (IrValue[2] == 0x46) {//CH 双击进入设置，单击确认（设置的时候暂停ds1302）
         process_ch();
     } else if (IrValue[2] == 0x19) {//100+ 背光开关
-        lcd_light_back = !lcd_light_back;
+        GPIO_WriteReverse(LCD_BK_PORT, LCD_BK_PIN);
     } else if (IrValue[2] == 0x0D) {//200+ beep开关
         beep_setting = !beep_setting;
     } else if (enter_settings_flag) {
@@ -227,217 +230,106 @@ __bit process_irkey()
 
 void IrInit()
 {
-    IT1 = 1;//下降沿触发
-    EX1 = 1;//打开中断1允许
-    EA = 1;//打开总中断
-
-    IRIN = 1;//初始化红外端口
+    GPIO_Init(INFRARED_PORT, INFRARED_PIN, GPIO_MODE_IN_FL_IT); //浮动输入带中断，外部有上拉电阻
+    EXTI_SetExtIntSensitivity(EXTI_PORT_GPIOD, EXTI_SENSITIVITY_FALL_ONLY); //下降沿出发
 }
 
-/* __bit DeCode(void) */
-/* { */
-/*     unsigned char i,j; */
-/*     unsigned char temp = 0;    //储存解码出的数据 */
-/*     for(i=0;i<4;i++)      //连续读取4个用户码和键数据码 */
-/*     { */
-/*         for(j=0;j<8;j++)  //每个码有8位数字 */
-/*         { */
-/*             temp=temp>>1;  //temp中的各数据位右移一位，因为先读出的是高位数据 */
-/*             T3H=0;         //定时器清0 */
-/*             T3L=0;         //定时器清0 */
-/*             T4T3M |= 0x08;         //开启定时器T0 */
-/*             while(IRIN==0) { //如果是低电平就等待 //低电平计时 */
-/*                 if (T3H > 0xEE) {//时间过长的话退出循环 */
-/*                     EX1=1;       */
-/*                     T4T3M &= 0xF7;    //开启定时器T1 */
-/*                     /\* UART_send_string("ir err3"); *\/ */
-/*                     return 0; */
-/*                 } */
-/*             } */
-/*             T4T3M &= 0xF7;         //关闭定时器T0 */
-/*             LowTime=T3H*256+T3L;    //保存低电平宽度 */
-/*             T3H=0;         //定时器清0 */
-/*             T3L=0;         //定时器清0 */
-/*             T4T3M |= 0x08;         //开启定时器T0 */
-/*             while(IRIN==1)   //如果是高电平就等待 */
-/*             { */
-/*                 if (T3H > 0xEE) {//时间过长的话退出循环 */
-/*                     EX1=1;       */
-/*                     T4T3M &= 0xF7;    //开启定时器T1 */
-/*                     /\* UART_send_string("ir err4"); *\/ */
-/*                     return 0; */
-/*                 } */
-/*             }; */
-/*             T4T3M &= 0xF7;        //关闭定时器T0 */
-/*             HighTime=T3H*256+T3L;   //保存高电平宽度 */
-/*             if((LowTime<370)||(LowTime>640)) */
-/*                 return 0;        //如果低电平长度不在合理范围，则认为出错，停止解码 */
-/*             if((HighTime>420)&&(HighTime<620))   //如果高电平时间在560微秒左右，即计数560／1.085＝516次 */
-/*                 temp=temp&0x7f;       //(520-100=420, 520+100=620)，则该位是0 */
-/*             if((HighTime>1300)&&(HighTime<1800)) //如果高电平时间在1680微秒左右，即计数1680／1.085＝1548次 */
-/*                 temp=temp|0x80;       //(1550-250=1300,1550+250=1800),则该位是1 */
-/*         } */
-/*         IrValue[i]=temp;//将解码出的字节值保存在a[i] */
-/*     } */
-/*     if(IrValue[2]=~IrValue[3])  //验证键数据码和其反码是否相等,一般情况下不必验证用户码 */
-/*     { */
-/*         return 1;     //解码正确，返回1 */
-/*     } */
-/*     return 0; */
-/* } */
-
-/* void ReadIr() __interrupt 2 */
-/* { */
-/*     EX1=0;      //关闭外中断1，不再接收二次红外信号的中断，只解码当前红外信号 */
-
-/*     T4T3M &= 0xF7; */
-/*     T3H=0;      //定时器T1的高8位清0 */
-/*     T3L=0;      //定时器T1的低8位清0 */
-/*     T4T3M |= 0x08;    //开启定时器T1 */
-/*     while(IRIN==0) { //如果是低电平就等待，给引导码低电平计时 */
-/*         if (T3H > 0xEE) {//时间过长的话退出循环 */
-/*             EX1=1; */
-/*             T4T3M &= 0xF7; */
-/*             /\* UART_send_string("ir err1"); *\/ */
-/*             return; */
-/*         } */
-/*     };           */
-
-/*     T4T3M &= 0xF7;                //关闭定时器T1 */
-/*     LowTime=T3H*256+T3L;  //保存低电平时间 */
-/*     T3H=0;      //定时器T1的高8位清0 */
-/*     T3L=0;      //定时器T1的低8位清0 */
-/*     T4T3M |= 0x08;    //开启定时器T1 */
-
-/*     while(IRIN==1) { //如果是高电平就等待，给引导码高电平计时 */
-/*         if (T3H > 0xEE) {//时间过长的话退出循环 */
-/*             EX1=1; */
-/*             T4T3M &= 0xF7;    //开启定时器T1 */
-/*             /\* UART_send_string("ir err2"); *\/ */
-/*             return; */
-/*         } */
-/*     };   */
-/*     T4T3M &= 0xF7;        //关闭定时器T1 */
-/*     HighTime=T3H*256+T3L;//保存引导码的高电平长度 */
-
-/*     if((LowTime>7800)&&(LowTime<8800)&&(HighTime>3600)&&(HighTime<4700)) */
-/*     { */
-/*         //如果是引导码,就开始解码,否则放弃,引导码的低电平计时 */
-/*         //次数＝9000us/1.085=8294, 判断区间:8300－500＝7800，8300＋500＝8800. */
-/*         if(DeCode()==1) // 执行遥控解码功能 */
-/*         { */
-/*             /\* Disp();//调用1602LCD显示函数 *\/ */
-/*             process_irkey(); */
-/*             enter_settings(); */
-/*             display_current_setting(); */
-
-/*             UART_send_byte(IrValue[2]); */
-/*             led = !led; */
-/*         } */
-/*     } */
-/*     EX1=1;   //开启外中断EX1 */
-/* } */
-
-__bit DeCode(void)
+unsigned char DeCode(void)
 {
     unsigned char i,j;
     unsigned char temp = 0;    //储存解码出的数据
-    for(i=0;i<4;i++)      //连续读取4个用户码和键数据码
+    for (i = 0; i < 4; i++)      //连续读取4个用户码和键数据码
     {
-        for(j=0;j<8;j++)  //每个码有8位数字
+        for (j = 0; j < 8; j++)  //每个码有8位数字
         {
-            temp=temp>>1;  //temp中的各数据位右移一位，因为先读出的是高位数据
-            T3H=0;         //定时器清0
-            T3L=0;         //定时器清0
-            T4T3M |= 0x08;         //开启定时器T0
-            while(IRIN==0) { //如果是低电平就等待 //低电平计时
-                if (T3H > 0xEE) {//时间过长的话退出循环
-                    EX1=1;      
-                    T4T3M &= 0xF7;    //开启定时器T1
-                    UART_send_string("ir err3");
+            temp = temp >> 1;  //temp中的各数据位右移一位，因为先读出的是高位数据
+            TIM2_SetCounter(0x0000);
+            TIM2_Cmd(ENABLE);
+            while (!GPIO_ReadInputPin(INFRARED_PORT, INFRARED_PIN)) { //如果是低电平就等待 //低电平计时
+                if (TIM2_GetCounter() > 0xEE00) {//时间过长的话退出循环
+                    TIM2_Cmd(DISABLE);
+                    uart_send_string("ir err3");
                     return 0;
                 }
             }
-            T4T3M &= 0xF7;         //关闭定时器T0
-            LowTime=T3H*256+T3L;    //保存低电平宽度
-            T3H=0;         //定时器清0
-            T3L=0;         //定时器清0
-            T4T3M |= 0x08;         //开启定时器T0
-            while(IRIN==1)   //如果是高电平就等待
+            TIM2_Cmd(DISABLE);
+            LowTime = TIM2_GetCounter();
+            TIM2_SetCounter(0x0000);
+            TIM2_Cmd(ENABLE);
+
+            while (GPIO_ReadInputPin(INFRARED_PORT, INFRARED_PIN))   //如果是高电平就等待
             {
-                if (T3H > 0xEE) {//时间过长的话退出循环
-                    EX1=1;      
-                    T4T3M &= 0xF7;    //开启定时器T1
-                    UART_send_string("ir err4");
+                if (TIM2_GetCounter() > 0xEE00) {//时间过长的话退出循环
+                    TIM2_Cmd(DISABLE);
+                    uart_send_string("ir err4");
                     return 0;
                 }
             };
-            T4T3M &= 0xF7;        //关闭定时器T0
-            HighTime=T3H*256+T3L;   //保存高电平宽度
-            if((LowTime<370)||(LowTime>640))
+            TIM2_Cmd(DISABLE);
+            HighTime = TIM2_GetCounter();
+
+            if (LowTime < 420 || LowTime > 700) //560 - 140, 560 + 140
                 return 0;        //如果低电平长度不在合理范围，则认为出错，停止解码
-            if((HighTime>420)&&(HighTime<620))   //如果高电平时间在560微秒左右，即计数560／1.085＝516次
-                temp=temp&0x7f;       //(520-100=420, 520+100=620)，则该位是0
-            if((HighTime>1300)&&(HighTime<1800)) //如果高电平时间在1680微秒左右，即计数1680／1.085＝1548次
-                temp=temp|0x80;       //(1550-250=1300,1550+250=1800),则该位是1
+            if (HighTime > 460 && HighTime < 660)   //如果高电平时间在560微秒左右，即计数560／1＝560次
+                temp = temp & 0x7f;       //(560-100=460, 560+100=660)，则该位是0
+            if (HighTime > 1430 && HighTime < 1930) //如果高电平时间在1680微秒左右，即计数1680／1＝1680次
+                temp = temp | 0x80;       //(1680-250=1430,1680+250=1930),则该位是1
         }
-        IrValue[i]=temp;//将解码出的字节值保存在a[i]
+        IrValue[i] = temp;//将解码出的字节值保存在a[i]
     }
-    if(IrValue[2]=~IrValue[3])  //验证键数据码和其反码是否相等,一般情况下不必验证用户码
+
+    if (IrValue[2] = ~IrValue[3])  //验证键数据码和其反码是否相等,一般情况下不必验证用户码
     {
         return 1;     //解码正确，返回1
     }
     return 0;
 }
 
-void ReadIr() __interrupt 2
+void ReadIr()
 {
-    EX1=0;      //关闭外中断1，不再接收二次红外信号的中断，只解码当前红外信号
+    if (GPIO_ReadInputPin(INFRARED_PORT, INFRARED_PIN)) {
+        return;
+    }
 
-    T4T3M &= 0xF7;
-    T3H=0;      //定时器T1的高8位清0
-    T3L=0;      //定时器T1的低8位清0
-    T4T3M |= 0x08;    //开启定时器T1
-    while(IRIN==0) { //如果是低电平就等待，给引导码低电平计时
-        if (T3H > 0xEE) {//时间过长的话退出循环
-            EX1=1;
-            T4T3M &= 0xF7;
-            UART_send_string("ir err1");
+    TIM2_Cmd(DISABLE);
+    TIM2_SetCounter(0x0000);
+    TIM2_Cmd(ENABLE);
+    while (!GPIO_ReadInputPin(INFRARED_PORT, INFRARED_PIN)) { //如果是低电平就等待，给引导码低电平计时
+        if (TIM2_GetCounter() > 0xEE00) {//时间过长的话退出循环
+            TIM2_Cmd(DISABLE);
+            uart_send_string("ir err1");
             return;
         }
-    };          
+    }
+    TIM2_Cmd(DISABLE);
+    LowTime = TIM2_GetCounter();
+    TIM2_SetCounter(0x0000);
+    TIM2_Cmd(ENABLE);
 
-    T4T3M &= 0xF7;                //关闭定时器T1
-    LowTime=T3H*256+T3L;  //保存低电平时间
-    T3H=0;      //定时器T1的高8位清0
-    T3L=0;      //定时器T1的低8位清0
-    T4T3M |= 0x08;    //开启定时器T1
-
-    while(IRIN==1) { //如果是高电平就等待，给引导码高电平计时
-        if (T3H > 0xEE) {//时间过长的话退出循环
-            EX1=1;
-            T4T3M &= 0xF7;    //关闭定时器T1
-            UART_send_string("ir err2");
+    while (GPIO_ReadInputPin(INFRARED_PORT, INFRARED_PIN)) { //如果是高电平就等待，给引导码高电平计时
+        if (TIM2_GetCounter() > 0xEE00) {//时间过长的话退出循环
+            TIM2_Cmd(DISABLE);
+            uart_send_string("ir err2");
             return;
         }
     };  
-    T4T3M &= 0xF7;        //关闭定时器T1
-    HighTime=T3H*256+T3L;//保存引导码的高电平长度
+    TIM2_Cmd(DISABLE);
+    HighTime = TIM2_GetCounter();
 
-    if((LowTime>7800)&&(LowTime<8800)&&(HighTime>3600)&&(HighTime<4700))
+    if (LowTime > 8500 && LowTime < 9500 && HighTime > 4000 && HighTime < 5000)
     {
         //如果是引导码,就开始解码,否则放弃,引导码的低电平计时
-        //次数＝9000us/1.085=8294, 判断区间:8300－500＝7800，8300＋500＝8800.
-        if(DeCode()==1) // 执行遥控解码功能
+        //低电平次数＝9000us/1=9000, 判断区间:9000－500＝8500，9000＋500＝9500.
+        //高电平次数=4500us/1=4500, 判断区间:4500 - 500 = 4000, 4500 + 500 = 5000
+        if (DeCode() == 1) // 执行遥控解码功能
         {
             /* Disp();//调用1602LCD显示函数 */
             process_irkey();
             enter_settings();
             display_current_setting();
 
-            UART_send_byte(IrValue[2]);
-            led = !led;
+            uart_send_byte(IrValue[2]);
+            GPIO_WriteReverse(LED_PORT, LED_PIN);
         }
     }
-    EX1=1;   //开启外中断EX1
 }

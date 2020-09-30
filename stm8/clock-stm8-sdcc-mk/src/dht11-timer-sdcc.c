@@ -1,13 +1,16 @@
 //https://pdf1.alldatasheet.com/datasheet-pdf/view/1132088/ETC2/DHT11.html
-#include <mcs51/8051.h>
+#include "stm8s.h"
 #include "uart_sdcc.h"
 #include "dht11.sdcc.h"
 
 #define DHT11_TIMEOUT -1
 #define DHT11_READ_ERROR -2
 
-/* __sbit __at (P0 + 6) DHT11_DAT; */
-#define DHT11_DAT P0_6
+#define DHT11_DAT_PIN GPIO_PIN_4
+#define DHT11_DAT_PORT GPIOF
+
+#define DHT11_CLR() GPIO_WriteLow(DHT11_DAT_PORT, DHT11_DAT_PIN)
+#define DHT11_SET() GPIO_WriteHigh(DHT11_DAT_PORT, DHT11_DAT_PIN)
 
 unsigned char dht11_data[5]; //湿度十位，湿度个位，温度十位，温度个位，是否更新显示的标志
 unsigned char dht11_temp[5]; //湿度十位，湿度个位，温度十位，温度个位，校验值
@@ -28,39 +31,38 @@ void dht11_read_data()
     unsigned char high_count = 0;
     unsigned char i, j = 0;
 
-    /* UART_send_string("read dht11\n"); */
+    /* uart_send_string("read dht11\n"); */
     
     /* 主机发送起始信号 */
-    TH1 = 0;
-    TL1 = 0;
-    DHT11_DAT = 0; //主机将总线拉低（时间>=18ms），使得DHT11能够接收到起始信号
-    TR1 = 1; //开启timer1
-    while (TH1 * 256 + TL1 <= 18433); //18433 × 1.085 = 20ms
+    GPIO_Init(DHT11_DAT_PORT, DHT11_DAT_PIN, GPIO_MODE_OUT_PP_LOW_FAST);
+    TIM2_SetCounter(0x0000);
+    DHT11_CLR(); //主机将总线拉低（时间>=18ms），使得DHT11能够接收到起始信号
+    TIM2_Cmd(ENABLE); //开启timer1
+    
+    while (TIM2_GetCounter() <= 20000); //20ms
     /* Delay20ms();  //至少 18 ms */
 
-    DHT11_DAT = 1; // 主机将总线拉高（释放总线），代表起始信号结束。
-    TH1 = 0;
-    TL1 = 0;
-    while (TH1 * 256 + TL1 <= 27); //27 × 1.085 = 30us
+    DHT11_SET(); // 主机将总线拉高（释放总线），代表起始信号结束。
+    TIM2_SetCounter(0x0000);
+    while (TIM2_GetCounter() <= 30); //30us
     /* Delay30us(); //延时20~40us */
 
-    TH1 = 0;
-    TL1 = 0;
+    TIM2_SetCounter(0x0000);
+    GPIO_Init(DHT11_DAT_PORT, DHT11_DAT_PIN, GPIO_MODE_IN_PU_NO_IT);
     /* 主机接收dht11响应信号ACK */
-    while (!DHT11_DAT) { //DHT11将总线拉低至少80us，作为DHT11的响应信号（ACK）
-        if (TH1 * 256 + TL1 > 85) { //85 × 1.085 = 92.2us
-            UART_send_string("dht11 error1");
-            TR1 = 0;
+    while (!GPIO_ReadInputPin(DHT11_DAT_PORT, DHT11_DAT_PIN)) { //DHT11将总线拉低至少80us，作为DHT11的响应信号（ACK）
+        if (TIM2_GetCounter() > 93) { //93us
+            uart_send_string("dht11 error1");
+            TIM2_Cmd(DISABLE);
             return;
         }
     }
 
-    TH1 = 0;
-    TL1 = 0;
-    while (DHT11_DAT) { //DHT11将总线拉高至少80us，为发送传感器数据做准备。
-        if (TH1 * 256 + TL1 > 95) { //90 × 1.085 = 97.65us
-            UART_send_string("dht11 error2");
-            TR1 = 0;
+    TIM2_SetCounter(0x0000);
+    while (GPIO_ReadInputPin(DHT11_DAT_PORT, DHT11_DAT_PIN)) { //DHT11将总线拉高至少80us，为发送传感器数据做准备。
+        if (TIM2_GetCounter() > 98) { //98us
+            uart_send_string("dht11 error2");
+            TIM2_Cmd(DISABLE);
             return;
         }
     }
@@ -70,29 +72,27 @@ void dht11_read_data()
     {
         for (i = 0; i < 8; ++i) //读每个字节的8位
         {
-            TH1 = 0;
-            TL1 = 0;
-            while (!DHT11_DAT) { //拉低54us作为bit信号的起始标志
-                if (TH1 * 256 + TL1 > 60) { //60 × 1.085 = 65us
-                    UART_send_string("dht11 error3");
-                    TR1 = 0;
+            TIM2_SetCounter(0x0000);
+            while (!GPIO_ReadInputPin(DHT11_DAT_PORT, DHT11_DAT_PIN)) { //拉低54us作为bit信号的起始标志
+                if (TIM2_GetCounter() > 60) { //60 × 1.085 = 65us
+                    uart_send_string("dht11 error3");
+                    TIM2_Cmd(DISABLE);
                     return;
                 }
             }
             dht11_temp[j] <<= 1;   //从高位开始读，所以左移
 
-            TH1 = 0;
-            TL1 = 0;
-            while (DHT11_DAT) { //拉高。持续26~28us表示0，持续70us表示1
-                if (TH1 * 256 + TL1 > 64) { //64 × 1.085 = 70us
-                    UART_send_string("dht11 error4");
-                    TR1 = 0;
+            TIM2_SetCounter(0x0000);
+            while (GPIO_ReadInputPin(DHT11_DAT_PORT, DHT11_DAT_PIN)) { //拉高。持续26~28us表示0，持续70us表示1
+                if (TIM2_GetCounter() > 64) { //64 × 1.085 = 70us
+                    uart_send_string("dht11 error4");
+                    TIM2_Cmd(DISABLE);
                     return;
                 }
             }
-            TR1 = 0;
-            high_count = TH1 * 256 + TL1;
-            TR1 = 1;
+            TIM2_Cmd(DISABLE);
+            high_count = TIM2_GetCounter();
+            TIM2_Cmd(ENABLE);
 
             if (high_count > 35) { //高电平大于37.9us，说明是1, 35 × 1.085 = 37.9us
                 dht11_temp[j] |= 0x01;
@@ -108,5 +108,5 @@ void dht11_read_data()
         }
         dht11_data[4] = 1;
     }
-    TR1 = 0;
+    TIM2_Cmd(DISABLE);
 }

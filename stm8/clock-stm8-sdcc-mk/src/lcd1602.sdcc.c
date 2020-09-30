@@ -3,59 +3,64 @@
 #include "common.sdcc.h"
 #include "uart_sdcc.h"
 
-#define LCD_DB P2
+#define LCD_DB_PORT GPIOC
+#define LCD_DB4_PIN GPIO_PIN_4
+#define LCD_DB5_PIN GPIO_PIN_5
+#define LCD_DB6_PIN GPIO_PIN_6
+#define LCD_DB7_PIN GPIO_PIN_7
 
-#define LCD_RS P0_0
-#define LCD_EN P0_2
-#define LCD_RW P0_1
+#define LCD_RS_PORT GPIOB
+#define LCD_RS_PIN GPIO_PIN_5
+#define LCD_EN_PORT GPIOC
+#define LCD_EN_PIN GPIO_PIN_1
+#define LCD_RW_PORT GPIOE
+#define LCD_RW_PIN GPIO_PIN_5
 
 extern unsigned char dht11_data[5];//湿度十位，湿度个位，温度十位，温度个位，是否更新显示的标志
 
+/* void lcd_check_busy() */
+/* { */
+/*     unsigned char lcd_status; */
 
-void lcd_check_busy()
-{
-    __bit lcd_status;
+/*     LCD_RS = 0; */
+/*     LCD_RW = 1; */
 
-    LCD_RS = 0;
-    LCD_RW = 1;
-
-    do
-    {
-        LCD_EN = 1;
-        lcd_status = P2_7;
-        LCD_EN = 0;
-    } while (lcd_status);
-}
+/*     do */
+/*     { */
+/*         LCD_EN = 1; */
+/*         lcd_status = P2_7; */
+/*         LCD_EN = 0; */
+/*     } while (lcd_status); */
+/* } */
 
 void lcdWriteCmd(unsigned char cmd)
 {
     /* lcd_check_busy(); */
     Delay600us();
-    LCD_EN = 0;
-    
-    LCD_RS = 0;
+    GPIO_WriteLow(LCD_EN_PORT, LCD_EN_PIN);
+    GPIO_WriteLow(LCD_RS_PORT, LCD_RS_PIN);
     /* LCD_RW = 0; */
-    LCD_DB = (LCD_DB & 0x0F) | (cmd & 0xF0);
-    LCD_EN = 1;
-    LCD_EN = 0;
-    LCD_DB = (LCD_DB & 0x0F) | (cmd << 4);
-    LCD_EN = 1;
-    LCD_EN = 0;
+    GPIO_Write(LCD_DB_PORT, (GPIO_ReadOutputData(LCD_DB_PORT)) & 0x0F | (cmd & 0xF0));
+    GPIO_WriteHigh(LCD_EN_PORT, LCD_EN_PIN);
+    GPIO_WriteLow(LCD_EN_PORT, LCD_EN_PIN);
+    GPIO_Write(LCD_DB_PORT, (GPIO_ReadOutputData(LCD_DB_PORT)) & 0x0F | (cmd << 4));
+    GPIO_WriteHigh(LCD_EN_PORT, LCD_EN_PIN);
+    GPIO_WriteLow(LCD_EN_PORT, LCD_EN_PIN);
 }
 
 void lcdWriteDat(unsigned char dat)
 {
     /* lcd_check_busy(); */
     Delay600us();
-    LCD_EN = 0;
-    LCD_RS = 1;
+    GPIO_WriteLow(LCD_EN_PORT, LCD_EN_PIN);
+    GPIO_WriteHigh(LCD_RS_PORT, LCD_RS_PIN);
     /* LCD_RW = 0; */
-    LCD_DB = (LCD_DB & 0x0F) | (dat & 0xF0);
-    LCD_EN = 1;
-    LCD_EN = 0;
-    LCD_DB = (LCD_DB & 0x0F) | (dat << 4);
-    LCD_EN = 1;
-    LCD_EN = 0;
+    GPIO_Write(LCD_DB_PORT, (GPIO_ReadOutputData(LCD_DB_PORT)) & 0x0F | (dat & 0xF0));
+    GPIO_WriteHigh(LCD_EN_PORT, LCD_EN_PIN);
+    GPIO_WriteLow(LCD_EN_PORT, LCD_EN_PIN);
+    GPIO_Write(LCD_DB_PORT, (GPIO_ReadOutputData(LCD_DB_PORT)) & 0x0F | (dat << 4));
+    GPIO_WriteHigh(LCD_EN_PORT, LCD_EN_PIN);
+    GPIO_WriteLow(LCD_EN_PORT, LCD_EN_PIN);
 }
 
 void lcdSetCursor(unsigned char x, unsigned char y)
@@ -93,10 +98,16 @@ void write_char(unsigned char x, unsigned char y, unsigned char dat)
     lcdWriteDat(dat);
 }
 
-void initLcd1602()
+void lcd1602_init()
 {
-    lcd_light_back = 0;//初始化打开背光
-    LCD_RW = 0;
+    GPIO_Init(LCD_BK_PORT, LCD_BK_PIN, GPIO_MODE_OUT_PP_LOW_FAST);
+    GPIO_Init(LCD_RW_PORT, LCD_RW_PIN, GPIO_MODE_OUT_PP_LOW_FAST);
+    GPIO_Init(LCD_EN_PORT, LCD_EN_PIN, GPIO_MODE_OUT_PP_LOW_FAST);
+    GPIO_Init(LCD_DB_PORT, LCD_DB4_PIN | LCD_DB5_PIN | LCD_DB6_PIN | LCD_DB7_PIN, GPIO_MODE_OUT_PP_LOW_FAST);
+
+    GPIO_WriteLow(LCD_BK_PORT, LCD_BK_PIN);  //初始化打开背光
+
+    GPIO_WriteLow(LCD_RW_PORT, LCD_RW_PIN);
     lcdWriteCmd(0x33);
     Delay4ms();
     lcdWriteCmd(0x32);
