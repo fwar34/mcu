@@ -106,14 +106,14 @@
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char ODR0        : 1;
-  unsigned char ODR1        : 1;
-  unsigned char ODR2        : 1;
-  unsigned char ODR3        : 1;
-  unsigned char ODR4        : 1;
-  unsigned char ODR5        : 1;
-  unsigned char ODR6        : 1;
-  unsigned char ODR7        : 1;
+    unsigned char ODR0        : 1;
+    unsigned char ODR1        : 1;
+    unsigned char ODR2        : 1;
+    unsigned char ODR3        : 1;
+    unsigned char ODR4        : 1;
+    unsigned char ODR5        : 1;
+    unsigned char ODR6        : 1;
+    unsigned char ODR7        : 1;
 } __BITS_PA_ODR;
 #endif
 __IO_REG8_BIT(PA_ODR,      0x5000, __READ_WRITE, __BITS_PA_ODR);
@@ -122,14 +122,14 @@ __IO_REG8_BIT(PA_ODR,      0x5000, __READ_WRITE, __BITS_PA_ODR);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char IDR0        : 1;
-  unsigned char IDR1        : 1;
-  unsigned char IDR2        : 1;
-  unsigned char IDR3        : 1;
-  unsigned char IDR4        : 1;
-  unsigned char IDR5        : 1;
-  unsigned char IDR6        : 1;
-  unsigned char IDR7        : 1;
+    unsigned char IDR0        : 1;
+    unsigned char IDR1        : 1;
+    unsigned char IDR2        : 1;
+    unsigned char IDR3        : 1;
+    unsigned char IDR4        : 1;
+    unsigned char IDR5        : 1;
+    unsigned char IDR6        : 1;
+    unsigned char IDR7        : 1;
 } __BITS_PA_IDR;
 #endif
 __IO_REG8_BIT(PA_IDR,      0x5001, __READ, __BITS_PA_IDR);
@@ -138,14 +138,14 @@ __IO_REG8_BIT(PA_IDR,      0x5001, __READ, __BITS_PA_IDR);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char DDR0        : 1;
-  unsigned char DDR1        : 1;
-  unsigned char DDR2        : 1;
-  unsigned char DDR3        : 1;
-  unsigned char DDR4        : 1;
-  unsigned char DDR5        : 1;
-  unsigned char DDR6        : 1;
-  unsigned char DDR7        : 1;
+    unsigned char DDR0        : 1;
+    unsigned char DDR1        : 1;
+    unsigned char DDR2        : 1;
+    unsigned char DDR3        : 1;
+    unsigned char DDR4        : 1;
+    unsigned char DDR5        : 1;
+    unsigned char DDR6        : 1;
+    unsigned char DDR7        : 1;
 } __BITS_PA_DDR;
 #endif
 __IO_REG8_BIT(PA_DDR,      0x5002, __READ_WRITE, __BITS_PA_DDR);
@@ -154,14 +154,14 @@ __IO_REG8_BIT(PA_DDR,      0x5002, __READ_WRITE, __BITS_PA_DDR);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char C10         : 1;
-  unsigned char C11         : 1;
-  unsigned char C12         : 1;
-  unsigned char C13         : 1;
-  unsigned char C14         : 1;
-  unsigned char C15         : 1;
-  unsigned char C16         : 1;
-  unsigned char C17         : 1;
+    unsigned char C10         : 1;
+    unsigned char C11         : 1;
+    unsigned char C12         : 1;
+    unsigned char C13         : 1;
+    unsigned char C14         : 1;
+    unsigned char C15         : 1;
+    unsigned char C16         : 1;
+    unsigned char C17         : 1;
 } __BITS_PA_CR1;
 #endif
 __IO_REG8_BIT(PA_CR1,      0x5003, __READ_WRITE, __BITS_PA_CR1);
@@ -170,14 +170,14 @@ __IO_REG8_BIT(PA_CR1,      0x5003, __READ_WRITE, __BITS_PA_CR1);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char C20         : 1;
-  unsigned char C21         : 1;
-  unsigned char C22         : 1;
-  unsigned char C23         : 1;
-  unsigned char C24         : 1;
-  unsigned char C25         : 1;
-  unsigned char C26         : 1;
-  unsigned char C27         : 1;
+    unsigned char C20         : 1;
+    unsigned char C21         : 1;
+    unsigned char C22         : 1;
+    unsigned char C23         : 1;
+    unsigned char C24         : 1;
+    unsigned char C25         : 1;
+    unsigned char C26         : 1;
+    unsigned char C27         : 1;
 } __BITS_PA_CR2;
 #endif
 __IO_REG8_BIT(PA_CR2,      0x5004, __READ_WRITE, __BITS_PA_CR2);
@@ -291,14 +291,14 @@ __IO_REG8_BIT(PA_CR2,      0x5004, __READ_WRITE, __BITS_PA_CR2);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char ODR0        : 1;
-  unsigned char ODR1        : 1;
-  unsigned char ODR2        : 1;
-  unsigned char ODR3        : 1;
-  unsigned char ODR4        : 1;
-  unsigned char ODR5        : 1;
-  unsigned char ODR6        : 1;
-  unsigned char ODR7        : 1;
+    unsigned char ODR0        : 1;
+    unsigned char ODR1        : 1;
+    unsigned char ODR2        : 1;
+    unsigned char ODR3        : 1;
+    unsigned char ODR4        : 1;
+    unsigned char ODR5        : 1;
+    unsigned char ODR6        : 1;
+    unsigned char ODR7        : 1;
 } __BITS_PB_ODR;
 #endif
 __IO_REG8_BIT(PB_ODR,      0x5005, __READ_WRITE, __BITS_PB_ODR);
@@ -307,14 +307,14 @@ __IO_REG8_BIT(PB_ODR,      0x5005, __READ_WRITE, __BITS_PB_ODR);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char IDR0        : 1;
-  unsigned char IDR1        : 1;
-  unsigned char IDR2        : 1;
-  unsigned char IDR3        : 1;
-  unsigned char IDR4        : 1;
-  unsigned char IDR5        : 1;
-  unsigned char IDR6        : 1;
-  unsigned char IDR7        : 1;
+    unsigned char IDR0        : 1;
+    unsigned char IDR1        : 1;
+    unsigned char IDR2        : 1;
+    unsigned char IDR3        : 1;
+    unsigned char IDR4        : 1;
+    unsigned char IDR5        : 1;
+    unsigned char IDR6        : 1;
+    unsigned char IDR7        : 1;
 } __BITS_PB_IDR;
 #endif
 __IO_REG8_BIT(PB_IDR,      0x5006, __READ, __BITS_PB_IDR);
@@ -323,14 +323,14 @@ __IO_REG8_BIT(PB_IDR,      0x5006, __READ, __BITS_PB_IDR);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char DDR0        : 1;
-  unsigned char DDR1        : 1;
-  unsigned char DDR2        : 1;
-  unsigned char DDR3        : 1;
-  unsigned char DDR4        : 1;
-  unsigned char DDR5        : 1;
-  unsigned char DDR6        : 1;
-  unsigned char DDR7        : 1;
+    unsigned char DDR0        : 1;
+    unsigned char DDR1        : 1;
+    unsigned char DDR2        : 1;
+    unsigned char DDR3        : 1;
+    unsigned char DDR4        : 1;
+    unsigned char DDR5        : 1;
+    unsigned char DDR6        : 1;
+    unsigned char DDR7        : 1;
 } __BITS_PB_DDR;
 #endif
 __IO_REG8_BIT(PB_DDR,      0x5007, __READ_WRITE, __BITS_PB_DDR);
@@ -339,14 +339,14 @@ __IO_REG8_BIT(PB_DDR,      0x5007, __READ_WRITE, __BITS_PB_DDR);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char C10         : 1;
-  unsigned char C11         : 1;
-  unsigned char C12         : 1;
-  unsigned char C13         : 1;
-  unsigned char C14         : 1;
-  unsigned char C15         : 1;
-  unsigned char C16         : 1;
-  unsigned char C17         : 1;
+    unsigned char C10         : 1;
+    unsigned char C11         : 1;
+    unsigned char C12         : 1;
+    unsigned char C13         : 1;
+    unsigned char C14         : 1;
+    unsigned char C15         : 1;
+    unsigned char C16         : 1;
+    unsigned char C17         : 1;
 } __BITS_PB_CR1;
 #endif
 __IO_REG8_BIT(PB_CR1,      0x5008, __READ_WRITE, __BITS_PB_CR1);
@@ -355,14 +355,14 @@ __IO_REG8_BIT(PB_CR1,      0x5008, __READ_WRITE, __BITS_PB_CR1);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char C20         : 1;
-  unsigned char C21         : 1;
-  unsigned char C22         : 1;
-  unsigned char C23         : 1;
-  unsigned char C24         : 1;
-  unsigned char C25         : 1;
-  unsigned char C26         : 1;
-  unsigned char C27         : 1;
+    unsigned char C20         : 1;
+    unsigned char C21         : 1;
+    unsigned char C22         : 1;
+    unsigned char C23         : 1;
+    unsigned char C24         : 1;
+    unsigned char C25         : 1;
+    unsigned char C26         : 1;
+    unsigned char C27         : 1;
 } __BITS_PB_CR2;
 #endif
 __IO_REG8_BIT(PB_CR2,      0x5009, __READ_WRITE, __BITS_PB_CR2);
@@ -476,14 +476,14 @@ __IO_REG8_BIT(PB_CR2,      0x5009, __READ_WRITE, __BITS_PB_CR2);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char ODR0        : 1;
-  unsigned char ODR1        : 1;
-  unsigned char ODR2        : 1;
-  unsigned char ODR3        : 1;
-  unsigned char ODR4        : 1;
-  unsigned char ODR5        : 1;
-  unsigned char ODR6        : 1;
-  unsigned char ODR7        : 1;
+    unsigned char ODR0        : 1;
+    unsigned char ODR1        : 1;
+    unsigned char ODR2        : 1;
+    unsigned char ODR3        : 1;
+    unsigned char ODR4        : 1;
+    unsigned char ODR5        : 1;
+    unsigned char ODR6        : 1;
+    unsigned char ODR7        : 1;
 } __BITS_PC_ODR;
 #endif
 __IO_REG8_BIT(PC_ODR,      0x500A, __READ_WRITE, __BITS_PC_ODR);
@@ -492,14 +492,14 @@ __IO_REG8_BIT(PC_ODR,      0x500A, __READ_WRITE, __BITS_PC_ODR);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char IDR0        : 1;
-  unsigned char IDR1        : 1;
-  unsigned char IDR2        : 1;
-  unsigned char IDR3        : 1;
-  unsigned char IDR4        : 1;
-  unsigned char IDR5        : 1;
-  unsigned char IDR6        : 1;
-  unsigned char IDR7        : 1;
+    unsigned char IDR0        : 1;
+    unsigned char IDR1        : 1;
+    unsigned char IDR2        : 1;
+    unsigned char IDR3        : 1;
+    unsigned char IDR4        : 1;
+    unsigned char IDR5        : 1;
+    unsigned char IDR6        : 1;
+    unsigned char IDR7        : 1;
 } __BITS_PC_IDR;
 #endif
 __IO_REG8_BIT(PC_IDR,      0x500B, __READ, __BITS_PC_IDR);
@@ -508,14 +508,14 @@ __IO_REG8_BIT(PC_IDR,      0x500B, __READ, __BITS_PC_IDR);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char DDR0        : 1;
-  unsigned char DDR1        : 1;
-  unsigned char DDR2        : 1;
-  unsigned char DDR3        : 1;
-  unsigned char DDR4        : 1;
-  unsigned char DDR5        : 1;
-  unsigned char DDR6        : 1;
-  unsigned char DDR7        : 1;
+    unsigned char DDR0        : 1;
+    unsigned char DDR1        : 1;
+    unsigned char DDR2        : 1;
+    unsigned char DDR3        : 1;
+    unsigned char DDR4        : 1;
+    unsigned char DDR5        : 1;
+    unsigned char DDR6        : 1;
+    unsigned char DDR7        : 1;
 } __BITS_PC_DDR;
 #endif
 __IO_REG8_BIT(PC_DDR,      0x500C, __READ_WRITE, __BITS_PC_DDR);
@@ -524,14 +524,14 @@ __IO_REG8_BIT(PC_DDR,      0x500C, __READ_WRITE, __BITS_PC_DDR);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char C10         : 1;
-  unsigned char C11         : 1;
-  unsigned char C12         : 1;
-  unsigned char C13         : 1;
-  unsigned char C14         : 1;
-  unsigned char C15         : 1;
-  unsigned char C16         : 1;
-  unsigned char C17         : 1;
+    unsigned char C10         : 1;
+    unsigned char C11         : 1;
+    unsigned char C12         : 1;
+    unsigned char C13         : 1;
+    unsigned char C14         : 1;
+    unsigned char C15         : 1;
+    unsigned char C16         : 1;
+    unsigned char C17         : 1;
 } __BITS_PC_CR1;
 #endif
 __IO_REG8_BIT(PC_CR1,      0x500D, __READ_WRITE, __BITS_PC_CR1);
@@ -540,14 +540,14 @@ __IO_REG8_BIT(PC_CR1,      0x500D, __READ_WRITE, __BITS_PC_CR1);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char C20         : 1;
-  unsigned char C21         : 1;
-  unsigned char C22         : 1;
-  unsigned char C23         : 1;
-  unsigned char C24         : 1;
-  unsigned char C25         : 1;
-  unsigned char C26         : 1;
-  unsigned char C27         : 1;
+    unsigned char C20         : 1;
+    unsigned char C21         : 1;
+    unsigned char C22         : 1;
+    unsigned char C23         : 1;
+    unsigned char C24         : 1;
+    unsigned char C25         : 1;
+    unsigned char C26         : 1;
+    unsigned char C27         : 1;
 } __BITS_PC_CR2;
 #endif
 __IO_REG8_BIT(PC_CR2,      0x500E, __READ_WRITE, __BITS_PC_CR2);
@@ -661,14 +661,14 @@ __IO_REG8_BIT(PC_CR2,      0x500E, __READ_WRITE, __BITS_PC_CR2);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char ODR0        : 1;
-  unsigned char ODR1        : 1;
-  unsigned char ODR2        : 1;
-  unsigned char ODR3        : 1;
-  unsigned char ODR4        : 1;
-  unsigned char ODR5        : 1;
-  unsigned char ODR6        : 1;
-  unsigned char ODR7        : 1;
+    unsigned char ODR0        : 1;
+    unsigned char ODR1        : 1;
+    unsigned char ODR2        : 1;
+    unsigned char ODR3        : 1;
+    unsigned char ODR4        : 1;
+    unsigned char ODR5        : 1;
+    unsigned char ODR6        : 1;
+    unsigned char ODR7        : 1;
 } __BITS_PD_ODR;
 #endif
 __IO_REG8_BIT(PD_ODR,      0x500F, __READ_WRITE, __BITS_PD_ODR);
@@ -677,14 +677,14 @@ __IO_REG8_BIT(PD_ODR,      0x500F, __READ_WRITE, __BITS_PD_ODR);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char IDR0        : 1;
-  unsigned char IDR1        : 1;
-  unsigned char IDR2        : 1;
-  unsigned char IDR3        : 1;
-  unsigned char IDR4        : 1;
-  unsigned char IDR5        : 1;
-  unsigned char IDR6        : 1;
-  unsigned char IDR7        : 1;
+    unsigned char IDR0        : 1;
+    unsigned char IDR1        : 1;
+    unsigned char IDR2        : 1;
+    unsigned char IDR3        : 1;
+    unsigned char IDR4        : 1;
+    unsigned char IDR5        : 1;
+    unsigned char IDR6        : 1;
+    unsigned char IDR7        : 1;
 } __BITS_PD_IDR;
 #endif
 __IO_REG8_BIT(PD_IDR,      0x5010, __READ, __BITS_PD_IDR);
@@ -693,14 +693,14 @@ __IO_REG8_BIT(PD_IDR,      0x5010, __READ, __BITS_PD_IDR);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char DDR0        : 1;
-  unsigned char DDR1        : 1;
-  unsigned char DDR2        : 1;
-  unsigned char DDR3        : 1;
-  unsigned char DDR4        : 1;
-  unsigned char DDR5        : 1;
-  unsigned char DDR6        : 1;
-  unsigned char DDR7        : 1;
+    unsigned char DDR0        : 1;
+    unsigned char DDR1        : 1;
+    unsigned char DDR2        : 1;
+    unsigned char DDR3        : 1;
+    unsigned char DDR4        : 1;
+    unsigned char DDR5        : 1;
+    unsigned char DDR6        : 1;
+    unsigned char DDR7        : 1;
 } __BITS_PD_DDR;
 #endif
 __IO_REG8_BIT(PD_DDR,      0x5011, __READ_WRITE, __BITS_PD_DDR);
@@ -709,14 +709,14 @@ __IO_REG8_BIT(PD_DDR,      0x5011, __READ_WRITE, __BITS_PD_DDR);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char C10         : 1;
-  unsigned char C11         : 1;
-  unsigned char C12         : 1;
-  unsigned char C13         : 1;
-  unsigned char C14         : 1;
-  unsigned char C15         : 1;
-  unsigned char C16         : 1;
-  unsigned char C17         : 1;
+    unsigned char C10         : 1;
+    unsigned char C11         : 1;
+    unsigned char C12         : 1;
+    unsigned char C13         : 1;
+    unsigned char C14         : 1;
+    unsigned char C15         : 1;
+    unsigned char C16         : 1;
+    unsigned char C17         : 1;
 } __BITS_PD_CR1;
 #endif
 __IO_REG8_BIT(PD_CR1,      0x5012, __READ_WRITE, __BITS_PD_CR1);
@@ -725,14 +725,14 @@ __IO_REG8_BIT(PD_CR1,      0x5012, __READ_WRITE, __BITS_PD_CR1);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char C20         : 1;
-  unsigned char C21         : 1;
-  unsigned char C22         : 1;
-  unsigned char C23         : 1;
-  unsigned char C24         : 1;
-  unsigned char C25         : 1;
-  unsigned char C26         : 1;
-  unsigned char C27         : 1;
+    unsigned char C20         : 1;
+    unsigned char C21         : 1;
+    unsigned char C22         : 1;
+    unsigned char C23         : 1;
+    unsigned char C24         : 1;
+    unsigned char C25         : 1;
+    unsigned char C26         : 1;
+    unsigned char C27         : 1;
 } __BITS_PD_CR2;
 #endif
 __IO_REG8_BIT(PD_CR2,      0x5013, __READ_WRITE, __BITS_PD_CR2);
@@ -846,14 +846,14 @@ __IO_REG8_BIT(PD_CR2,      0x5013, __READ_WRITE, __BITS_PD_CR2);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char ODR0        : 1;
-  unsigned char ODR1        : 1;
-  unsigned char ODR2        : 1;
-  unsigned char ODR3        : 1;
-  unsigned char ODR4        : 1;
-  unsigned char ODR5        : 1;
-  unsigned char ODR6        : 1;
-  unsigned char ODR7        : 1;
+    unsigned char ODR0        : 1;
+    unsigned char ODR1        : 1;
+    unsigned char ODR2        : 1;
+    unsigned char ODR3        : 1;
+    unsigned char ODR4        : 1;
+    unsigned char ODR5        : 1;
+    unsigned char ODR6        : 1;
+    unsigned char ODR7        : 1;
 } __BITS_PE_ODR;
 #endif
 __IO_REG8_BIT(PE_ODR,      0x5014, __READ_WRITE, __BITS_PE_ODR);
@@ -862,14 +862,14 @@ __IO_REG8_BIT(PE_ODR,      0x5014, __READ_WRITE, __BITS_PE_ODR);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char IDR0        : 1;
-  unsigned char IDR1        : 1;
-  unsigned char IDR2        : 1;
-  unsigned char IDR3        : 1;
-  unsigned char IDR4        : 1;
-  unsigned char IDR5        : 1;
-  unsigned char IDR6        : 1;
-  unsigned char IDR7        : 1;
+    unsigned char IDR0        : 1;
+    unsigned char IDR1        : 1;
+    unsigned char IDR2        : 1;
+    unsigned char IDR3        : 1;
+    unsigned char IDR4        : 1;
+    unsigned char IDR5        : 1;
+    unsigned char IDR6        : 1;
+    unsigned char IDR7        : 1;
 } __BITS_PE_IDR;
 #endif
 __IO_REG8_BIT(PE_IDR,      0x5015, __READ, __BITS_PE_IDR);
@@ -878,14 +878,14 @@ __IO_REG8_BIT(PE_IDR,      0x5015, __READ, __BITS_PE_IDR);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char DDR0        : 1;
-  unsigned char DDR1        : 1;
-  unsigned char DDR2        : 1;
-  unsigned char DDR3        : 1;
-  unsigned char DDR4        : 1;
-  unsigned char DDR5        : 1;
-  unsigned char DDR6        : 1;
-  unsigned char DDR7        : 1;
+    unsigned char DDR0        : 1;
+    unsigned char DDR1        : 1;
+    unsigned char DDR2        : 1;
+    unsigned char DDR3        : 1;
+    unsigned char DDR4        : 1;
+    unsigned char DDR5        : 1;
+    unsigned char DDR6        : 1;
+    unsigned char DDR7        : 1;
 } __BITS_PE_DDR;
 #endif
 __IO_REG8_BIT(PE_DDR,      0x5016, __READ_WRITE, __BITS_PE_DDR);
@@ -894,14 +894,14 @@ __IO_REG8_BIT(PE_DDR,      0x5016, __READ_WRITE, __BITS_PE_DDR);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char C10         : 1;
-  unsigned char C11         : 1;
-  unsigned char C12         : 1;
-  unsigned char C13         : 1;
-  unsigned char C14         : 1;
-  unsigned char C15         : 1;
-  unsigned char C16         : 1;
-  unsigned char C17         : 1;
+    unsigned char C10         : 1;
+    unsigned char C11         : 1;
+    unsigned char C12         : 1;
+    unsigned char C13         : 1;
+    unsigned char C14         : 1;
+    unsigned char C15         : 1;
+    unsigned char C16         : 1;
+    unsigned char C17         : 1;
 } __BITS_PE_CR1;
 #endif
 __IO_REG8_BIT(PE_CR1,      0x5017, __READ_WRITE, __BITS_PE_CR1);
@@ -910,14 +910,14 @@ __IO_REG8_BIT(PE_CR1,      0x5017, __READ_WRITE, __BITS_PE_CR1);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char C20         : 1;
-  unsigned char C21         : 1;
-  unsigned char C22         : 1;
-  unsigned char C23         : 1;
-  unsigned char C24         : 1;
-  unsigned char C25         : 1;
-  unsigned char C26         : 1;
-  unsigned char C27         : 1;
+    unsigned char C20         : 1;
+    unsigned char C21         : 1;
+    unsigned char C22         : 1;
+    unsigned char C23         : 1;
+    unsigned char C24         : 1;
+    unsigned char C25         : 1;
+    unsigned char C26         : 1;
+    unsigned char C27         : 1;
 } __BITS_PE_CR2;
 #endif
 __IO_REG8_BIT(PE_CR2,      0x5018, __READ_WRITE, __BITS_PE_CR2);
@@ -1031,14 +1031,14 @@ __IO_REG8_BIT(PE_CR2,      0x5018, __READ_WRITE, __BITS_PE_CR2);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char ODR0        : 1;
-  unsigned char ODR1        : 1;
-  unsigned char ODR2        : 1;
-  unsigned char ODR3        : 1;
-  unsigned char ODR4        : 1;
-  unsigned char ODR5        : 1;
-  unsigned char ODR6        : 1;
-  unsigned char ODR7        : 1;
+    unsigned char ODR0        : 1;
+    unsigned char ODR1        : 1;
+    unsigned char ODR2        : 1;
+    unsigned char ODR3        : 1;
+    unsigned char ODR4        : 1;
+    unsigned char ODR5        : 1;
+    unsigned char ODR6        : 1;
+    unsigned char ODR7        : 1;
 } __BITS_PF_ODR;
 #endif
 __IO_REG8_BIT(PF_ODR,      0x5019, __READ_WRITE, __BITS_PF_ODR);
@@ -1047,14 +1047,14 @@ __IO_REG8_BIT(PF_ODR,      0x5019, __READ_WRITE, __BITS_PF_ODR);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char IDR0        : 1;
-  unsigned char IDR1        : 1;
-  unsigned char IDR2        : 1;
-  unsigned char IDR3        : 1;
-  unsigned char IDR4        : 1;
-  unsigned char IDR5        : 1;
-  unsigned char IDR6        : 1;
-  unsigned char IDR7        : 1;
+    unsigned char IDR0        : 1;
+    unsigned char IDR1        : 1;
+    unsigned char IDR2        : 1;
+    unsigned char IDR3        : 1;
+    unsigned char IDR4        : 1;
+    unsigned char IDR5        : 1;
+    unsigned char IDR6        : 1;
+    unsigned char IDR7        : 1;
 } __BITS_PF_IDR;
 #endif
 __IO_REG8_BIT(PF_IDR,      0x501A, __READ, __BITS_PF_IDR);
@@ -1063,14 +1063,14 @@ __IO_REG8_BIT(PF_IDR,      0x501A, __READ, __BITS_PF_IDR);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char DDR0        : 1;
-  unsigned char DDR1        : 1;
-  unsigned char DDR2        : 1;
-  unsigned char DDR3        : 1;
-  unsigned char DDR4        : 1;
-  unsigned char DDR5        : 1;
-  unsigned char DDR6        : 1;
-  unsigned char DDR7        : 1;
+    unsigned char DDR0        : 1;
+    unsigned char DDR1        : 1;
+    unsigned char DDR2        : 1;
+    unsigned char DDR3        : 1;
+    unsigned char DDR4        : 1;
+    unsigned char DDR5        : 1;
+    unsigned char DDR6        : 1;
+    unsigned char DDR7        : 1;
 } __BITS_PF_DDR;
 #endif
 __IO_REG8_BIT(PF_DDR,      0x501B, __READ_WRITE, __BITS_PF_DDR);
@@ -1079,14 +1079,14 @@ __IO_REG8_BIT(PF_DDR,      0x501B, __READ_WRITE, __BITS_PF_DDR);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char C10         : 1;
-  unsigned char C11         : 1;
-  unsigned char C12         : 1;
-  unsigned char C13         : 1;
-  unsigned char C14         : 1;
-  unsigned char C15         : 1;
-  unsigned char C16         : 1;
-  unsigned char C17         : 1;
+    unsigned char C10         : 1;
+    unsigned char C11         : 1;
+    unsigned char C12         : 1;
+    unsigned char C13         : 1;
+    unsigned char C14         : 1;
+    unsigned char C15         : 1;
+    unsigned char C16         : 1;
+    unsigned char C17         : 1;
 } __BITS_PF_CR1;
 #endif
 __IO_REG8_BIT(PF_CR1,      0x501C, __READ_WRITE, __BITS_PF_CR1);
@@ -1095,14 +1095,14 @@ __IO_REG8_BIT(PF_CR1,      0x501C, __READ_WRITE, __BITS_PF_CR1);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char C20         : 1;
-  unsigned char C21         : 1;
-  unsigned char C22         : 1;
-  unsigned char C23         : 1;
-  unsigned char C24         : 1;
-  unsigned char C25         : 1;
-  unsigned char C26         : 1;
-  unsigned char C27         : 1;
+    unsigned char C20         : 1;
+    unsigned char C21         : 1;
+    unsigned char C22         : 1;
+    unsigned char C23         : 1;
+    unsigned char C24         : 1;
+    unsigned char C25         : 1;
+    unsigned char C26         : 1;
+    unsigned char C27         : 1;
 } __BITS_PF_CR2;
 #endif
 __IO_REG8_BIT(PF_CR2,      0x501D, __READ_WRITE, __BITS_PF_CR2);
@@ -1216,14 +1216,14 @@ __IO_REG8_BIT(PF_CR2,      0x501D, __READ_WRITE, __BITS_PF_CR2);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char ODR0        : 1;
-  unsigned char ODR1        : 1;
-  unsigned char ODR2        : 1;
-  unsigned char ODR3        : 1;
-  unsigned char ODR4        : 1;
-  unsigned char ODR5        : 1;
-  unsigned char ODR6        : 1;
-  unsigned char ODR7        : 1;
+    unsigned char ODR0        : 1;
+    unsigned char ODR1        : 1;
+    unsigned char ODR2        : 1;
+    unsigned char ODR3        : 1;
+    unsigned char ODR4        : 1;
+    unsigned char ODR5        : 1;
+    unsigned char ODR6        : 1;
+    unsigned char ODR7        : 1;
 } __BITS_PG_ODR;
 #endif
 __IO_REG8_BIT(PG_ODR,      0x501E, __READ_WRITE, __BITS_PG_ODR);
@@ -1232,14 +1232,14 @@ __IO_REG8_BIT(PG_ODR,      0x501E, __READ_WRITE, __BITS_PG_ODR);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char IDR0        : 1;
-  unsigned char IDR1        : 1;
-  unsigned char IDR2        : 1;
-  unsigned char IDR3        : 1;
-  unsigned char IDR4        : 1;
-  unsigned char IDR5        : 1;
-  unsigned char IDR6        : 1;
-  unsigned char IDR7        : 1;
+    unsigned char IDR0        : 1;
+    unsigned char IDR1        : 1;
+    unsigned char IDR2        : 1;
+    unsigned char IDR3        : 1;
+    unsigned char IDR4        : 1;
+    unsigned char IDR5        : 1;
+    unsigned char IDR6        : 1;
+    unsigned char IDR7        : 1;
 } __BITS_PG_IDR;
 #endif
 __IO_REG8_BIT(PG_IDR,      0x501F, __READ, __BITS_PG_IDR);
@@ -1248,14 +1248,14 @@ __IO_REG8_BIT(PG_IDR,      0x501F, __READ, __BITS_PG_IDR);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char DDR0        : 1;
-  unsigned char DDR1        : 1;
-  unsigned char DDR2        : 1;
-  unsigned char DDR3        : 1;
-  unsigned char DDR4        : 1;
-  unsigned char DDR5        : 1;
-  unsigned char DDR6        : 1;
-  unsigned char DDR7        : 1;
+    unsigned char DDR0        : 1;
+    unsigned char DDR1        : 1;
+    unsigned char DDR2        : 1;
+    unsigned char DDR3        : 1;
+    unsigned char DDR4        : 1;
+    unsigned char DDR5        : 1;
+    unsigned char DDR6        : 1;
+    unsigned char DDR7        : 1;
 } __BITS_PG_DDR;
 #endif
 __IO_REG8_BIT(PG_DDR,      0x5020, __READ_WRITE, __BITS_PG_DDR);
@@ -1264,14 +1264,14 @@ __IO_REG8_BIT(PG_DDR,      0x5020, __READ_WRITE, __BITS_PG_DDR);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char C10         : 1;
-  unsigned char C11         : 1;
-  unsigned char C12         : 1;
-  unsigned char C13         : 1;
-  unsigned char C14         : 1;
-  unsigned char C15         : 1;
-  unsigned char C16         : 1;
-  unsigned char C17         : 1;
+    unsigned char C10         : 1;
+    unsigned char C11         : 1;
+    unsigned char C12         : 1;
+    unsigned char C13         : 1;
+    unsigned char C14         : 1;
+    unsigned char C15         : 1;
+    unsigned char C16         : 1;
+    unsigned char C17         : 1;
 } __BITS_PG_CR1;
 #endif
 __IO_REG8_BIT(PG_CR1,      0x5021, __READ_WRITE, __BITS_PG_CR1);
@@ -1280,14 +1280,14 @@ __IO_REG8_BIT(PG_CR1,      0x5021, __READ_WRITE, __BITS_PG_CR1);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char C20         : 1;
-  unsigned char C21         : 1;
-  unsigned char C22         : 1;
-  unsigned char C23         : 1;
-  unsigned char C24         : 1;
-  unsigned char C25         : 1;
-  unsigned char C26         : 1;
-  unsigned char C27         : 1;
+    unsigned char C20         : 1;
+    unsigned char C21         : 1;
+    unsigned char C22         : 1;
+    unsigned char C23         : 1;
+    unsigned char C24         : 1;
+    unsigned char C25         : 1;
+    unsigned char C26         : 1;
+    unsigned char C27         : 1;
 } __BITS_PG_CR2;
 #endif
 __IO_REG8_BIT(PG_CR2,      0x5022, __READ_WRITE, __BITS_PG_CR2);
@@ -1401,14 +1401,14 @@ __IO_REG8_BIT(PG_CR2,      0x5022, __READ_WRITE, __BITS_PG_CR2);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char ODR0        : 1;
-  unsigned char ODR1        : 1;
-  unsigned char ODR2        : 1;
-  unsigned char ODR3        : 1;
-  unsigned char ODR4        : 1;
-  unsigned char ODR5        : 1;
-  unsigned char ODR6        : 1;
-  unsigned char ODR7        : 1;
+    unsigned char ODR0        : 1;
+    unsigned char ODR1        : 1;
+    unsigned char ODR2        : 1;
+    unsigned char ODR3        : 1;
+    unsigned char ODR4        : 1;
+    unsigned char ODR5        : 1;
+    unsigned char ODR6        : 1;
+    unsigned char ODR7        : 1;
 } __BITS_PH_ODR;
 #endif
 __IO_REG8_BIT(PH_ODR,      0x5023, __READ_WRITE, __BITS_PH_ODR);
@@ -1417,14 +1417,14 @@ __IO_REG8_BIT(PH_ODR,      0x5023, __READ_WRITE, __BITS_PH_ODR);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char IDR0        : 1;
-  unsigned char IDR1        : 1;
-  unsigned char IDR2        : 1;
-  unsigned char IDR3        : 1;
-  unsigned char IDR4        : 1;
-  unsigned char IDR5        : 1;
-  unsigned char IDR6        : 1;
-  unsigned char IDR7        : 1;
+    unsigned char IDR0        : 1;
+    unsigned char IDR1        : 1;
+    unsigned char IDR2        : 1;
+    unsigned char IDR3        : 1;
+    unsigned char IDR4        : 1;
+    unsigned char IDR5        : 1;
+    unsigned char IDR6        : 1;
+    unsigned char IDR7        : 1;
 } __BITS_PH_IDR;
 #endif
 __IO_REG8_BIT(PH_IDR,      0x5024, __READ, __BITS_PH_IDR);
@@ -1433,14 +1433,14 @@ __IO_REG8_BIT(PH_IDR,      0x5024, __READ, __BITS_PH_IDR);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char DDR0        : 1;
-  unsigned char DDR1        : 1;
-  unsigned char DDR2        : 1;
-  unsigned char DDR3        : 1;
-  unsigned char DDR4        : 1;
-  unsigned char DDR5        : 1;
-  unsigned char DDR6        : 1;
-  unsigned char DDR7        : 1;
+    unsigned char DDR0        : 1;
+    unsigned char DDR1        : 1;
+    unsigned char DDR2        : 1;
+    unsigned char DDR3        : 1;
+    unsigned char DDR4        : 1;
+    unsigned char DDR5        : 1;
+    unsigned char DDR6        : 1;
+    unsigned char DDR7        : 1;
 } __BITS_PH_DDR;
 #endif
 __IO_REG8_BIT(PH_DDR,      0x5025, __READ_WRITE, __BITS_PH_DDR);
@@ -1449,14 +1449,14 @@ __IO_REG8_BIT(PH_DDR,      0x5025, __READ_WRITE, __BITS_PH_DDR);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char C10         : 1;
-  unsigned char C11         : 1;
-  unsigned char C12         : 1;
-  unsigned char C13         : 1;
-  unsigned char C14         : 1;
-  unsigned char C15         : 1;
-  unsigned char C16         : 1;
-  unsigned char C17         : 1;
+    unsigned char C10         : 1;
+    unsigned char C11         : 1;
+    unsigned char C12         : 1;
+    unsigned char C13         : 1;
+    unsigned char C14         : 1;
+    unsigned char C15         : 1;
+    unsigned char C16         : 1;
+    unsigned char C17         : 1;
 } __BITS_PH_CR1;
 #endif
 __IO_REG8_BIT(PH_CR1,      0x5026, __READ_WRITE, __BITS_PH_CR1);
@@ -1465,14 +1465,14 @@ __IO_REG8_BIT(PH_CR1,      0x5026, __READ_WRITE, __BITS_PH_CR1);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char C20         : 1;
-  unsigned char C21         : 1;
-  unsigned char C22         : 1;
-  unsigned char C23         : 1;
-  unsigned char C24         : 1;
-  unsigned char C25         : 1;
-  unsigned char C26         : 1;
-  unsigned char C27         : 1;
+    unsigned char C20         : 1;
+    unsigned char C21         : 1;
+    unsigned char C22         : 1;
+    unsigned char C23         : 1;
+    unsigned char C24         : 1;
+    unsigned char C25         : 1;
+    unsigned char C26         : 1;
+    unsigned char C27         : 1;
 } __BITS_PH_CR2;
 #endif
 __IO_REG8_BIT(PH_CR2,      0x5027, __READ_WRITE, __BITS_PH_CR2);
@@ -1586,14 +1586,14 @@ __IO_REG8_BIT(PH_CR2,      0x5027, __READ_WRITE, __BITS_PH_CR2);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char ODR0        : 1;
-  unsigned char ODR1        : 1;
-  unsigned char ODR2        : 1;
-  unsigned char ODR3        : 1;
-  unsigned char ODR4        : 1;
-  unsigned char ODR5        : 1;
-  unsigned char ODR6        : 1;
-  unsigned char ODR7        : 1;
+    unsigned char ODR0        : 1;
+    unsigned char ODR1        : 1;
+    unsigned char ODR2        : 1;
+    unsigned char ODR3        : 1;
+    unsigned char ODR4        : 1;
+    unsigned char ODR5        : 1;
+    unsigned char ODR6        : 1;
+    unsigned char ODR7        : 1;
 } __BITS_PI_ODR;
 #endif
 __IO_REG8_BIT(PI_ODR,      0x5028, __READ_WRITE, __BITS_PI_ODR);
@@ -1602,14 +1602,14 @@ __IO_REG8_BIT(PI_ODR,      0x5028, __READ_WRITE, __BITS_PI_ODR);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char IDR0        : 1;
-  unsigned char IDR1        : 1;
-  unsigned char IDR2        : 1;
-  unsigned char IDR3        : 1;
-  unsigned char IDR4        : 1;
-  unsigned char IDR5        : 1;
-  unsigned char IDR6        : 1;
-  unsigned char IDR7        : 1;
+    unsigned char IDR0        : 1;
+    unsigned char IDR1        : 1;
+    unsigned char IDR2        : 1;
+    unsigned char IDR3        : 1;
+    unsigned char IDR4        : 1;
+    unsigned char IDR5        : 1;
+    unsigned char IDR6        : 1;
+    unsigned char IDR7        : 1;
 } __BITS_PI_IDR;
 #endif
 __IO_REG8_BIT(PI_IDR,      0x5029, __READ, __BITS_PI_IDR);
@@ -1618,14 +1618,14 @@ __IO_REG8_BIT(PI_IDR,      0x5029, __READ, __BITS_PI_IDR);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char DDR0        : 1;
-  unsigned char DDR1        : 1;
-  unsigned char DDR2        : 1;
-  unsigned char DDR3        : 1;
-  unsigned char DDR4        : 1;
-  unsigned char DDR5        : 1;
-  unsigned char DDR6        : 1;
-  unsigned char DDR7        : 1;
+    unsigned char DDR0        : 1;
+    unsigned char DDR1        : 1;
+    unsigned char DDR2        : 1;
+    unsigned char DDR3        : 1;
+    unsigned char DDR4        : 1;
+    unsigned char DDR5        : 1;
+    unsigned char DDR6        : 1;
+    unsigned char DDR7        : 1;
 } __BITS_PI_DDR;
 #endif
 __IO_REG8_BIT(PI_DDR,      0x502A, __READ_WRITE, __BITS_PI_DDR);
@@ -1634,14 +1634,14 @@ __IO_REG8_BIT(PI_DDR,      0x502A, __READ_WRITE, __BITS_PI_DDR);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char C10         : 1;
-  unsigned char C11         : 1;
-  unsigned char C12         : 1;
-  unsigned char C13         : 1;
-  unsigned char C14         : 1;
-  unsigned char C15         : 1;
-  unsigned char C16         : 1;
-  unsigned char C17         : 1;
+    unsigned char C10         : 1;
+    unsigned char C11         : 1;
+    unsigned char C12         : 1;
+    unsigned char C13         : 1;
+    unsigned char C14         : 1;
+    unsigned char C15         : 1;
+    unsigned char C16         : 1;
+    unsigned char C17         : 1;
 } __BITS_PI_CR1;
 #endif
 __IO_REG8_BIT(PI_CR1,      0x502B, __READ_WRITE, __BITS_PI_CR1);
@@ -1650,14 +1650,14 @@ __IO_REG8_BIT(PI_CR1,      0x502B, __READ_WRITE, __BITS_PI_CR1);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char C20         : 1;
-  unsigned char C21         : 1;
-  unsigned char C22         : 1;
-  unsigned char C23         : 1;
-  unsigned char C24         : 1;
-  unsigned char C25         : 1;
-  unsigned char C26         : 1;
-  unsigned char C27         : 1;
+    unsigned char C20         : 1;
+    unsigned char C21         : 1;
+    unsigned char C22         : 1;
+    unsigned char C23         : 1;
+    unsigned char C24         : 1;
+    unsigned char C25         : 1;
+    unsigned char C26         : 1;
+    unsigned char C27         : 1;
 } __BITS_PI_CR2;
 #endif
 __IO_REG8_BIT(PI_CR2,      0x502C, __READ_WRITE, __BITS_PI_CR2);
@@ -1771,10 +1771,10 @@ __IO_REG8_BIT(PI_CR2,      0x502C, __READ_WRITE, __BITS_PI_CR2);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char FIX         : 1;
-  unsigned char IE          : 1;
-  unsigned char AHALT       : 1;
-  unsigned char HALT        : 1;
+    unsigned char FIX         : 1;
+    unsigned char IE          : 1;
+    unsigned char AHALT       : 1;
+    unsigned char HALT        : 1;
 } __BITS_FLASH_CR1;
 #endif
 __IO_REG8_BIT(FLASH_CR1,   0x505A, __READ_WRITE, __BITS_FLASH_CR1);
@@ -1783,12 +1783,12 @@ __IO_REG8_BIT(FLASH_CR1,   0x505A, __READ_WRITE, __BITS_FLASH_CR1);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char PRG         : 1;
-  unsigned char             : 3;
-  unsigned char FPRG        : 1;
-  unsigned char ERASE       : 1;
-  unsigned char WPRG        : 1;
-  unsigned char OPT         : 1;
+    unsigned char PRG         : 1;
+    unsigned char             : 3;
+    unsigned char FPRG        : 1;
+    unsigned char ERASE       : 1;
+    unsigned char WPRG        : 1;
+    unsigned char OPT         : 1;
 } __BITS_FLASH_CR2;
 #endif
 __IO_REG8_BIT(FLASH_CR2,   0x505B, __READ_WRITE, __BITS_FLASH_CR2);
@@ -1797,12 +1797,12 @@ __IO_REG8_BIT(FLASH_CR2,   0x505B, __READ_WRITE, __BITS_FLASH_CR2);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char NPRG        : 1;
-  unsigned char             : 3;
-  unsigned char NFPRG       : 1;
-  unsigned char NERASE      : 1;
-  unsigned char NWPRG       : 1;
-  unsigned char NOPT        : 1;
+    unsigned char NPRG        : 1;
+    unsigned char             : 3;
+    unsigned char NFPRG       : 1;
+    unsigned char NERASE      : 1;
+    unsigned char NWPRG       : 1;
+    unsigned char NOPT        : 1;
 } __BITS_FLASH_NCR2;
 #endif
 __IO_REG8_BIT(FLASH_NCR2,  0x505C, __READ_WRITE, __BITS_FLASH_NCR2);
@@ -1811,12 +1811,12 @@ __IO_REG8_BIT(FLASH_NCR2,  0x505C, __READ_WRITE, __BITS_FLASH_NCR2);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char WPB0        : 1;
-  unsigned char WPB1        : 1;
-  unsigned char WPB2        : 1;
-  unsigned char WPB3        : 1;
-  unsigned char WPB4        : 1;
-  unsigned char WPB5        : 1;
+    unsigned char WPB0        : 1;
+    unsigned char WPB1        : 1;
+    unsigned char WPB2        : 1;
+    unsigned char WPB3        : 1;
+    unsigned char WPB4        : 1;
+    unsigned char WPB5        : 1;
 } __BITS_FLASH_FPR;
 #endif
 __IO_REG8_BIT(FLASH_FPR,   0x505D, __READ, __BITS_FLASH_FPR);
@@ -1825,12 +1825,12 @@ __IO_REG8_BIT(FLASH_FPR,   0x505D, __READ, __BITS_FLASH_FPR);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char NWPB0       : 1;
-  unsigned char NWPB1       : 1;
-  unsigned char NWPB2       : 1;
-  unsigned char NWPB3       : 1;
-  unsigned char NWPB4       : 1;
-  unsigned char NWPB5       : 1;
+    unsigned char NWPB0       : 1;
+    unsigned char NWPB1       : 1;
+    unsigned char NWPB2       : 1;
+    unsigned char NWPB3       : 1;
+    unsigned char NWPB4       : 1;
+    unsigned char NWPB5       : 1;
 } __BITS_FLASH_NFPR;
 #endif
 __IO_REG8_BIT(FLASH_NFPR,  0x505E, __READ, __BITS_FLASH_NFPR);
@@ -1839,12 +1839,12 @@ __IO_REG8_BIT(FLASH_NFPR,  0x505E, __READ, __BITS_FLASH_NFPR);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char WR_PG_DIS   : 1;
-  unsigned char PUL         : 1;
-  unsigned char EOP         : 1;
-  unsigned char DUL         : 1;
-  unsigned char             : 2;
-  unsigned char HVOFF       : 1;
+    unsigned char WR_PG_DIS   : 1;
+    unsigned char PUL         : 1;
+    unsigned char EOP         : 1;
+    unsigned char DUL         : 1;
+    unsigned char             : 2;
+    unsigned char HVOFF       : 1;
 } __BITS_FLASH_IAPSR;
 #endif
 __IO_REG8_BIT(FLASH_IAPSR, 0x505F, __READ_WRITE, __BITS_FLASH_IAPSR);
@@ -1946,10 +1946,10 @@ __IO_REG8    (FLASH_DUKR,  0x5064, __READ_WRITE);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char PAIS        : 2;
-  unsigned char PBIS        : 2;
-  unsigned char PCIS        : 2;
-  unsigned char PDIS        : 2;
+    unsigned char PAIS        : 2;
+    unsigned char PBIS        : 2;
+    unsigned char PCIS        : 2;
+    unsigned char PDIS        : 2;
 } __BITS_EXTI_CR1;
 #endif
 __IO_REG8_BIT(EXTI_CR1,    0x50A0, __READ_WRITE, __BITS_EXTI_CR1);
@@ -1958,8 +1958,8 @@ __IO_REG8_BIT(EXTI_CR1,    0x50A0, __READ_WRITE, __BITS_EXTI_CR1);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char PEIS        : 2;
-  unsigned char TLIS        : 1;
+    unsigned char PEIS        : 2;
+    unsigned char TLIS        : 1;
 } __BITS_EXTI_CR2;
 #endif
 __IO_REG8_BIT(EXTI_CR2,    0x50A1, __READ_WRITE, __BITS_EXTI_CR2);
@@ -1999,11 +1999,11 @@ __IO_REG8_BIT(EXTI_CR2,    0x50A1, __READ_WRITE, __BITS_EXTI_CR2);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char WWDGF       : 1;
-  unsigned char IWDGF       : 1;
-  unsigned char ILLOPF      : 1;
-  unsigned char SWIMF       : 1;
-  unsigned char EMCF        : 1;
+    unsigned char WWDGF       : 1;
+    unsigned char IWDGF       : 1;
+    unsigned char ILLOPF      : 1;
+    unsigned char SWIMF       : 1;
+    unsigned char EMCF        : 1;
 } __BITS_RST_SR;
 #endif
 __IO_REG8_BIT(RST_SR,      0x50B3, __READ_WRITE, __BITS_RST_SR);
@@ -2039,12 +2039,12 @@ __IO_REG8_BIT(RST_SR,      0x50B3, __READ_WRITE, __BITS_RST_SR);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char HSIEN       : 1;
-  unsigned char HSIRDY      : 1;
-  unsigned char FHW         : 1;
-  unsigned char LSIEN       : 1;
-  unsigned char LSIRDY      : 1;
-  unsigned char REGAH       : 1;
+    unsigned char HSIEN       : 1;
+    unsigned char HSIRDY      : 1;
+    unsigned char FHW         : 1;
+    unsigned char LSIEN       : 1;
+    unsigned char LSIRDY      : 1;
+    unsigned char REGAH       : 1;
 } __BITS_CLK_ICKR;
 #endif
 __IO_REG8_BIT(CLK_ICKR,    0x50C0, __READ_WRITE, __BITS_CLK_ICKR);
@@ -2053,8 +2053,8 @@ __IO_REG8_BIT(CLK_ICKR,    0x50C0, __READ_WRITE, __BITS_CLK_ICKR);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char HSEEN       : 1;
-  unsigned char HSERDY      : 1;
+    unsigned char HSEEN       : 1;
+    unsigned char HSERDY      : 1;
 } __BITS_CLK_ECKR;
 #endif
 __IO_REG8_BIT(CLK_ECKR,    0x50C1, __READ_WRITE, __BITS_CLK_ECKR);
@@ -2067,10 +2067,10 @@ __IO_REG8    (CLK_SWR,     0x50C4, __READ_WRITE);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char SWBSY       : 1;
-  unsigned char SWEN        : 1;
-  unsigned char SWIEN       : 1;
-  unsigned char SWIF        : 1;
+    unsigned char SWBSY       : 1;
+    unsigned char SWEN        : 1;
+    unsigned char SWIEN       : 1;
+    unsigned char SWIF        : 1;
 } __BITS_CLK_SWCR;
 #endif
 __IO_REG8_BIT(CLK_SWCR,    0x50C5, __READ_WRITE, __BITS_CLK_SWCR);
@@ -2079,8 +2079,8 @@ __IO_REG8_BIT(CLK_SWCR,    0x50C5, __READ_WRITE, __BITS_CLK_SWCR);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char CPUDIV      : 3;
-  unsigned char HSIDIV      : 2;
+    unsigned char CPUDIV      : 3;
+    unsigned char HSIDIV      : 2;
 } __BITS_CLK_CKDIVR;
 #endif
 __IO_REG8_BIT(CLK_CKDIVR,  0x50C6, __READ_WRITE, __BITS_CLK_CKDIVR);
@@ -2091,10 +2091,10 @@ __IO_REG8    (CLK_PCKENR1, 0x50C7, __READ_WRITE);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char CSSEN       : 1;
-  unsigned char AUX         : 1;
-  unsigned char CSSDIE      : 1;
-  unsigned char CSSD        : 1;
+    unsigned char CSSEN       : 1;
+    unsigned char AUX         : 1;
+    unsigned char CSSDIE      : 1;
+    unsigned char CSSD        : 1;
 } __BITS_CLK_CSSR;
 #endif
 __IO_REG8_BIT(CLK_CSSR,    0x50C8, __READ_WRITE, __BITS_CLK_CSSR);
@@ -2103,10 +2103,10 @@ __IO_REG8_BIT(CLK_CSSR,    0x50C8, __READ_WRITE, __BITS_CLK_CSSR);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char CCOEN       : 1;
-  unsigned char CCOSEL      : 4;
-  unsigned char CCORDY      : 1;
-  unsigned char CC0BSY      : 1;
+    unsigned char CCOEN       : 1;
+    unsigned char CCOSEL      : 4;
+    unsigned char CCORDY      : 1;
+    unsigned char CC0BSY      : 1;
 } __BITS_CLK_CCOR;
 #endif
 __IO_REG8_BIT(CLK_CCOR,    0x50C9, __READ_WRITE, __BITS_CLK_CCOR);
@@ -2117,7 +2117,7 @@ __IO_REG8    (CLK_PCKENR2, 0x50CA, __READ_WRITE);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char CANDIV      : 3;
+    unsigned char CANDIV      : 3;
 } __BITS_CLK_CANCCR;
 #endif
 __IO_REG8_BIT(CLK_CANCCR,  0x50CB, __READ_WRITE, __BITS_CLK_CANCCR);
@@ -2126,7 +2126,7 @@ __IO_REG8_BIT(CLK_CANCCR,  0x50CB, __READ_WRITE, __BITS_CLK_CANCCR);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char HSITRIM     : 4;
+    unsigned char HSITRIM     : 4;
 } __BITS_CLK_HSITRIMR;
 #endif
 __IO_REG8_BIT(CLK_HSITRIMR, 0x50CC, __READ_WRITE, __BITS_CLK_HSITRIMR);
@@ -2135,7 +2135,7 @@ __IO_REG8_BIT(CLK_HSITRIMR, 0x50CC, __READ_WRITE, __BITS_CLK_HSITRIMR);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char SWIMCLK     : 1;
+    unsigned char SWIMCLK     : 1;
 } __BITS_CLK_SWIMCCR;
 #endif
 __IO_REG8_BIT(CLK_SWIMCCR, 0x50CD, __READ_WRITE, __BITS_CLK_SWIMCCR);
@@ -2227,14 +2227,14 @@ __IO_REG8_BIT(CLK_SWIMCCR, 0x50CD, __READ_WRITE, __BITS_CLK_SWIMCCR);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char T0          : 1;
-  unsigned char T1          : 1;
-  unsigned char T2          : 1;
-  unsigned char T3          : 1;
-  unsigned char T4          : 1;
-  unsigned char T5          : 1;
-  unsigned char T6          : 1;
-  unsigned char WDGA        : 1;
+    unsigned char T0          : 1;
+    unsigned char T1          : 1;
+    unsigned char T2          : 1;
+    unsigned char T3          : 1;
+    unsigned char T4          : 1;
+    unsigned char T5          : 1;
+    unsigned char T6          : 1;
+    unsigned char WDGA        : 1;
 } __BITS_WWDG_CR;
 #endif
 __IO_REG8_BIT(WWDG_CR,     0x50D1, __READ_WRITE, __BITS_WWDG_CR);
@@ -2243,13 +2243,13 @@ __IO_REG8_BIT(WWDG_CR,     0x50D1, __READ_WRITE, __BITS_WWDG_CR);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char W0          : 1;
-  unsigned char W1          : 1;
-  unsigned char W2          : 1;
-  unsigned char W3          : 1;
-  unsigned char W4          : 1;
-  unsigned char W5          : 1;
-  unsigned char W6          : 1;
+    unsigned char W0          : 1;
+    unsigned char W1          : 1;
+    unsigned char W2          : 1;
+    unsigned char W3          : 1;
+    unsigned char W4          : 1;
+    unsigned char W5          : 1;
+    unsigned char W6          : 1;
 } __BITS_WWDG_WR;
 #endif
 __IO_REG8_BIT(WWDG_WR,     0x50D2, __READ_WRITE, __BITS_WWDG_WR);
@@ -2309,7 +2309,7 @@ __IO_REG8    (IWDG_KR,     0x50E0, __WRITE);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char PR          : 3;
+    unsigned char PR          : 3;
 } __BITS_IWDG_PR;
 #endif
 __IO_REG8_BIT(IWDG_PR,     0x50E1, __READ_WRITE, __BITS_IWDG_PR);
@@ -2339,10 +2339,10 @@ __IO_REG8    (IWDG_RLR,    0x50E2, __READ_WRITE);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char MSR         : 1;
-  unsigned char             : 3;
-  unsigned char AWUEN       : 1;
-  unsigned char AWUF        : 1;
+    unsigned char MSR         : 1;
+    unsigned char             : 3;
+    unsigned char AWUEN       : 1;
+    unsigned char AWUF        : 1;
 } __BITS_AWU_CSR1;
 #endif
 __IO_REG8_BIT(AWU_CSR1,    0x50F0, __READ_WRITE, __BITS_AWU_CSR1);
@@ -2351,7 +2351,7 @@ __IO_REG8_BIT(AWU_CSR1,    0x50F0, __READ_WRITE, __BITS_AWU_CSR1);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char APR         : 6;
+    unsigned char APR         : 6;
 } __BITS_AWU_APR;
 #endif
 __IO_REG8_BIT(AWU_APR,     0x50F1, __READ_WRITE, __BITS_AWU_APR);
@@ -2360,7 +2360,7 @@ __IO_REG8_BIT(AWU_APR,     0x50F1, __READ_WRITE, __BITS_AWU_APR);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char AWUTB       : 4;
+    unsigned char AWUTB       : 4;
 } __BITS_AWU_TBR;
 #endif
 __IO_REG8_BIT(AWU_TBR,     0x50F2, __READ_WRITE, __BITS_AWU_TBR);
@@ -2400,9 +2400,9 @@ __IO_REG8_BIT(AWU_TBR,     0x50F2, __READ_WRITE, __BITS_AWU_TBR);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char BEEPDIV     : 5;
-  unsigned char BEEPEN      : 1;
-  unsigned char BEEPSEL     : 2;
+    unsigned char BEEPDIV     : 5;
+    unsigned char BEEPEN      : 1;
+    unsigned char BEEPSEL     : 2;
 } __BITS_BEEP_CSR;
 #endif
 __IO_REG8_BIT(BEEP_CSR,    0x50F3, __READ_WRITE, __BITS_BEEP_CSR);
@@ -2434,12 +2434,12 @@ __IO_REG8_BIT(BEEP_CSR,    0x50F3, __READ_WRITE, __BITS_BEEP_CSR);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char CPHA        : 1;
-  unsigned char CPOL        : 1;
-  unsigned char MSTR        : 1;
-  unsigned char BR          : 3;
-  unsigned char SPE         : 1;
-  unsigned char LSBFIRST    : 1;
+    unsigned char CPHA        : 1;
+    unsigned char CPOL        : 1;
+    unsigned char MSTR        : 1;
+    unsigned char BR          : 3;
+    unsigned char SPE         : 1;
+    unsigned char LSBFIRST    : 1;
 } __BITS_SPI_CR1;
 #endif
 __IO_REG8_BIT(SPI_CR1,     0x5200, __READ_WRITE, __BITS_SPI_CR1);
@@ -2448,14 +2448,14 @@ __IO_REG8_BIT(SPI_CR1,     0x5200, __READ_WRITE, __BITS_SPI_CR1);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char SSI         : 1;
-  unsigned char SSM         : 1;
-  unsigned char RXONLY      : 1;
-  unsigned char             : 1;
-  unsigned char CRCNEXT     : 1;
-  unsigned char CECEN       : 1;
-  unsigned char BDOE        : 1;
-  unsigned char BDM         : 1;
+    unsigned char SSI         : 1;
+    unsigned char SSM         : 1;
+    unsigned char RXONLY      : 1;
+    unsigned char             : 1;
+    unsigned char CRCNEXT     : 1;
+    unsigned char CECEN       : 1;
+    unsigned char BDOE        : 1;
+    unsigned char BDM         : 1;
 } __BITS_SPI_CR2;
 #endif
 __IO_REG8_BIT(SPI_CR2,     0x5201, __READ_WRITE, __BITS_SPI_CR2);
@@ -2464,11 +2464,11 @@ __IO_REG8_BIT(SPI_CR2,     0x5201, __READ_WRITE, __BITS_SPI_CR2);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char             : 4;
-  unsigned char WKIE        : 1;
-  unsigned char ERRIE       : 1;
-  unsigned char RXIE        : 1;
-  unsigned char TXIE        : 1;
+    unsigned char             : 4;
+    unsigned char WKIE        : 1;
+    unsigned char ERRIE       : 1;
+    unsigned char RXIE        : 1;
+    unsigned char TXIE        : 1;
 } __BITS_SPI_ICR;
 #endif
 __IO_REG8_BIT(SPI_ICR,     0x5202, __READ_WRITE, __BITS_SPI_ICR);
@@ -2477,14 +2477,14 @@ __IO_REG8_BIT(SPI_ICR,     0x5202, __READ_WRITE, __BITS_SPI_ICR);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char RXNE        : 1;
-  unsigned char TXE         : 1;
-  unsigned char             : 1;
-  unsigned char WKUP        : 1;
-  unsigned char CRCERR      : 1;
-  unsigned char MODF        : 1;
-  unsigned char OVR         : 1;
-  unsigned char BSY         : 1;
+    unsigned char RXNE        : 1;
+    unsigned char TXE         : 1;
+    unsigned char             : 1;
+    unsigned char WKUP        : 1;
+    unsigned char CRCERR      : 1;
+    unsigned char MODF        : 1;
+    unsigned char OVR         : 1;
+    unsigned char BSY         : 1;
 } __BITS_SPI_SR;
 #endif
 __IO_REG8_BIT(SPI_SR,      0x5203, __READ_WRITE, __BITS_SPI_SR);
@@ -2572,10 +2572,10 @@ __IO_REG8    (SPI_TXCRCR,  0x5207, __READ);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char PE          : 1;
-  unsigned char             : 5;
-  unsigned char ENGC        : 1;
-  unsigned char NOSTRETCH   : 1;
+    unsigned char PE          : 1;
+    unsigned char             : 5;
+    unsigned char ENGC        : 1;
+    unsigned char NOSTRETCH   : 1;
 } __BITS_I2C_CR1;
 #endif
 __IO_REG8_BIT(I2C_CR1,     0x5210, __READ_WRITE, __BITS_I2C_CR1);
@@ -2584,12 +2584,12 @@ __IO_REG8_BIT(I2C_CR1,     0x5210, __READ_WRITE, __BITS_I2C_CR1);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char START       : 1;
-  unsigned char STOP        : 1;
-  unsigned char ACK         : 1;
-  unsigned char POS         : 1;
-  unsigned char             : 3;
-  unsigned char SWRST       : 1;
+    unsigned char START       : 1;
+    unsigned char STOP        : 1;
+    unsigned char ACK         : 1;
+    unsigned char POS         : 1;
+    unsigned char             : 3;
+    unsigned char SWRST       : 1;
 } __BITS_I2C_CR2;
 #endif
 __IO_REG8_BIT(I2C_CR2,     0x5211, __READ_WRITE, __BITS_I2C_CR2);
@@ -2598,7 +2598,7 @@ __IO_REG8_BIT(I2C_CR2,     0x5211, __READ_WRITE, __BITS_I2C_CR2);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char FREQ        : 6;
+    unsigned char FREQ        : 6;
 } __BITS_I2C_FREQR;
 #endif
 __IO_REG8_BIT(I2C_FREQR,   0x5212, __READ_WRITE, __BITS_I2C_FREQR);
@@ -2607,8 +2607,8 @@ __IO_REG8_BIT(I2C_FREQR,   0x5212, __READ_WRITE, __BITS_I2C_FREQR);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char ADD0        : 1;
-  unsigned char ADD         : 7;
+    unsigned char ADD0        : 1;
+    unsigned char ADD         : 7;
 } __BITS_I2C_OARL;
 #endif
 __IO_REG8_BIT(I2C_OARL,    0x5213, __READ_WRITE, __BITS_I2C_OARL);
@@ -2617,11 +2617,11 @@ __IO_REG8_BIT(I2C_OARL,    0x5213, __READ_WRITE, __BITS_I2C_OARL);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char             : 1;
-  unsigned char ADD         : 2;
-  unsigned char             : 3;
-  unsigned char ADDCONF     : 1;
-  unsigned char ADDMODE     : 1;
+    unsigned char             : 1;
+    unsigned char ADD         : 2;
+    unsigned char             : 3;
+    unsigned char ADDCONF     : 1;
+    unsigned char ADDMODE     : 1;
 } __BITS_I2C_OARH;
 #endif
 __IO_REG8_BIT(I2C_OARH,    0x5214, __READ_WRITE, __BITS_I2C_OARH);
@@ -2632,14 +2632,14 @@ __IO_REG8    (I2C_DR,      0x5216, __READ_WRITE);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char SB          : 1;
-  unsigned char ADDR        : 1;
-  unsigned char BTF         : 1;
-  unsigned char ADD10       : 1;
-  unsigned char STOPF       : 1;
-  unsigned char             : 1;
-  unsigned char RXNE        : 1;
-  unsigned char TXE         : 1;
+    unsigned char SB          : 1;
+    unsigned char ADDR        : 1;
+    unsigned char BTF         : 1;
+    unsigned char ADD10       : 1;
+    unsigned char STOPF       : 1;
+    unsigned char             : 1;
+    unsigned char RXNE        : 1;
+    unsigned char TXE         : 1;
 } __BITS_I2C_SR1;
 #endif
 __IO_REG8_BIT(I2C_SR1,     0x5217, __READ, __BITS_I2C_SR1);
@@ -2648,12 +2648,12 @@ __IO_REG8_BIT(I2C_SR1,     0x5217, __READ, __BITS_I2C_SR1);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char BERR        : 1;
-  unsigned char ARLO        : 1;
-  unsigned char AF          : 1;
-  unsigned char OVR         : 1;
-  unsigned char             : 1;
-  unsigned char WUFH        : 1;
+    unsigned char BERR        : 1;
+    unsigned char ARLO        : 1;
+    unsigned char AF          : 1;
+    unsigned char OVR         : 1;
+    unsigned char             : 1;
+    unsigned char WUFH        : 1;
 } __BITS_I2C_SR2;
 #endif
 __IO_REG8_BIT(I2C_SR2,     0x5218, __READ_WRITE, __BITS_I2C_SR2);
@@ -2662,11 +2662,11 @@ __IO_REG8_BIT(I2C_SR2,     0x5218, __READ_WRITE, __BITS_I2C_SR2);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char MSL         : 1;
-  unsigned char BUSY        : 1;
-  unsigned char TRA         : 1;
-  unsigned char             : 1;
-  unsigned char GENCALL     : 1;
+    unsigned char MSL         : 1;
+    unsigned char BUSY        : 1;
+    unsigned char TRA         : 1;
+    unsigned char             : 1;
+    unsigned char GENCALL     : 1;
 } __BITS_I2C_SR3;
 #endif
 __IO_REG8_BIT(I2C_SR3,     0x5219, __READ, __BITS_I2C_SR3);
@@ -2675,9 +2675,9 @@ __IO_REG8_BIT(I2C_SR3,     0x5219, __READ, __BITS_I2C_SR3);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char ITERREN     : 1;
-  unsigned char ITEVTEN     : 1;
-  unsigned char ITBUFEN     : 1;
+    unsigned char ITERREN     : 1;
+    unsigned char ITEVTEN     : 1;
+    unsigned char ITBUFEN     : 1;
 } __BITS_I2C_ITR;
 #endif
 __IO_REG8_BIT(I2C_ITR,     0x521A, __READ_WRITE, __BITS_I2C_ITR);
@@ -2688,10 +2688,10 @@ __IO_REG8    (I2C_CCRL,    0x521B, __READ_WRITE);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char CCR         : 4;
-  unsigned char             : 2;
-  unsigned char DUTY        : 1;
-  unsigned char F_S         : 1;
+    unsigned char CCR         : 4;
+    unsigned char             : 2;
+    unsigned char DUTY        : 1;
+    unsigned char F_S         : 1;
 } __BITS_I2C_CCRH;
 #endif
 __IO_REG8_BIT(I2C_CCRH,    0x521C, __READ_WRITE, __BITS_I2C_CCRH);
@@ -2700,7 +2700,7 @@ __IO_REG8_BIT(I2C_CCRH,    0x521C, __READ_WRITE, __BITS_I2C_CCRH);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char TRISE       : 6;
+    unsigned char TRISE       : 6;
 } __BITS_I2C_TRISER;
 #endif
 __IO_REG8_BIT(I2C_TRISER,  0x521D, __READ_WRITE, __BITS_I2C_TRISER);
@@ -2822,14 +2822,14 @@ __IO_REG8    (I2C_PECR,    0x521E, __READ_WRITE);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char PE          : 1;
-  unsigned char FE          : 1;
-  unsigned char NF          : 1;
-  unsigned char OR_LHE      : 1;
-  unsigned char IDLE        : 1;
-  unsigned char RXNE        : 1;
-  unsigned char TC          : 1;
-  unsigned char TXE         : 1;
+    unsigned char PE          : 1;
+    unsigned char FE          : 1;
+    unsigned char NF          : 1;
+    unsigned char OR_LHE      : 1;
+    unsigned char IDLE        : 1;
+    unsigned char RXNE        : 1;
+    unsigned char TC          : 1;
+    unsigned char TXE         : 1;
 } __BITS_UART2_SR;
 #endif
 __IO_REG8_BIT(UART2_SR,    0x5240, __READ_WRITE, __BITS_UART2_SR);
@@ -2844,14 +2844,14 @@ __IO_REG8    (UART2_BRR2,  0x5243, __READ_WRITE);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char PIEN        : 1;
-  unsigned char PS          : 1;
-  unsigned char PCEN        : 1;
-  unsigned char WAKE        : 1;
-  unsigned char M           : 1;
-  unsigned char UART0       : 1;
-  unsigned char T8          : 1;
-  unsigned char R8          : 1;
+    unsigned char PIEN        : 1;
+    unsigned char PS          : 1;
+    unsigned char PCEN        : 1;
+    unsigned char WAKE        : 1;
+    unsigned char M           : 1;
+    unsigned char UART0       : 1;
+    unsigned char T8          : 1;
+    unsigned char R8          : 1;
 } __BITS_UART2_CR1;
 #endif
 __IO_REG8_BIT(UART2_CR1,   0x5244, __READ_WRITE, __BITS_UART2_CR1);
@@ -2860,14 +2860,14 @@ __IO_REG8_BIT(UART2_CR1,   0x5244, __READ_WRITE, __BITS_UART2_CR1);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char SBK         : 1;
-  unsigned char RWU         : 1;
-  unsigned char REN         : 1;
-  unsigned char TEN         : 1;
-  unsigned char ILIEN       : 1;
-  unsigned char RIEN        : 1;
-  unsigned char TCIEN       : 1;
-  unsigned char TIEN        : 1;
+    unsigned char SBK         : 1;
+    unsigned char RWU         : 1;
+    unsigned char REN         : 1;
+    unsigned char TEN         : 1;
+    unsigned char ILIEN       : 1;
+    unsigned char RIEN        : 1;
+    unsigned char TCIEN       : 1;
+    unsigned char TIEN        : 1;
 } __BITS_UART2_CR2;
 #endif
 __IO_REG8_BIT(UART2_CR2,   0x5245, __READ_WRITE, __BITS_UART2_CR2);
@@ -2876,13 +2876,13 @@ __IO_REG8_BIT(UART2_CR2,   0x5245, __READ_WRITE, __BITS_UART2_CR2);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char LBCL        : 1;
-  unsigned char CPHA        : 1;
-  unsigned char CPOL        : 1;
-  unsigned char CKEN        : 1;
-  unsigned char STOP        : 2;
-  unsigned char             : 1;
-  unsigned char LINEN       : 1;
+    unsigned char LBCL        : 1;
+    unsigned char CPHA        : 1;
+    unsigned char CPOL        : 1;
+    unsigned char CKEN        : 1;
+    unsigned char STOP        : 2;
+    unsigned char             : 1;
+    unsigned char LINEN       : 1;
 } __BITS_UART2_CR3;
 #endif
 __IO_REG8_BIT(UART2_CR3,   0x5246, __READ_WRITE, __BITS_UART2_CR3);
@@ -2891,10 +2891,10 @@ __IO_REG8_BIT(UART2_CR3,   0x5246, __READ_WRITE, __BITS_UART2_CR3);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char ADD         : 4;
-  unsigned char LBDF        : 1;
-  unsigned char LBDL        : 1;
-  unsigned char LBDIEN      : 1;
+    unsigned char ADD         : 4;
+    unsigned char LBDF        : 1;
+    unsigned char LBDL        : 1;
+    unsigned char LBDIEN      : 1;
 } __BITS_UART2_CR4;
 #endif
 __IO_REG8_BIT(UART2_CR4,   0x5247, __READ_WRITE, __BITS_UART2_CR4);
@@ -2903,14 +2903,14 @@ __IO_REG8_BIT(UART2_CR4,   0x5247, __READ_WRITE, __BITS_UART2_CR4);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char LSF         : 1;
-  unsigned char LHDF        : 1;
-  unsigned char LHDIEN      : 1;
-  unsigned char             : 1;
-  unsigned char LASE        : 1;
-  unsigned char LSLV        : 1;
-  unsigned char             : 1;
-  unsigned char LDUM        : 1;
+    unsigned char LSF         : 1;
+    unsigned char LHDF        : 1;
+    unsigned char LHDIEN      : 1;
+    unsigned char             : 1;
+    unsigned char LASE        : 1;
+    unsigned char LSLV        : 1;
+    unsigned char             : 1;
+    unsigned char LDUM        : 1;
 } __BITS_UART2_CR6;
 #endif
 __IO_REG8_BIT(UART2_CR6,   0x5249, __READ_WRITE, __BITS_UART2_CR6);
@@ -3030,13 +3030,13 @@ __IO_REG8    (UART2_PSCR,  0x524B, __READ_WRITE);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char CEN         : 1;
-  unsigned char UDIS        : 1;
-  unsigned char URS         : 1;
-  unsigned char OPM         : 1;
-  unsigned char DIR         : 1;
-  unsigned char CMS         : 2;
-  unsigned char ARPE        : 1;
+    unsigned char CEN         : 1;
+    unsigned char UDIS        : 1;
+    unsigned char URS         : 1;
+    unsigned char OPM         : 1;
+    unsigned char DIR         : 1;
+    unsigned char CMS         : 2;
+    unsigned char ARPE        : 1;
 } __BITS_TIM1_CR1;
 #endif
 __IO_REG8_BIT(TIM1_CR1,    0x5250, __READ_WRITE, __BITS_TIM1_CR1);
@@ -3045,11 +3045,11 @@ __IO_REG8_BIT(TIM1_CR1,    0x5250, __READ_WRITE, __BITS_TIM1_CR1);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char CCPG        : 1;
-  unsigned char             : 1;
-  unsigned char COMS        : 1;
-  unsigned char             : 1;
-  unsigned char MMS         : 3;
+    unsigned char CCPG        : 1;
+    unsigned char             : 1;
+    unsigned char COMS        : 1;
+    unsigned char             : 1;
+    unsigned char MMS         : 3;
 } __BITS_TIM1_CR2;
 #endif
 __IO_REG8_BIT(TIM1_CR2,    0x5251, __READ_WRITE, __BITS_TIM1_CR2);
@@ -3058,10 +3058,10 @@ __IO_REG8_BIT(TIM1_CR2,    0x5251, __READ_WRITE, __BITS_TIM1_CR2);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char SMS         : 3;
-  unsigned char             : 1;
-  unsigned char TS          : 3;
-  unsigned char MSM         : 1;
+    unsigned char SMS         : 3;
+    unsigned char             : 1;
+    unsigned char TS          : 3;
+    unsigned char MSM         : 1;
 } __BITS_TIM1_SMCR;
 #endif
 __IO_REG8_BIT(TIM1_SMCR,   0x5252, __READ_WRITE, __BITS_TIM1_SMCR);
@@ -3070,10 +3070,10 @@ __IO_REG8_BIT(TIM1_SMCR,   0x5252, __READ_WRITE, __BITS_TIM1_SMCR);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char ETF         : 4;
-  unsigned char ETPS        : 2;
-  unsigned char ECE         : 1;
-  unsigned char ETP         : 1;
+    unsigned char ETF         : 4;
+    unsigned char ETPS        : 2;
+    unsigned char ECE         : 1;
+    unsigned char ETP         : 1;
 } __BITS_TIM1_ETR;
 #endif
 __IO_REG8_BIT(TIM1_ETR,    0x5253, __READ_WRITE, __BITS_TIM1_ETR);
@@ -3082,14 +3082,14 @@ __IO_REG8_BIT(TIM1_ETR,    0x5253, __READ_WRITE, __BITS_TIM1_ETR);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char UIE         : 1;
-  unsigned char CC1IE       : 1;
-  unsigned char CC2IE       : 1;
-  unsigned char CC3IE       : 1;
-  unsigned char CC4IE       : 1;
-  unsigned char COMIE       : 1;
-  unsigned char TIE         : 1;
-  unsigned char BIE         : 1;
+    unsigned char UIE         : 1;
+    unsigned char CC1IE       : 1;
+    unsigned char CC2IE       : 1;
+    unsigned char CC3IE       : 1;
+    unsigned char CC4IE       : 1;
+    unsigned char COMIE       : 1;
+    unsigned char TIE         : 1;
+    unsigned char BIE         : 1;
 } __BITS_TIM1_IER;
 #endif
 __IO_REG8_BIT(TIM1_IER,    0x5254, __READ_WRITE, __BITS_TIM1_IER);
@@ -3098,14 +3098,14 @@ __IO_REG8_BIT(TIM1_IER,    0x5254, __READ_WRITE, __BITS_TIM1_IER);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char UIF         : 1;
-  unsigned char CC1IF       : 1;
-  unsigned char CC2IF       : 1;
-  unsigned char CC3IF       : 1;
-  unsigned char CC4IF       : 1;
-  unsigned char COMIF       : 1;
-  unsigned char TIF         : 1;
-  unsigned char BIF         : 1;
+    unsigned char UIF         : 1;
+    unsigned char CC1IF       : 1;
+    unsigned char CC2IF       : 1;
+    unsigned char CC3IF       : 1;
+    unsigned char CC4IF       : 1;
+    unsigned char COMIF       : 1;
+    unsigned char TIF         : 1;
+    unsigned char BIF         : 1;
 } __BITS_TIM1_SR1;
 #endif
 __IO_REG8_BIT(TIM1_SR1,    0x5255, __READ_WRITE, __BITS_TIM1_SR1);
@@ -3114,11 +3114,11 @@ __IO_REG8_BIT(TIM1_SR1,    0x5255, __READ_WRITE, __BITS_TIM1_SR1);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char             : 1;
-  unsigned char CC1OF       : 1;
-  unsigned char CC2OF       : 1;
-  unsigned char CC3OF       : 1;
-  unsigned char CC4OF       : 1;
+    unsigned char             : 1;
+    unsigned char CC1OF       : 1;
+    unsigned char CC2OF       : 1;
+    unsigned char CC3OF       : 1;
+    unsigned char CC4OF       : 1;
 } __BITS_TIM1_SR2;
 #endif
 __IO_REG8_BIT(TIM1_SR2,    0x5256, __READ_WRITE, __BITS_TIM1_SR2);
@@ -3127,14 +3127,14 @@ __IO_REG8_BIT(TIM1_SR2,    0x5256, __READ_WRITE, __BITS_TIM1_SR2);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char UG          : 1;
-  unsigned char CC1G        : 1;
-  unsigned char CC2G        : 1;
-  unsigned char CC3G        : 1;
-  unsigned char CC4G        : 1;
-  unsigned char COMG        : 1;
-  unsigned char TG          : 1;
-  unsigned char BG          : 1;
+    unsigned char UG          : 1;
+    unsigned char CC1G        : 1;
+    unsigned char CC2G        : 1;
+    unsigned char CC3G        : 1;
+    unsigned char CC4G        : 1;
+    unsigned char COMG        : 1;
+    unsigned char TG          : 1;
+    unsigned char BG          : 1;
 } __BITS_TIM1_EGR;
 #endif
 __IO_REG8_BIT(TIM1_EGR,    0x5257, __WRITE, __BITS_TIM1_EGR);
@@ -3143,11 +3143,11 @@ __IO_REG8_BIT(TIM1_EGR,    0x5257, __WRITE, __BITS_TIM1_EGR);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char CC1S        : 2;
-  unsigned char OC1FE       : 1;
-  unsigned char OC1PE       : 1;
-  unsigned char OC1M        : 3;
-  unsigned char OC1CE       : 1;
+    unsigned char CC1S        : 2;
+    unsigned char OC1FE       : 1;
+    unsigned char OC1PE       : 1;
+    unsigned char OC1M        : 3;
+    unsigned char OC1CE       : 1;
 } __BITS_TIM1_CCMR1;
 #endif
 __IO_REG8_BIT(TIM1_CCMR1,  0x5258, __READ_WRITE, __BITS_TIM1_CCMR1);
@@ -3156,11 +3156,11 @@ __IO_REG8_BIT(TIM1_CCMR1,  0x5258, __READ_WRITE, __BITS_TIM1_CCMR1);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char CC2S        : 2;
-  unsigned char OC2FE       : 1;
-  unsigned char OC2PE       : 1;
-  unsigned char OC2M        : 3;
-  unsigned char OC2CE       : 1;
+    unsigned char CC2S        : 2;
+    unsigned char OC2FE       : 1;
+    unsigned char OC2PE       : 1;
+    unsigned char OC2M        : 3;
+    unsigned char OC2CE       : 1;
 } __BITS_TIM1_CCMR2;
 #endif
 __IO_REG8_BIT(TIM1_CCMR2,  0x5259, __READ_WRITE, __BITS_TIM1_CCMR2);
@@ -3169,11 +3169,11 @@ __IO_REG8_BIT(TIM1_CCMR2,  0x5259, __READ_WRITE, __BITS_TIM1_CCMR2);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char CC3S        : 2;
-  unsigned char OC3FE       : 1;
-  unsigned char OC3PE       : 1;
-  unsigned char OC3M        : 3;
-  unsigned char OC3CE       : 1;
+    unsigned char CC3S        : 2;
+    unsigned char OC3FE       : 1;
+    unsigned char OC3PE       : 1;
+    unsigned char OC3M        : 3;
+    unsigned char OC3CE       : 1;
 } __BITS_TIM1_CCMR3;
 #endif
 __IO_REG8_BIT(TIM1_CCMR3,  0x525A, __READ_WRITE, __BITS_TIM1_CCMR3);
@@ -3182,11 +3182,11 @@ __IO_REG8_BIT(TIM1_CCMR3,  0x525A, __READ_WRITE, __BITS_TIM1_CCMR3);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char CC4S        : 2;
-  unsigned char OC4FE       : 1;
-  unsigned char OC4PE       : 1;
-  unsigned char OC4M        : 3;
-  unsigned char OC4CE       : 1;
+    unsigned char CC4S        : 2;
+    unsigned char OC4FE       : 1;
+    unsigned char OC4PE       : 1;
+    unsigned char OC4M        : 3;
+    unsigned char OC4CE       : 1;
 } __BITS_TIM1_CCMR4;
 #endif
 __IO_REG8_BIT(TIM1_CCMR4,  0x525B, __READ_WRITE, __BITS_TIM1_CCMR4);
@@ -3195,14 +3195,14 @@ __IO_REG8_BIT(TIM1_CCMR4,  0x525B, __READ_WRITE, __BITS_TIM1_CCMR4);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char CC1E        : 1;
-  unsigned char CC1P        : 1;
-  unsigned char CC1NE       : 1;
-  unsigned char CC1NP       : 1;
-  unsigned char CC2E        : 1;
-  unsigned char CC2P        : 1;
-  unsigned char CC2NE       : 1;
-  unsigned char CC2NP       : 1;
+    unsigned char CC1E        : 1;
+    unsigned char CC1P        : 1;
+    unsigned char CC1NE       : 1;
+    unsigned char CC1NP       : 1;
+    unsigned char CC2E        : 1;
+    unsigned char CC2P        : 1;
+    unsigned char CC2NE       : 1;
+    unsigned char CC2NP       : 1;
 } __BITS_TIM1_CCER1;
 #endif
 __IO_REG8_BIT(TIM1_CCER1,  0x525C, __READ_WRITE, __BITS_TIM1_CCER1);
@@ -3211,12 +3211,12 @@ __IO_REG8_BIT(TIM1_CCER1,  0x525C, __READ_WRITE, __BITS_TIM1_CCER1);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char CC3E        : 1;
-  unsigned char CC3P        : 1;
-  unsigned char CC3NE       : 1;
-  unsigned char CC3NP       : 1;
-  unsigned char CC4E        : 1;
-  unsigned char CC4P        : 1;
+    unsigned char CC3E        : 1;
+    unsigned char CC3P        : 1;
+    unsigned char CC3NE       : 1;
+    unsigned char CC3NP       : 1;
+    unsigned char CC4E        : 1;
+    unsigned char CC4P        : 1;
 } __BITS_TIM1_CCER2;
 #endif
 __IO_REG8_BIT(TIM1_CCER2,  0x525D, __READ_WRITE, __BITS_TIM1_CCER2);
@@ -3255,13 +3255,13 @@ __IO_REG8    (TIM1_CCR4L,  0x526C, __READ_WRITE);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char LOCK        : 2;
-  unsigned char OSSI        : 1;
-  unsigned char OSSR        : 1;
-  unsigned char BKE         : 1;
-  unsigned char BKP         : 1;
-  unsigned char AOE         : 1;
-  unsigned char MOE         : 1;
+    unsigned char LOCK        : 2;
+    unsigned char OSSI        : 1;
+    unsigned char OSSR        : 1;
+    unsigned char BKE         : 1;
+    unsigned char BKP         : 1;
+    unsigned char AOE         : 1;
+    unsigned char MOE         : 1;
 } __BITS_TIM1_BKR;
 #endif
 __IO_REG8_BIT(TIM1_BKR,    0x526D, __READ_WRITE, __BITS_TIM1_BKR);
@@ -3272,13 +3272,13 @@ __IO_REG8    (TIM1_DTR,    0x526E, __READ_WRITE);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char OIS1        : 1;
-  unsigned char OIS1N       : 1;
-  unsigned char OIS2        : 1;
-  unsigned char OIS2N       : 1;
-  unsigned char OIS3        : 1;
-  unsigned char OIS3N       : 1;
-  unsigned char OIS4        : 1;
+    unsigned char OIS1        : 1;
+    unsigned char OIS1N       : 1;
+    unsigned char OIS2        : 1;
+    unsigned char OIS2N       : 1;
+    unsigned char OIS3        : 1;
+    unsigned char OIS3N       : 1;
+    unsigned char OIS4        : 1;
 } __BITS_TIM1_OISR;
 #endif
 __IO_REG8_BIT(TIM1_OISR,   0x526F, __READ_WRITE, __BITS_TIM1_OISR);
@@ -3520,12 +3520,12 @@ __IO_REG8_BIT(TIM1_OISR,   0x526F, __READ_WRITE, __BITS_TIM1_OISR);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char CEN         : 1;
-  unsigned char UDIS        : 1;
-  unsigned char URS         : 1;
-  unsigned char OPM         : 1;
-  unsigned char             : 3;
-  unsigned char ARPE        : 1;
+    unsigned char CEN         : 1;
+    unsigned char UDIS        : 1;
+    unsigned char URS         : 1;
+    unsigned char OPM         : 1;
+    unsigned char             : 3;
+    unsigned char ARPE        : 1;
 } __BITS_TIM2_CR1;
 #endif
 __IO_REG8_BIT(TIM2_CR1,    0x5300, __READ_WRITE, __BITS_TIM2_CR1);
@@ -3534,12 +3534,12 @@ __IO_REG8_BIT(TIM2_CR1,    0x5300, __READ_WRITE, __BITS_TIM2_CR1);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char UIE         : 1;
-  unsigned char CC1IE       : 1;
-  unsigned char CC2IE       : 1;
-  unsigned char CC3IE       : 1;
-  unsigned char             : 2;
-  unsigned char TIE         : 1;
+    unsigned char UIE         : 1;
+    unsigned char CC1IE       : 1;
+    unsigned char CC2IE       : 1;
+    unsigned char CC3IE       : 1;
+    unsigned char             : 2;
+    unsigned char TIE         : 1;
 } __BITS_TIM2_IER;
 #endif
 __IO_REG8_BIT(TIM2_IER,    0x5301, __READ_WRITE, __BITS_TIM2_IER);
@@ -3548,12 +3548,12 @@ __IO_REG8_BIT(TIM2_IER,    0x5301, __READ_WRITE, __BITS_TIM2_IER);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char UIF         : 1;
-  unsigned char CC1IF       : 1;
-  unsigned char CC2IF       : 1;
-  unsigned char CC3IF       : 1;
-  unsigned char             : 2;
-  unsigned char TIF         : 1;
+    unsigned char UIF         : 1;
+    unsigned char CC1IF       : 1;
+    unsigned char CC2IF       : 1;
+    unsigned char CC3IF       : 1;
+    unsigned char             : 2;
+    unsigned char TIF         : 1;
 } __BITS_TIM2_SR1;
 #endif
 __IO_REG8_BIT(TIM2_SR1,    0x5302, __READ_WRITE, __BITS_TIM2_SR1);
@@ -3562,10 +3562,10 @@ __IO_REG8_BIT(TIM2_SR1,    0x5302, __READ_WRITE, __BITS_TIM2_SR1);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char             : 1;
-  unsigned char CC1OF       : 1;
-  unsigned char CC2OF       : 1;
-  unsigned char CC3OF       : 1;
+    unsigned char             : 1;
+    unsigned char CC1OF       : 1;
+    unsigned char CC2OF       : 1;
+    unsigned char CC3OF       : 1;
 } __BITS_TIM2_SR2;
 #endif
 __IO_REG8_BIT(TIM2_SR2,    0x5303, __READ_WRITE, __BITS_TIM2_SR2);
@@ -3574,12 +3574,12 @@ __IO_REG8_BIT(TIM2_SR2,    0x5303, __READ_WRITE, __BITS_TIM2_SR2);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char UG          : 1;
-  unsigned char CC1G        : 1;
-  unsigned char CC2G        : 1;
-  unsigned char CC3G        : 1;
-  unsigned char             : 2;
-  unsigned char TG          : 1;
+    unsigned char UG          : 1;
+    unsigned char CC1G        : 1;
+    unsigned char CC2G        : 1;
+    unsigned char CC3G        : 1;
+    unsigned char             : 2;
+    unsigned char TG          : 1;
 } __BITS_TIM2_EGR;
 #endif
 __IO_REG8_BIT(TIM2_EGR,    0x5304, __WRITE, __BITS_TIM2_EGR);
@@ -3588,10 +3588,10 @@ __IO_REG8_BIT(TIM2_EGR,    0x5304, __WRITE, __BITS_TIM2_EGR);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char CC1S        : 2;
-  unsigned char             : 1;
-  unsigned char OC1PE       : 1;
-  unsigned char OC1M        : 3;
+    unsigned char CC1S        : 2;
+    unsigned char             : 1;
+    unsigned char OC1PE       : 1;
+    unsigned char OC1M        : 3;
 } __BITS_TIM2_CCMR1;
 #endif
 __IO_REG8_BIT(TIM2_CCMR1,  0x5305, __READ_WRITE, __BITS_TIM2_CCMR1);
@@ -3600,10 +3600,10 @@ __IO_REG8_BIT(TIM2_CCMR1,  0x5305, __READ_WRITE, __BITS_TIM2_CCMR1);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char CC2S        : 2;
-  unsigned char             : 1;
-  unsigned char OC2PE       : 1;
-  unsigned char OC2M        : 3;
+    unsigned char CC2S        : 2;
+    unsigned char             : 1;
+    unsigned char OC2PE       : 1;
+    unsigned char OC2M        : 3;
 } __BITS_TIM2_CCMR2;
 #endif
 __IO_REG8_BIT(TIM2_CCMR2,  0x5306, __READ_WRITE, __BITS_TIM2_CCMR2);
@@ -3612,10 +3612,10 @@ __IO_REG8_BIT(TIM2_CCMR2,  0x5306, __READ_WRITE, __BITS_TIM2_CCMR2);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char CC3S        : 2;
-  unsigned char             : 1;
-  unsigned char OC3PE       : 1;
-  unsigned char OC3M        : 3;
+    unsigned char CC3S        : 2;
+    unsigned char             : 1;
+    unsigned char OC3PE       : 1;
+    unsigned char OC3M        : 3;
 } __BITS_TIM2_CCMR3;
 #endif
 __IO_REG8_BIT(TIM2_CCMR3,  0x5307, __READ_WRITE, __BITS_TIM2_CCMR3);
@@ -3624,11 +3624,11 @@ __IO_REG8_BIT(TIM2_CCMR3,  0x5307, __READ_WRITE, __BITS_TIM2_CCMR3);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char CC1E        : 1;
-  unsigned char CC1P        : 1;
-  unsigned char             : 2;
-  unsigned char CC2E        : 1;
-  unsigned char CC2P        : 1;
+    unsigned char CC1E        : 1;
+    unsigned char CC1P        : 1;
+    unsigned char             : 2;
+    unsigned char CC2E        : 1;
+    unsigned char CC2P        : 1;
 } __BITS_TIM2_CCER1;
 #endif
 __IO_REG8_BIT(TIM2_CCER1,  0x5308, __READ_WRITE, __BITS_TIM2_CCER1);
@@ -3637,8 +3637,8 @@ __IO_REG8_BIT(TIM2_CCER1,  0x5308, __READ_WRITE, __BITS_TIM2_CCER1);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char CC3E        : 1;
-  unsigned char CC3P        : 1;
+    unsigned char CC3E        : 1;
+    unsigned char CC3P        : 1;
 } __BITS_TIM2_CCER2;
 #endif
 __IO_REG8_BIT(TIM2_CCER2,  0x5309, __READ_WRITE, __BITS_TIM2_CCER2);
@@ -3651,7 +3651,7 @@ __IO_REG8    (TIM2_CNTRL,  0x530B, __READ_WRITE);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char PSC         : 4;
+    unsigned char PSC         : 4;
 } __BITS_TIM2_PSCR;
 #endif
 __IO_REG8_BIT(TIM2_PSCR,   0x530C, __READ_WRITE, __BITS_TIM2_PSCR);
@@ -3791,12 +3791,12 @@ __IO_REG8    (TIM2_CCR3L,  0x5314, __READ_WRITE);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char CEN         : 1;
-  unsigned char UDIS        : 1;
-  unsigned char URS         : 1;
-  unsigned char OPM         : 1;
-  unsigned char             : 3;
-  unsigned char ARPE        : 1;
+    unsigned char CEN         : 1;
+    unsigned char UDIS        : 1;
+    unsigned char URS         : 1;
+    unsigned char OPM         : 1;
+    unsigned char             : 3;
+    unsigned char ARPE        : 1;
 } __BITS_TIM3_CR1;
 #endif
 __IO_REG8_BIT(TIM3_CR1,    0x5320, __READ_WRITE, __BITS_TIM3_CR1);
@@ -3805,12 +3805,12 @@ __IO_REG8_BIT(TIM3_CR1,    0x5320, __READ_WRITE, __BITS_TIM3_CR1);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char UIE         : 1;
-  unsigned char CC1IE       : 1;
-  unsigned char CC2IE       : 1;
-  unsigned char CC3IE       : 1;
-  unsigned char             : 2;
-  unsigned char TIE         : 1;
+    unsigned char UIE         : 1;
+    unsigned char CC1IE       : 1;
+    unsigned char CC2IE       : 1;
+    unsigned char CC3IE       : 1;
+    unsigned char             : 2;
+    unsigned char TIE         : 1;
 } __BITS_TIM3_IER;
 #endif
 __IO_REG8_BIT(TIM3_IER,    0x5321, __READ_WRITE, __BITS_TIM3_IER);
@@ -3819,12 +3819,12 @@ __IO_REG8_BIT(TIM3_IER,    0x5321, __READ_WRITE, __BITS_TIM3_IER);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char UIF         : 1;
-  unsigned char CC1IF       : 1;
-  unsigned char CC2IF       : 1;
-  unsigned char CC3IF       : 1;
-  unsigned char             : 2;
-  unsigned char TIF         : 1;
+    unsigned char UIF         : 1;
+    unsigned char CC1IF       : 1;
+    unsigned char CC2IF       : 1;
+    unsigned char CC3IF       : 1;
+    unsigned char             : 2;
+    unsigned char TIF         : 1;
 } __BITS_TIM3_SR1;
 #endif
 __IO_REG8_BIT(TIM3_SR1,    0x5322, __READ_WRITE, __BITS_TIM3_SR1);
@@ -3833,10 +3833,10 @@ __IO_REG8_BIT(TIM3_SR1,    0x5322, __READ_WRITE, __BITS_TIM3_SR1);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char             : 1;
-  unsigned char CC1OF       : 1;
-  unsigned char CC2OF       : 1;
-  unsigned char CC3OF       : 1;
+    unsigned char             : 1;
+    unsigned char CC1OF       : 1;
+    unsigned char CC2OF       : 1;
+    unsigned char CC3OF       : 1;
 } __BITS_TIM3_SR2;
 #endif
 __IO_REG8_BIT(TIM3_SR2,    0x5323, __READ_WRITE, __BITS_TIM3_SR2);
@@ -3845,12 +3845,12 @@ __IO_REG8_BIT(TIM3_SR2,    0x5323, __READ_WRITE, __BITS_TIM3_SR2);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char UG          : 1;
-  unsigned char CC1G        : 1;
-  unsigned char CC2G        : 1;
-  unsigned char CC3G        : 1;
-  unsigned char             : 2;
-  unsigned char TG          : 1;
+    unsigned char UG          : 1;
+    unsigned char CC1G        : 1;
+    unsigned char CC2G        : 1;
+    unsigned char CC3G        : 1;
+    unsigned char             : 2;
+    unsigned char TG          : 1;
 } __BITS_TIM3_EGR;
 #endif
 __IO_REG8_BIT(TIM3_EGR,    0x5324, __WRITE, __BITS_TIM3_EGR);
@@ -3859,10 +3859,10 @@ __IO_REG8_BIT(TIM3_EGR,    0x5324, __WRITE, __BITS_TIM3_EGR);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char CC1S        : 2;
-  unsigned char             : 1;
-  unsigned char OC1PE       : 1;
-  unsigned char OC1M        : 3;
+    unsigned char CC1S        : 2;
+    unsigned char             : 1;
+    unsigned char OC1PE       : 1;
+    unsigned char OC1M        : 3;
 } __BITS_TIM3_CCMR1;
 #endif
 __IO_REG8_BIT(TIM3_CCMR1,  0x5325, __READ_WRITE, __BITS_TIM3_CCMR1);
@@ -3871,10 +3871,10 @@ __IO_REG8_BIT(TIM3_CCMR1,  0x5325, __READ_WRITE, __BITS_TIM3_CCMR1);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char CC2S        : 2;
-  unsigned char             : 1;
-  unsigned char OC2PE       : 1;
-  unsigned char OC2M        : 3;
+    unsigned char CC2S        : 2;
+    unsigned char             : 1;
+    unsigned char OC2PE       : 1;
+    unsigned char OC2M        : 3;
 } __BITS_TIM3_CCMR2;
 #endif
 __IO_REG8_BIT(TIM3_CCMR2,  0x5326, __READ_WRITE, __BITS_TIM3_CCMR2);
@@ -3883,11 +3883,11 @@ __IO_REG8_BIT(TIM3_CCMR2,  0x5326, __READ_WRITE, __BITS_TIM3_CCMR2);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char CC1E        : 1;
-  unsigned char CC1P        : 1;
-  unsigned char             : 2;
-  unsigned char CC2E        : 1;
-  unsigned char CC2P        : 1;
+    unsigned char CC1E        : 1;
+    unsigned char CC1P        : 1;
+    unsigned char             : 2;
+    unsigned char CC2E        : 1;
+    unsigned char CC2P        : 1;
 } __BITS_TIM3_CCER1;
 #endif
 __IO_REG8_BIT(TIM3_CCER1,  0x5327, __READ_WRITE, __BITS_TIM3_CCER1);
@@ -3900,7 +3900,7 @@ __IO_REG8    (TIM3_CNTRL,  0x5329, __READ_WRITE);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char PSC         : 4;
+    unsigned char PSC         : 4;
 } __BITS_TIM3_PSCR;
 #endif
 __IO_REG8_BIT(TIM3_PSCR,   0x532A, __READ_WRITE, __BITS_TIM3_PSCR);
@@ -4022,12 +4022,12 @@ __IO_REG8    (TIM3_CCR2L,  0x5330, __READ_WRITE);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char CEN         : 1;
-  unsigned char UDIS        : 1;
-  unsigned char URS         : 1;
-  unsigned char OPM         : 1;
-  unsigned char             : 3;
-  unsigned char ARPE        : 1;
+    unsigned char CEN         : 1;
+    unsigned char UDIS        : 1;
+    unsigned char URS         : 1;
+    unsigned char OPM         : 1;
+    unsigned char             : 3;
+    unsigned char ARPE        : 1;
 } __BITS_TIM4_CR1;
 #endif
 __IO_REG8_BIT(TIM4_CR1,    0x5340, __READ_WRITE, __BITS_TIM4_CR1);
@@ -4036,9 +4036,9 @@ __IO_REG8_BIT(TIM4_CR1,    0x5340, __READ_WRITE, __BITS_TIM4_CR1);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char UIE         : 1;
-  unsigned char             : 5;
-  unsigned char TIE         : 1;
+    unsigned char UIE         : 1;
+    unsigned char             : 5;
+    unsigned char TIE         : 1;
 } __BITS_TIM4_IER;
 #endif
 __IO_REG8_BIT(TIM4_IER,    0x5341, __READ_WRITE, __BITS_TIM4_IER);
@@ -4047,9 +4047,9 @@ __IO_REG8_BIT(TIM4_IER,    0x5341, __READ_WRITE, __BITS_TIM4_IER);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char UIF         : 1;
-  unsigned char             : 5;
-  unsigned char TIF         : 1;
+    unsigned char UIF         : 1;
+    unsigned char             : 5;
+    unsigned char TIF         : 1;
 } __BITS_TIM4_SR;
 #endif
 __IO_REG8_BIT(TIM4_SR,     0x5342, __READ_WRITE, __BITS_TIM4_SR);
@@ -4058,9 +4058,9 @@ __IO_REG8_BIT(TIM4_SR,     0x5342, __READ_WRITE, __BITS_TIM4_SR);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char UG          : 1;
-  unsigned char             : 5;
-  unsigned char TG          : 1;
+    unsigned char UG          : 1;
+    unsigned char             : 5;
+    unsigned char TG          : 1;
 } __BITS_TIM4_EGR;
 #endif
 __IO_REG8_BIT(TIM4_EGR,    0x5343, __WRITE, __BITS_TIM4_EGR);
@@ -4071,7 +4071,7 @@ __IO_REG8    (TIM4_CNTR,   0x5344, __READ_WRITE);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char PSC         : 3;
+    unsigned char PSC         : 3;
 } __BITS_TIM4_PSCR;
 #endif
 __IO_REG8_BIT(TIM4_PSCR,   0x5345, __READ_WRITE, __BITS_TIM4_PSCR);
@@ -4171,11 +4171,11 @@ __IO_REG8    (ADC_DB9RL,   0x53F3, __READ);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char CH          : 4;
-  unsigned char AWDIE       : 1;
-  unsigned char EOCIE       : 1;
-  unsigned char AWD         : 1;
-  unsigned char EOC         : 1;
+    unsigned char CH          : 4;
+    unsigned char AWDIE       : 1;
+    unsigned char EOCIE       : 1;
+    unsigned char AWD         : 1;
+    unsigned char EOC         : 1;
 } __BITS_ADC_CSR;
 #endif
 __IO_REG8_BIT(ADC_CSR,     0x5400, __READ_WRITE, __BITS_ADC_CSR);
@@ -4184,10 +4184,10 @@ __IO_REG8_BIT(ADC_CSR,     0x5400, __READ_WRITE, __BITS_ADC_CSR);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char ADON        : 1;
-  unsigned char CONT        : 1;
-  unsigned char             : 2;
-  unsigned char SPSEL       : 3;
+    unsigned char ADON        : 1;
+    unsigned char CONT        : 1;
+    unsigned char             : 2;
+    unsigned char SPSEL       : 3;
 } __BITS_ADC_CR1;
 #endif
 __IO_REG8_BIT(ADC_CR1,     0x5401, __READ_WRITE, __BITS_ADC_CR1);
@@ -4196,12 +4196,12 @@ __IO_REG8_BIT(ADC_CR1,     0x5401, __READ_WRITE, __BITS_ADC_CR1);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char             : 1;
-  unsigned char SCAN        : 1;
-  unsigned char             : 1;
-  unsigned char ALIGN       : 1;
-  unsigned char EXTSEL      : 2;
-  unsigned char EXTTRIG     : 1;
+    unsigned char             : 1;
+    unsigned char SCAN        : 1;
+    unsigned char             : 1;
+    unsigned char ALIGN       : 1;
+    unsigned char EXTSEL      : 2;
+    unsigned char EXTTRIG     : 1;
 } __BITS_ADC_CR2;
 #endif
 __IO_REG8_BIT(ADC_CR2,     0x5402, __READ_WRITE, __BITS_ADC_CR2);
@@ -4210,9 +4210,9 @@ __IO_REG8_BIT(ADC_CR2,     0x5402, __READ_WRITE, __BITS_ADC_CR2);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char             : 6;
-  unsigned char OVR         : 1;
-  unsigned char DBUF        : 1;
+    unsigned char             : 6;
+    unsigned char OVR         : 1;
+    unsigned char DBUF        : 1;
 } __BITS_ADC_CR3;
 #endif
 __IO_REG8_BIT(ADC_CR3,     0x5403, __READ_WRITE, __BITS_ADC_CR3);
@@ -4231,7 +4231,7 @@ __IO_REG8    (ADC_HTRH,    0x5408, __READ_WRITE);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char HT          : 2;
+    unsigned char HT          : 2;
 } __BITS_ADC_HTRL;
 #endif
 __IO_REG8_BIT(ADC_HTRL,    0x5409, __READ_WRITE, __BITS_ADC_HTRL);
@@ -4242,7 +4242,7 @@ __IO_REG8    (ADC_LTRH,    0x540A, __READ_WRITE);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char LT          : 2;
+    unsigned char LT          : 2;
 } __BITS_ADC_LTRL;
 #endif
 __IO_REG8_BIT(ADC_LTRL,    0x540B, __READ_WRITE, __BITS_ADC_LTRL);
@@ -4251,8 +4251,8 @@ __IO_REG8_BIT(ADC_LTRL,    0x540B, __READ_WRITE, __BITS_ADC_LTRL);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char AWS8        : 1;
-  unsigned char AWS9        : 1;
+    unsigned char AWS8        : 1;
+    unsigned char AWS9        : 1;
 } __BITS_ADC_AWSRH;
 #endif
 __IO_REG8_BIT(ADC_AWSRH,   0x540C, __READ_WRITE, __BITS_ADC_AWSRH);
@@ -4261,14 +4261,14 @@ __IO_REG8_BIT(ADC_AWSRH,   0x540C, __READ_WRITE, __BITS_ADC_AWSRH);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char AWS0        : 1;
-  unsigned char AWS1        : 1;
-  unsigned char AWS2        : 1;
-  unsigned char AWS3        : 1;
-  unsigned char AWS4        : 1;
-  unsigned char AWS5        : 1;
-  unsigned char AWS6        : 1;
-  unsigned char AWS7        : 1;
+    unsigned char AWS0        : 1;
+    unsigned char AWS1        : 1;
+    unsigned char AWS2        : 1;
+    unsigned char AWS3        : 1;
+    unsigned char AWS4        : 1;
+    unsigned char AWS5        : 1;
+    unsigned char AWS6        : 1;
+    unsigned char AWS7        : 1;
 } __BITS_ADC_AWSRL;
 #endif
 __IO_REG8_BIT(ADC_AWSRL,   0x540D, __READ_WRITE, __BITS_ADC_AWSRL);
@@ -4277,8 +4277,8 @@ __IO_REG8_BIT(ADC_AWSRL,   0x540D, __READ_WRITE, __BITS_ADC_AWSRL);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char AWEN8       : 1;
-  unsigned char AWEN9       : 1;
+    unsigned char AWEN8       : 1;
+    unsigned char AWEN9       : 1;
 } __BITS_ADC_AWCRH;
 #endif
 __IO_REG8_BIT(ADC_AWCRH,   0x540E, __READ_WRITE, __BITS_ADC_AWCRH);
@@ -4287,14 +4287,14 @@ __IO_REG8_BIT(ADC_AWCRH,   0x540E, __READ_WRITE, __BITS_ADC_AWCRH);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char AWEN0       : 1;
-  unsigned char AWEN1       : 1;
-  unsigned char AWEN2       : 1;
-  unsigned char AWEN3       : 1;
-  unsigned char AWEN4       : 1;
-  unsigned char AWEN5       : 1;
-  unsigned char AWEN6       : 1;
-  unsigned char AWEN7       : 1;
+    unsigned char AWEN0       : 1;
+    unsigned char AWEN1       : 1;
+    unsigned char AWEN2       : 1;
+    unsigned char AWEN3       : 1;
+    unsigned char AWEN4       : 1;
+    unsigned char AWEN5       : 1;
+    unsigned char AWEN6       : 1;
+    unsigned char AWEN7       : 1;
 } __BITS_ADC_AWCRL;
 #endif
 __IO_REG8_BIT(ADC_AWCRL,   0x540F, __READ_WRITE, __BITS_ADC_AWCRL);
@@ -4430,14 +4430,14 @@ __IO_REG8    (CPU_SPL,     0x7F09, __READ_WRITE);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char C           : 1;
-  unsigned char Z           : 1;
-  unsigned char NF          : 1;
-  unsigned char I0          : 1;
-  unsigned char H           : 1;
-  unsigned char I1          : 1;
-  unsigned char             : 1;
-  unsigned char V           : 1;
+    unsigned char C           : 1;
+    unsigned char Z           : 1;
+    unsigned char NF          : 1;
+    unsigned char I0          : 1;
+    unsigned char H           : 1;
+    unsigned char I1          : 1;
+    unsigned char             : 1;
+    unsigned char V           : 1;
 } __BITS_CPU_CCR;
 #endif
 __IO_REG8_BIT(CPU_CCR,     0x7F0A, __READ_WRITE, __BITS_CPU_CCR);
@@ -4446,8 +4446,8 @@ __IO_REG8_BIT(CPU_CCR,     0x7F0A, __READ_WRITE, __BITS_CPU_CCR);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char SWO         : 1;
-  unsigned char AL          : 1;
+    unsigned char SWO         : 1;
+    unsigned char AL          : 1;
 } __BITS_CPU_CFG_GCR;
 #endif
 __IO_REG8_BIT(CPU_CFG_GCR, 0x7F60, __READ_WRITE, __BITS_CPU_CFG_GCR);
@@ -4493,10 +4493,10 @@ __IO_REG8_BIT(CPU_CFG_GCR, 0x7F60, __READ_WRITE, __BITS_CPU_CFG_GCR);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char VECT0SPR    : 2;
-  unsigned char VECT1SPR    : 2;
-  unsigned char VECT2SPR    : 2;
-  unsigned char VECT3SPR    : 2;
+    unsigned char VECT0SPR    : 2;
+    unsigned char VECT1SPR    : 2;
+    unsigned char VECT2SPR    : 2;
+    unsigned char VECT3SPR    : 2;
 } __BITS_ITC_SPR1;
 #endif
 __IO_REG8_BIT(ITC_SPR1,    0x7F70, __READ_WRITE, __BITS_ITC_SPR1);
@@ -4505,10 +4505,10 @@ __IO_REG8_BIT(ITC_SPR1,    0x7F70, __READ_WRITE, __BITS_ITC_SPR1);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char VECT4SPR    : 2;
-  unsigned char VECT5SPR    : 2;
-  unsigned char VECT6SPR    : 2;
-  unsigned char VECT7SPR    : 2;
+    unsigned char VECT4SPR    : 2;
+    unsigned char VECT5SPR    : 2;
+    unsigned char VECT6SPR    : 2;
+    unsigned char VECT7SPR    : 2;
 } __BITS_ITC_SPR2;
 #endif
 __IO_REG8_BIT(ITC_SPR2,    0x7F71, __READ_WRITE, __BITS_ITC_SPR2);
@@ -4517,10 +4517,10 @@ __IO_REG8_BIT(ITC_SPR2,    0x7F71, __READ_WRITE, __BITS_ITC_SPR2);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char VECT8SPR    : 2;
-  unsigned char VECT9SPR    : 2;
-  unsigned char VECT10SPR   : 2;
-  unsigned char VECT11SPR   : 2;
+    unsigned char VECT8SPR    : 2;
+    unsigned char VECT9SPR    : 2;
+    unsigned char VECT10SPR   : 2;
+    unsigned char VECT11SPR   : 2;
 } __BITS_ITC_SPR3;
 #endif
 __IO_REG8_BIT(ITC_SPR3,    0x7F72, __READ_WRITE, __BITS_ITC_SPR3);
@@ -4529,10 +4529,10 @@ __IO_REG8_BIT(ITC_SPR3,    0x7F72, __READ_WRITE, __BITS_ITC_SPR3);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char VECT12SPR   : 2;
-  unsigned char VECT13SPR   : 2;
-  unsigned char VECT14SPR   : 2;
-  unsigned char VECT15SPR   : 2;
+    unsigned char VECT12SPR   : 2;
+    unsigned char VECT13SPR   : 2;
+    unsigned char VECT14SPR   : 2;
+    unsigned char VECT15SPR   : 2;
 } __BITS_ITC_SPR4;
 #endif
 __IO_REG8_BIT(ITC_SPR4,    0x7F73, __READ_WRITE, __BITS_ITC_SPR4);
@@ -4541,10 +4541,10 @@ __IO_REG8_BIT(ITC_SPR4,    0x7F73, __READ_WRITE, __BITS_ITC_SPR4);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char VECT16SPR   : 2;
-  unsigned char VECT17SPR   : 2;
-  unsigned char VECT18SPR   : 2;
-  unsigned char VECT19SPR   : 2;
+    unsigned char VECT16SPR   : 2;
+    unsigned char VECT17SPR   : 2;
+    unsigned char VECT18SPR   : 2;
+    unsigned char VECT19SPR   : 2;
 } __BITS_ITC_SPR5;
 #endif
 __IO_REG8_BIT(ITC_SPR5,    0x7F74, __READ_WRITE, __BITS_ITC_SPR5);
@@ -4553,10 +4553,10 @@ __IO_REG8_BIT(ITC_SPR5,    0x7F74, __READ_WRITE, __BITS_ITC_SPR5);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char VECT20SPR   : 2;
-  unsigned char VECT21SPR   : 2;
-  unsigned char VECT22SPR   : 2;
-  unsigned char VECT23SPR   : 2;
+    unsigned char VECT20SPR   : 2;
+    unsigned char VECT21SPR   : 2;
+    unsigned char VECT22SPR   : 2;
+    unsigned char VECT23SPR   : 2;
 } __BITS_ITC_SPR6;
 #endif
 __IO_REG8_BIT(ITC_SPR6,    0x7F75, __READ_WRITE, __BITS_ITC_SPR6);
@@ -4565,10 +4565,10 @@ __IO_REG8_BIT(ITC_SPR6,    0x7F75, __READ_WRITE, __BITS_ITC_SPR6);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char VECT24SPR   : 2;
-  unsigned char VECT25SPR   : 2;
-  unsigned char VECT26SPR   : 2;
-  unsigned char VECT27SPR   : 2;
+    unsigned char VECT24SPR   : 2;
+    unsigned char VECT25SPR   : 2;
+    unsigned char VECT26SPR   : 2;
+    unsigned char VECT27SPR   : 2;
 } __BITS_ITC_SPR7;
 #endif
 __IO_REG8_BIT(ITC_SPR7,    0x7F76, __READ_WRITE, __BITS_ITC_SPR7);
@@ -4577,8 +4577,8 @@ __IO_REG8_BIT(ITC_SPR7,    0x7F76, __READ_WRITE, __BITS_ITC_SPR7);
 #ifdef __SDCC
 typedef struct
 {
-  unsigned char VECT28SPR   : 2;
-  unsigned char VECT29SPR   : 2;
+    unsigned char VECT28SPR   : 2;
+    unsigned char VECT29SPR   : 2;
 } __BITS_ITC_SPR8;
 #endif
 __IO_REG8_BIT(ITC_SPR8,    0x7F77, __READ_WRITE, __BITS_ITC_SPR8);
