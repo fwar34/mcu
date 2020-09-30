@@ -41,9 +41,8 @@ extern unsigned int new_value;
 
 void Timer2Init(void)        //timer2@1MHz, dht11和ir在使用
 {
-    TIM2_PrescalerConfig(TIM2_PRESCALER_2, TIM2_PSCRELOADMODE_IMMEDIATE); //2分频
-    TIM1_TimeBaseInit(0x0000, TIM1_COUNTERMODE_UP, 0x0000, 0x00);
-    TIM1_ITConfig(TIM1_IT_UPDATE, DISABLE);
+    TIM2_TimeBaseInit(TIM2_PRESCALER_2, 0x0000); //2分频
+    TIM2_ITConfig(TIM2_IT_UPDATE, DISABLE);
     TIM2_GenerateEvent(TIM2_EVENTSOURCE_UPDATE); //软件产生更新事件，可以立即更新预分频寄存器
     TIM2_Cmd(DISABLE);
 }
