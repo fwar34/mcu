@@ -36,12 +36,27 @@
 #include "infrared.sdcc.h"
 #include "common.sdcc.h"
 #include "uart_sdcc.h"
+#include "delay.h"
 
 extern unsigned int new_value;
 
+/**
+ * @brief Delay
+ * @param nCount
+ * @retval None
+ */
+void Delay(uint32_t nCount)
+{
+    /* Decrement nCount value */
+    while (nCount != 0)
+    {
+        nCount--;
+    }
+}
+
 void Timer2Init(void)        //timer2@1MHz, dht11和ir在使用
 {
-    TIM2_TimeBaseInit(TIM2_PRESCALER_2, 0x0000); //2分频
+    TIM2_TimeBaseInit(TIM2_PRESCALER_16, 0x0000); //16分频
     TIM2_ITConfig(TIM2_IT_UPDATE, DISABLE);
     TIM2_GenerateEvent(TIM2_EVENTSOURCE_UPDATE); //软件产生更新事件，可以立即更新预分频寄存器
     TIM2_Cmd(DISABLE);
@@ -53,7 +68,7 @@ void Timer3Init(void)        //0.5微秒@2MHz
 
 void Timer4Init(void)        //50毫秒@2MHz
 {
-    TIM4_TimeBaseInit(TIM4_PRESCALER_1, 100);
+    TIM4_TimeBaseInit(TIM4_PRESCALER_8, 100);
     TIM4_ITConfig(TIM4_IT_UPDATE, ENABLE);
     TIM4_Cmd(ENABLE);
 }
@@ -67,13 +82,10 @@ void Timer4Init(void)        //50毫秒@2MHz
 /* Private define ------------------------------------------------------------*/
 /* Evalboard I/Os configuration */
 
-#define LED_GPIO_PORT  (GPIOA)
-#define LED_GPIO_PINS  (GPIO_PIN_3 | GPIO_PIN_2 | GPIO_PIN_1 | GPIO_PIN_0)
 
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
-void Delay (uint16_t nCount);
 
 void display_idle_count()
 {
@@ -96,9 +108,9 @@ void display_idle_count()
  */
 void main(void)
 {
+    CLK_HSIPrescalerConfig(CLK_PRESCALER_HSIDIV1);//HSI 不分频，主时钟 16M
+    delay_init(16);
     disableInterrupts();
-    /* Initialize I/Os in Output Mode */
-    GPIO_Init(LED_GPIO_PORT, (GPIO_Pin_TypeDef)LED_GPIO_PINS, GPIO_MODE_OUT_PP_LOW_FAST);
 
     /* unsigned char msg[] = "hello"; */
     //初始时间20年8月16号14点16分55秒星期天
@@ -130,25 +142,11 @@ void main(void)
         /* ds1302_read_time(&current_time); */
         /* display(&current_time); */
         display_idle_count();
-
         /* ds1302_read_time(&current_time); */
         /* display(&current_time); */
     }
 }
 
-/**
- * @brief Delay
- * @param nCount
- * @retval None
- */
-void Delay(uint16_t nCount)
-{
-    /* Decrement nCount value */
-    while (nCount != 0)
-    {
-        nCount--;
-    }
-}
 
 #ifdef USE_FULL_ASSERT
 

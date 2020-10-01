@@ -1,4 +1,4 @@
-#include "delay.sdcc.h"
+#include "delay.h"
 #include "lcd1602.sdcc.h"
 #include "common.sdcc.h"
 #include "uart_sdcc.h"
@@ -18,25 +18,27 @@
 
 extern unsigned char dht11_data[5];//湿度十位，湿度个位，温度十位，温度个位，是否更新显示的标志
 
-/* void lcd_check_busy() */
-/* { */
-/*     unsigned char lcd_status; */
+void lcd_check_busy()
+{
+    unsigned char bit_status;
 
-/*     LCD_RS = 0; */
-/*     LCD_RW = 1; */
+    GPIO_Init(LCD_RW_PORT, LCD_RW_PIN, GPIO_MODE_IN_PU_NO_IT);
+    GPIO_WriteLow(LCD_RS_PORT, LCD_RS_PIN);
+    GPIO_WriteHigh(LCD_RW_PORT, LCD_RW_PIN);
 
-/*     do */
-/*     { */
-/*         LCD_EN = 1; */
-/*         lcd_status = P2_7; */
-/*         LCD_EN = 0; */
-/*     } while (lcd_status); */
-/* } */
+    do
+    {
+        GPIO_WriteHigh(LCD_EN_PORT, LCD_EN_PIN);
+        bit_status = GPIO_ReadInputPin(LCD_DB_PORT, LCD_DB7_PIN);
+        GPIO_WriteLow(LCD_EN_PORT, LCD_EN_PIN);
+    } while (bit_status);
+    GPIO_Init(LCD_RW_PORT, LCD_RW_PIN, GPIO_MODE_OUT_PP_LOW_FAST);
+}
 
 void lcdWriteCmd(unsigned char cmd)
 {
     /* lcd_check_busy(); */
-    Delay600us();
+    delay_us(600);
     GPIO_WriteLow(LCD_EN_PORT, LCD_EN_PIN);
     GPIO_WriteLow(LCD_RS_PORT, LCD_RS_PIN);
     /* LCD_RW = 0; */
@@ -51,7 +53,7 @@ void lcdWriteCmd(unsigned char cmd)
 void lcdWriteDat(unsigned char dat)
 {
     /* lcd_check_busy(); */
-    Delay600us();
+    delay_us(600);
     GPIO_WriteLow(LCD_EN_PORT, LCD_EN_PIN);
     GPIO_WriteHigh(LCD_RS_PORT, LCD_RS_PIN);
     /* LCD_RW = 0; */
@@ -100,23 +102,24 @@ void write_char(unsigned char x, unsigned char y, unsigned char dat)
 
 void lcd1602_init()
 {
+    GPIO_Init(LCD_RS_PORT, LCD_RS_PIN, GPIO_MODE_OUT_PP_LOW_FAST);
     GPIO_Init(LCD_BK_PORT, LCD_BK_PIN, GPIO_MODE_OUT_PP_LOW_FAST);
     GPIO_Init(LCD_RW_PORT, LCD_RW_PIN, GPIO_MODE_OUT_PP_LOW_FAST);
     GPIO_Init(LCD_EN_PORT, LCD_EN_PIN, GPIO_MODE_OUT_PP_LOW_FAST);
-    GPIO_Init(LCD_DB_PORT, LCD_DB4_PIN | LCD_DB5_PIN | LCD_DB6_PIN | LCD_DB7_PIN, GPIO_MODE_OUT_PP_LOW_FAST);
+    GPIO_Init(LCD_DB_PORT, LCD_DB4_PIN | LCD_DB5_PIN | LCD_DB6_PIN | LCD_DB7_PIN, GPIO_MODE_OUT_PP_HIGH_FAST);
 
     GPIO_WriteLow(LCD_BK_PORT, LCD_BK_PIN);  //初始化打开背光
-
     GPIO_WriteLow(LCD_RW_PORT, LCD_RW_PIN);
+    //下面的3个delay函数不能少,少了不显示
     lcdWriteCmd(0x33);
-    Delay4ms();
+    delay_ms(4);
     lcdWriteCmd(0x32);
-    Delay4ms();
-    lcdWriteCmd(0x28);
-    lcdWriteCmd(0x0c);
-    lcdWriteCmd(0x06);
-    lcdWriteCmd(0x01);
-    Delay200ms();
+    delay_ms(4);
+    lcdWriteCmd(0x28);    //16*2,5*7点阵，4位数据接口
+    lcdWriteCmd(0x0c);    //显示器开，光标关闭
+    lcdWriteCmd(0x06);    //文字不动，地址自动+1
+    lcdWriteCmd(0x01);    //清屏（显示和地址指针）
+    delay_ms(200);
 }
 
 void wait_for_dht11()
@@ -124,12 +127,12 @@ void wait_for_dht11()
     unsigned char i;
     for (i = 0; i < 16; ++i) {
         write_char(0, i, '>');
-        Delay50ms();
+        delay_ms(50);
     }
 
     for (i = 15; i == 0; --i) {
         write_char(1, i, '<');
-        Delay50ms();
+        delay_ms(50);
     }
 }
 
@@ -156,9 +159,9 @@ void flicker_minute(unsigned char x)
 {
     write_char(1, 3, ' ');
     write_char(1, 4, ' ');
-    Delay500ms();
+    delay_ms(500);
     display_min(((x & 0x70) >> 4) * 10 + (x & 0x0F));
-    Delay500ms();
+    delay_ms(500);
 }
 
 void display_hour(unsigned char x)
@@ -174,9 +177,9 @@ void flicker_hour(unsigned char x)
 {
     write_char(1, 0, ' ');
     write_char(1, 1, ' ');
-    Delay500ms();
+    delay_ms(500);
     display_hour(((x & 0x30) >> 4) * 10 + (x & 0x0F));
-    Delay500ms();
+    delay_ms(500);
 }
 
 void display_day(unsigned char x)
@@ -192,9 +195,9 @@ void flicker_day(unsigned char x)
 {
     write_char(0, 8, ' ');
     write_char(0, 9, ' ');
-    Delay500ms();
+    delay_ms(500);
     display_day(((x & 0x30) >> 4) * 10 + (x & 0x0F));
-    Delay500ms();
+    delay_ms(500);
 }
 
 void display_month(unsigned char x)
@@ -210,9 +213,9 @@ void flicker_month(unsigned char x)
 {
     write_char(0, 5, ' ');
     write_char(0, 6, ' ');
-    Delay500ms();
+    delay_ms(500);
     display_month(((x & 0x10) >> 4) * 10 + (x & 0x0F));
-    Delay500ms();
+    delay_ms(500);
 }
 
 void display_year(unsigned char x)
@@ -230,11 +233,11 @@ void flicker_year(unsigned char x)
     write_char(0, 1, ' ');
     write_char(0, 2, ' ');
     write_char(0, 3, ' ');
-    Delay500ms();
+    delay_ms(500);
     write_char(0, 0, '2');
     write_char(0, 1, '0');
     display_year((x >> 4) * 10 + (x & 0x0F));
-    Delay500ms();
+    delay_ms(500);
 }
 
 void display_week(unsigned char x)
@@ -250,9 +253,9 @@ void flicker_week(unsigned char x)
 {
     write_char(0, 11, ' ');
     write_char(0, 12, ' ');
-    Delay500ms();
+    delay_ms(500);
     display_week(x & 0x07);
-    Delay500ms();
+    delay_ms(500);
 }
 
 //秒，分，时，日，月，星期，年

@@ -478,6 +478,8 @@ INTERRUPT_HANDLER(TIM4_UPD_OVF_IRQHandler, 23)
        it is recommended to set a breakpoint on the following instruction.
     */
     TIM4_ClearITPendingBit(TIM2_IT_UPDATE);
+    GPIO_WriteReverse(LED_PORT, LED_PIN);
+
     ds1302_read_time(&current_time);
     display(&current_time);
         
