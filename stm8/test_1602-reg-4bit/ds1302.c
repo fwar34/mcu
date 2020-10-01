@@ -3,13 +3,13 @@
 
 void ds1302_init()
 {
-    PC_DDR_DDR4 = 1;
-    PC_CR1_C14 = 1;
-    PC_CR2_C24 = 1;
+    PC_DDR_DDR3 = 1;
+    PC_CR1_C13 = 1;
+    PC_CR2_C23 = 1;
 
-    PC_DDR_DDR6 = 1;
-    PC_CR1_C16 = 1;
-    PC_CR2_C26 = 1;
+    PC_DDR_DDR2 = 1;
+    PC_CR1_C12 = 1;
+    PC_CR2_C22 = 1;
 
     DS1302_RST_PIN = 0;
     DS1302_CLK_PIN = 0;
@@ -32,16 +32,16 @@ void ds1302_init()
 
 void read_IO()
 {
-    PC_DDR_DDR5 = 0;
-    PC_CR1_C15 = 0;
-    PC_CR2_C25 = 0;
+    PD_DDR_DDR0 = 0;
+    PD_CR1_C10 = 0;
+    PD_CR2_C20 = 0;
 }
 
 void write_IO()
 { 
-    PC_DDR_DDR5 = 1;
-    PC_CR1_C15 = 1;
-    PC_CR2_C25 = 1;
+    PD_DDR_DDR0 = 1;
+    PD_CR1_C10 = 1;
+    PD_CR2_C20 = 1;
 }
 
 /*void read_IO()*/

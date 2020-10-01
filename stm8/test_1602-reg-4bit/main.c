@@ -1,4 +1,4 @@
-#include "iostm8s105c6.h"
+#include "iostm8s105k4.h"
 #include "ds1302.h"
 #include "dht11.h"
 #include "uart.h"
@@ -7,33 +7,33 @@
 typedef unsigned char u8;
 typedef unsigned char uint8_t;
 
-#define LCD_DB PB_ODR
+#define LCD_DB PC_ODR
 
 /*#define LCD_RS PA_ODR_ODR1*/
 /*#define LCD_RW PE_ODR_ODR5*/
 /*#define LCD_EN PA_ODR_ODR2*/
 /*#define LCD_STA7 PC_IDR_IDR7*/
 
-#define LCD_RS PB_ODR_ODR0
-#define LCD_RW PB_ODR_ODR1
-#define LCD_EN PB_ODR_ODR2
-#define LCD_STA7 PB_IDR_IDR7
+#define LCD_RS PB_ODR_ODR5
+#define LCD_RW PE_ODR_ODR5
+#define LCD_EN PC_ODR_ODR1
+#define LCD_STA7 PC_IDR_IDR7
 
 unsigned char* error_msg = "11 error";
 unsigned char* clear_msg = "        ";
 
 void db7_set_write()
 {
-    PB_DDR |= 0x80;
-    PB_CR1 |= 0x80;
-    PB_CR2 |= 0x80;
+    PC_DDR |= 0x80;
+    PC_CR1 |= 0x80;
+    PC_CR2 |= 0x80;
 }
 
 void db7_set_read()
 {
-    PB_DDR &= 0x7F;
-    PB_CR1 &= 0x7F;
-    PB_CR2 &= 0x7F;
+    PC_DDR &= 0x7F;
+    PC_CR1 &= 0x7F;
+    PC_CR2 &= 0x7F;
 }
 
 void lcd_check_busy()
@@ -143,10 +143,18 @@ void write_char(uint8_t x, uint8_t y, uint8_t dat)
  **/
 void initLcd1602()
 {
-    PB_DDR |= 0xFF;                                                                                         ;
-    PB_CR1 |= 0xFF;
-    PB_CR2 |= 0xFF;
-    PB_ODR &= 0xFF;
+    PC_DDR |= 0xFF;                                                                                         ;
+    PC_CR1 |= 0xFF;
+    PC_CR2 |= 0xFF;
+    PC_ODR &= 0xFF;
+    
+    PB_DDR |= 1 << 5;
+    PB_CR1 |= 1 << 5;
+    PB_CR2 &= ~(1 << 5);
+    
+    PE_DDR |= 1 << 5;
+    PE_CR1 |= 1 << 5;
+    PE_CR2 &= ~(1 << 5);
 
     /*PC_DDR |= 0xF0;
     PC_CR1 |= 0xF0;
