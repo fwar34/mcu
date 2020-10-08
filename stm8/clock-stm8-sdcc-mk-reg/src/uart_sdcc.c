@@ -11,7 +11,7 @@ void delay(unsigned int n)
 }
 
 /*波特率=fmaster/UART_DIV，BRR2的高四位+BRR1+BRR2的第四位组成了UART_DIV*/
-void uart_init()//115200@16Mhz
+void uart_init()//115200@16Mhz，因为8266默认的波特率就是115200
 {
     UART2->CR1=0x00;//1个起始位，8个数据位，无校验位
     UART2->CR2=0x2c;//接收中断使能，使能发送、接收

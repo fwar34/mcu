@@ -393,7 +393,9 @@ INTERRUPT_HANDLER(UART2_RX_IRQHandler, 21)
        it is recommended to set a breakpoint on the following instruction.
     */
     /* UART2_ClearITPendingBit(UART2_IT_RXNE); */
-    uart_send_byte(uart_recv_byte());
+    uart_recv_buf[uart_recv_buf_index++] = uart_recv_byte();
+    if (uart_recv_buf_index >= 255)
+        uart_recv_buf_index = 0;
 }
 #endif /* STM8S105*/
 

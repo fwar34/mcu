@@ -247,7 +247,7 @@ unsigned char DeCode(void)
             while (!GPIO_ReadInputPin(INFRARED_PORT, INFRARED_PIN)) { //如果是低电平就等待 //低电平计时
                 if (TIM2_GetCounter() > 0xEE00) {//时间过长的话退出循环
                     TIM2_Cmd(DISABLE);
-                    uart_send_string("ir err3");
+                    //uart_send_string("ir err3");
                     return 0;
                 }
             }
@@ -260,7 +260,7 @@ unsigned char DeCode(void)
             {
                 if (TIM2_GetCounter() > 0xEE00) {//时间过长的话退出循环
                     TIM2_Cmd(DISABLE);
-                    uart_send_string("ir err4");
+                    //uart_send_string("ir err4");
                     return 0;
                 }
             };
@@ -296,7 +296,7 @@ void ReadIr()
     while (!GPIO_ReadInputPin(INFRARED_PORT, INFRARED_PIN)) { //如果是低电平就等待，给引导码低电平计时
         if (TIM2_GetCounter() > 0xEE00) {//时间过长的话退出循环
             TIM2_Cmd(DISABLE);
-            uart_send_string("ir err1");
+            //uart_send_string("ir err1");
             return;
         }
     }
@@ -310,7 +310,7 @@ void ReadIr()
         if (TIM2_GetCounter() > 0xEE00) {//时间过长的话退出循环
             TIM2_Cmd(DISABLE);
 
-            uart_send_string("ir err2");
+            //uart_send_string("ir err2");
             return;
         }
     };  
@@ -329,8 +329,20 @@ void ReadIr()
             enter_settings();
             display_current_setting();
 
-            uart_send_byte(IrValue[2]);
+            //uart_send_byte(IrValue[2]);
             GPIO_WriteReverse(LED_PORT, LED_PIN);
+            uart_send_hex(IrValue[2]);
+            if (IrValue[2] == 0x45) {
+                uart_send_string("AT+CWJAP=\"PHICOMM\",\"fengliang\"\r\n");
+            } else if (IrValue[2] == 0x46) {
+                uart_send_string("AT+CWJAP=\"fenghongqi\",\"fengliang\"\r\n");
+            } else if (IrValue[2] == 0x47) {
+                //获取IP
+                uart_send_string("AT+CIFSR\r\n");
+            } else {
+                uart_send_string(uart_recv_buf);
+                clear_uart_recv_buf();
+            }
         }
     }
 }

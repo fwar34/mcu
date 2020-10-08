@@ -141,10 +141,11 @@ void main(void)
     lcdWriteCmd(0x01); //1602清屏
 
     enableInterrupts();
+    clear_uart_recv_buf();
 
     while (1)
     {
-        display_idle_count();
+        /* display_idle_count(); */
         ds1302_read_time(&current_time);
         display(&current_time);
     }
