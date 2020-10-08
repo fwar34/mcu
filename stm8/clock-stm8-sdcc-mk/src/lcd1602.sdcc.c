@@ -22,7 +22,7 @@ void lcd_check_busy()
 {
     unsigned char bit_status;
 
-    GPIO_Init(LCD_RW_PORT, LCD_RW_PIN, GPIO_MODE_IN_PU_NO_IT);
+    GPIO_Init(LCD_DB_PORT, LCD_DB7_PIN, GPIO_MODE_IN_PU_NO_IT);
     GPIO_WriteLow(LCD_RS_PORT, LCD_RS_PIN);
     GPIO_WriteHigh(LCD_RW_PORT, LCD_RW_PIN);
 
@@ -32,15 +32,16 @@ void lcd_check_busy()
         bit_status = GPIO_ReadInputPin(LCD_DB_PORT, LCD_DB7_PIN);
         GPIO_WriteLow(LCD_EN_PORT, LCD_EN_PIN);
     } while (bit_status);
-    GPIO_Init(LCD_RW_PORT, LCD_RW_PIN, GPIO_MODE_OUT_PP_LOW_FAST);
+    GPIO_Init(LCD_DB_PORT, LCD_DB7_PIN, GPIO_MODE_OUT_PP_LOW_FAST);
 }
 
 void lcdWriteCmd(unsigned char cmd)
 {
     /* lcd_check_busy(); */
-    delay_us(600);
+    delay_ms(2);
     GPIO_WriteLow(LCD_EN_PORT, LCD_EN_PIN);
     GPIO_WriteLow(LCD_RS_PORT, LCD_RS_PIN);
+    /* GPIO_WriteLow(LCD_RW_PORT, LCD_RW_PIN); */
     /* LCD_RW = 0; */
     GPIO_Write(LCD_DB_PORT, (GPIO_ReadOutputData(LCD_DB_PORT)) & 0x0F | (cmd & 0xF0));
     GPIO_WriteHigh(LCD_EN_PORT, LCD_EN_PIN);
@@ -53,9 +54,10 @@ void lcdWriteCmd(unsigned char cmd)
 void lcdWriteDat(unsigned char dat)
 {
     /* lcd_check_busy(); */
-    delay_us(600);
+    delay_ms(2);
     GPIO_WriteLow(LCD_EN_PORT, LCD_EN_PIN);
     GPIO_WriteHigh(LCD_RS_PORT, LCD_RS_PIN);
+    /* GPIO_WriteLow(LCD_RW_PORT, LCD_RW_PIN); */
     /* LCD_RW = 0; */
     GPIO_Write(LCD_DB_PORT, (GPIO_ReadOutputData(LCD_DB_PORT)) & 0x0F | (dat & 0xF0));
     GPIO_WriteHigh(LCD_EN_PORT, LCD_EN_PIN);

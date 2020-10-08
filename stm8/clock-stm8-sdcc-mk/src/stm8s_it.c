@@ -41,8 +41,7 @@ extern unsigned char first_ch_flag;//表示第一次按ch的标志
 extern unsigned char dht11_data[5];//湿度十位，湿度个位，温度十位，温度个位，是否显示的标志
 extern unsigned short idle_count;//最后一次设置开始空闲计数
 
-static unsigned char count = 40;//dht11更新的计数
-DS1302_TIME current_time;
+static unsigned int count = 40;//dht11更新的计数
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -393,6 +392,8 @@ INTERRUPT_HANDLER(UART2_RX_IRQHandler, 21)
     /* In order to detect unexpected events during development,
        it is recommended to set a breakpoint on the following instruction.
     */
+    UART2_ClearITPendingBit(UART2_IT_RXNE);
+    UART2_SendData8(UART2_ReceiveData8());
 }
 #endif /* STM8S105*/
 
@@ -477,11 +478,7 @@ INTERRUPT_HANDLER(TIM4_UPD_OVF_IRQHandler, 23)
     /* In order to detect unexpected events during development,
        it is recommended to set a breakpoint on the following instruction.
     */
-    TIM4_ClearITPendingBit(TIM2_IT_UPDATE);
-    GPIO_WriteReverse(LED_PORT, LED_PIN);
-
-    ds1302_read_time(&current_time);
-    display(&current_time);
+    TIM4_ClearITPendingBit(TIM4_IT_UPDATE);
         
     if (ch_count > 0) {//第一次点击ch按钮会把ch_count设置成1
         ++ch_count;
@@ -498,10 +495,10 @@ INTERRUPT_HANDLER(TIM4_UPD_OVF_IRQHandler, 23)
         }
     }
 
-    if (++count >= 20 * 2) {//1000ms * 2 -> 2s更新一次dht11
+    if (++count >= 500 * 2) {//1000ms * 2 -> 2s更新一次dht11
         /* lcd_light_back = !lcd_light_back; */
         count = 0;//reset counter
-        dht11_read_data();
+        //dht11_read_data();
         display_dht11();
     }
 

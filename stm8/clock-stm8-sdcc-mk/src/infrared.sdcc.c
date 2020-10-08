@@ -316,6 +316,7 @@ void ReadIr()
     TIM2_Cmd(DISABLE);
     HighTime = TIM2_GetCounter();
 
+        GPIO_WriteReverse(LED_PORT, LED_PIN);
     if (LowTime > 8500 && LowTime < 9500 && HighTime > 4000 && HighTime < 5000)
     {
         //如果是引导码,就开始解码,否则放弃,引导码的低电平计时

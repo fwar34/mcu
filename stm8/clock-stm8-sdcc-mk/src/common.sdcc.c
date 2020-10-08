@@ -1,5 +1,6 @@
 #include "common.sdcc.h"
 #include "delay.sdcc.h"
+#include "delay.h"
 
 unsigned char current_setting;//当前设置项
 //current_setting可以作为下标来取，秒不用设置，所以不在数组里面
@@ -9,14 +10,14 @@ unsigned char beep_setting;//beep开关
 //蜂鸣器提醒声
 void beep_ring_1s()
 {
-    /* if (beep_setting) { */
-    /*     unsigned char i = 0; */
-    /*     for (;i < 100;++i) { */
-    /*         Delay100us(); */
-    /*         beep = !beep; */
-    /*     } */
-    /*     beep = 1; */
-    /* } */
+    if (beep_setting) {
+        unsigned char i = 0;
+        for (;i < 100;++i) {
+            delay_us(100);
+            GPIO_WriteReverse(BEEP_PORT, BEEP_PIN);
+        }
+        beep_mute();
+    }
 }
 
 void common_gpio_init()

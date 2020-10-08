@@ -40,6 +40,7 @@
 
 extern unsigned int new_value;
 
+
 /**
  * @brief Delay
  * @param nCount
@@ -66,9 +67,13 @@ void Timer3Init(void)        //0.5微秒@2MHz
 {
 }
 
-void Timer4Init(void)        //50毫秒@2MHz
+void Timer4Init(void)        //2毫秒@2MHz
 {
-    TIM4_TimeBaseInit(TIM4_PRESCALER_8, 100);
+    TIM4_TimeBaseInit(TIM4_PRESCALER_128, 249);
+    TIM2_GenerateEvent(TIM2_EVENTSOURCE_UPDATE); //软件产生更新事件，可以立即更新预分频寄存器，
+                                                 //与TIM4_PrescalerConfig(TIM4_PRESCALER_128, TIM4_PSCRELOADMODE_IMMEDIATE)一个作用
+    TIM4_ARRPreloadConfig(ENABLE);
+    TIM4_ClearFlag(TIM4_FLAG_UPDATE);
     TIM4_ITConfig(TIM4_IT_UPDATE, ENABLE);
     TIM4_Cmd(ENABLE);
 }
@@ -115,7 +120,7 @@ void main(void)
     /* unsigned char msg[] = "hello"; */
     //初始时间20年8月16号14点16分55秒星期天
     DS1302_TIME start_time = {20, 9, 9, 3, 0, 6, 40};
-    /* DS1302_TIME current_time; */
+    DS1302_TIME current_time;
 
     common_gpio_init();
     lcd1602_init();
@@ -139,11 +144,9 @@ void main(void)
 
     while (1)
     {
-        /* ds1302_read_time(&current_time); */
-        /* display(&current_time); */
         display_idle_count();
-        /* ds1302_read_time(&current_time); */
-        /* display(&current_time); */
+        ds1302_read_time(&current_time);
+        display(&current_time);
     }
 }
 
