@@ -15,6 +15,7 @@
 
 # STM8 device (for supported devices see stm8s.h)
 DEVICE=STM8S105
+DEVICE_FLASH=stm8s105k4
 
 # set compiler path & parameters 
 CC_ROOT =
@@ -38,31 +39,15 @@ PRJ_OBJECTS := $(addprefix $(OUTPUT_DIR)/, $(PRJ_SOURCE:.c=.rel))
 SPL_ROOT    = $(HOME)/mine/mcu/stm8/framework-ststm8spl-platformio
 SPL_SRC_DIR = $(SPL_ROOT)/Libraries/STM8S_StdPeriph_Driver/src
 SPL_INC_DIR = $(SPL_ROOT)/Libraries/STM8S_StdPeriph_Driver/inc
-SPL_SOURCE  = stm8s_gpio.c stm8s_tim2.c stm8s_tim3.c stm8s_tim4.c stm8s_exti.c stm8s_clk.c
-SPL_OBJECTS := $(addprefix $(OUTPUT_DIR)/, $(SPL_SOURCE:.c=.rel))
+SPL_SOURCE  = stm8s_gpio.c
+# SPL_OBJECTS := $(addprefix $(OUTPUT_DIR)/, $(SPL_SOURCE:.c=.rel))
 
-# set path to STM8S_EVAL board routines
-# EVAL_DIR     = $(SPL_ROOT)/Utilities/STM8S_EVAL
-# EVAL_SOURCE  = 
-# EVAL_OBJECTS := $(addprefix $(OUTPUT_DIR)/, $(EVAL_SOURCE:.c=.rel))
-
-# set path to STM8S_EVAL common routines
-# EVAL_COMM_DIR    = $(EVAL_DIR)/Common
-# EVAL_COMM_SOURCE  = 
-# EVAL_COMM_OBJECTS := $(addprefix $(OUTPUT_DIR)/, $(EVAL_COMM_SOURCE:.c=.rel))
-
-# set path to STM8-128_EVAL board routines
-# EVAL_STM8S_128K_DIR     = $(EVAL_DIR)/STM8-128_EVAL
-# EVAL_STM8S_128K_SOURCE  = 
-# EVAL_STM8S_128K_OBJECTS := $(addprefix $(OUTPUT_DIR)/, $(EVAL_STM8S_128K_SOURCE:.c=.rel))
-
+IAR_INC_DIR = $(SPL_ROOT)/Libraries/IAR_Headers
 
 # collect all include folders
-# INCLUDE = -I$(PRJ_SRC_DIR) -I$(SPL_INC_DIR) -I$(EVAL_DIR) -I$(EVAL_COMM_DIR) -I$(EVAL_STM8S_128K_DIR)
-INCLUDE = -I$(PRJ_SRC_DIR) -I$(SPL_INC_DIR)
+INCLUDE = -I$(PRJ_SRC_DIR) -I$(SPL_INC_DIR) -I$(IAR_INC_DIR)
 
 # collect all source directories
-# VPATH=$(PRJ_SRC_DIR):$(SPL_SRC_DIR):$(EVAL_DIR):$(EVAL_COMM_DIR):$(EVAL_STM8S_128K_DIR)
 VPATH=$(PRJ_SRC_DIR):$(SPL_SRC_DIR)
 
 .PHONY: clean
@@ -78,10 +63,11 @@ $(OUTPUT_DIR):
 $(OUTPUT_DIR)/%.rel: %.c
 	$(CC) $(CFLAGS) $(INCLUDE) -D$(DEVICE) -c $? -o $@
 
-# $(TARGET): $(PRJ_OBJECTS) $(SPL_OBJECTS) $(EVAL_OBJECTS) $(EVAL_COMM_OBJECTS) $(EVAL_STM8S_128K_OBJECTS)
-
 $(TARGET): $(PRJ_OBJECTS) $(SPL_OBJECTS)
 	$(CC) $(CFLAGS) -o $(TARGET) $^
+
+flash: $(TARGET)
+	stm8flash -c stlinkv2 -p $(DEVICE_FLASH) -s flash -w $(TARGET)
 
 clean: 
 	rm -fr $(OUTPUT_DIR)

@@ -27,7 +27,6 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm8s.h"
-#include "stm8s_it.h"    /* SDCC patch: required by SDCC for interrupts */
 
 #include "ds1302.sdcc.h"
 #include "lcd1602.sdcc.h"
@@ -57,6 +56,9 @@ void Delay(uint32_t nCount)
 
 void Timer2Init(void)        //timer2@1MHz, dht11和ir在使用 每次tick为1us
 {
+    TIM2_PSCR = 0x04;  //2^4=16分频
+    TIM2_IER &= ~TIM2_IT_UPDATE;
+
     TIM2_TimeBaseInit(TIM2_PRESCALER_16, 0xFFFF); //16分频
     TIM2_ITConfig(TIM2_IT_UPDATE, DISABLE);
     TIM2_GenerateEvent(TIM2_EVENTSOURCE_UPDATE); //软件产生更新事件，可以立即更新预分频寄存器
