@@ -55,7 +55,7 @@ void Delay(uint32_t nCount)
     }
 }
 
-void Timer2Init(void)        //timer2@1MHz, dht11和ir在使用
+void Timer2Init(void)        //timer2@1MHz, dht11和ir在使用 每次tick为1us
 {
     TIM2_TimeBaseInit(TIM2_PRESCALER_16, 0xFFFF); //16分频
     TIM2_ITConfig(TIM2_IT_UPDATE, DISABLE);

@@ -55,9 +55,9 @@ void Delay(uint32_t nCount)
     }
 }
 
-void Timer2Init(void)        //timer2@1MHz, dht11和ir在使用
+void Timer2Init(void)        //timer2@1MHz, dht11和ir在使用 每次tick为1us
 {
-    TIM2_TimeBaseInit(TIM2_PRESCALER_16, 0x0000); //16分频
+    TIM2_TimeBaseInit(TIM2_PRESCALER_16, 0xFFFF); //16分频
     TIM2_ITConfig(TIM2_IT_UPDATE, DISABLE);
     TIM2_GenerateEvent(TIM2_EVENTSOURCE_UPDATE); //软件产生更新事件，可以立即更新预分频寄存器
     TIM2_Cmd(DISABLE);
@@ -141,10 +141,11 @@ void main(void)
     lcdWriteCmd(0x01); //1602清屏
 
     enableInterrupts();
+    clear_uart_recv_buf();
 
     while (1)
     {
-        display_idle_count();
+        /* display_idle_count(); */
         ds1302_read_time(&current_time);
         display(&current_time);
     }

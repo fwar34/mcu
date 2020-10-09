@@ -10,35 +10,27 @@ void delay(unsigned int n)
     while (n--);
 }
 
-
-void uart_init()//9600bps@16Mhz
+/*波特率=fmaster/UART_DIV，BRR2的高四位+BRR1+BRR2的第四位组成了UART_DIV*/
+void uart_init()//115200@16Mhz，因为8266默认的波特率就是115200
 {
-    UART2_DeInit();
-    /*
-    115200:传输速度
-    UART2_WORDLENGTH_8D:字长8位
-    UART2_STOPBITS_1:一个停止位
-    UART2_PARITY_NO:没有校验位
-    UART2_MODE_TXRX_ENABLE:收发使能
-    */
-    UART2_Init(115200, UART2_WORDLENGTH_8D, UART2_STOPBITS_1, UART2_PARITY_NO, UART2_SYNCMODE_CLOCK_DISABLE, UART2_MODE_TXRX_ENABLE);
-    UART2_ITConfig(UART2_IT_RXNE_OR, ENABLE);//使能接收中断
-    UART2_Cmd(ENABLE);//使能UART3
+    UART2->CR1=0x00;//1个起始位，8个数据位，无校验位
+    UART2->CR2=0x2c;//接收中断使能，使能发送、接收
+    UART2->CR3=0x00;//1个停止位
+    //设置波特率近似115200
+    UART2->BRR2=0x0B;
+    UART2->BRR1=0x08;
 }
 
 /*******************************************************************************
- ****函数名称:
- ****函数功能:发送8位数据
- ****版本:V1.0
- ****日期:14-2-2014
- ****入口参数:dat-需要发送的数据
- ****出口参数:无
- ****说明:
- ********************************************************************************/
-void uart_send_byte(u8 dat)
+ ****函数功能:UART2发送8位数据函数
+ ****入口参数:
+ ****出口参数:
+ ****函数备注:
+ *******************************************************************************/
+void uart_send_byte(unsigned char Data)
 {
-    while ((UART2_GetFlagStatus(UART2_FLAG_TXE) == RESET));
-    UART2_SendData8(dat);
+    while((UART2->SR&0x80)==0);
+    UART2->DR = Data;
 }
 
 /*******************************************************************************
@@ -54,8 +46,8 @@ void uart_send_hex(unsigned char dat)
 {
     uart_send_byte('0');
     uart_send_byte('x');
-    uart_send_byte('0' + dat >> 4);
-    uart_send_byte('0' + dat & 0x0F);
+    uart_send_byte(hex_array[dat >> 4]);
+    uart_send_byte(hex_array[dat & 0x0F]);
     uart_send_byte(' ');
 }
 
@@ -76,3 +68,16 @@ void uart_send_string(unsigned char *dat)
         dat++;
     }
 }
+
+/*******************************************************************************
+ ****函数功能:UART2接收数据函数
+ ****入口参数:
+ ****出口参数:
+ ****函数备注:
+ *******************************************************************************/
+unsigned char uart_recv_byte(void)
+{
+    while((UART2->SR&0x20)==0);
+    return ((unsigned char)UART2->DR);
+}
+

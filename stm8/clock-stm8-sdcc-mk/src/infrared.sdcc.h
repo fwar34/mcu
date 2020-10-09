@@ -3,5 +3,6 @@
 
 void IrInit();
 void ReadIr();
+void IrMachine();
 
 #endif

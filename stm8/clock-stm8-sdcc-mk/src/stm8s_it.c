@@ -162,7 +162,8 @@ INTERRUPT_HANDLER(EXTI_PORTD_IRQHandler, 6)
     /* In order to detect unexpected events during development,
        it is recommended to set a breakpoint on the following instruction.
     */
-    ReadIr();
+    /* ReadIr(); */
+    IrMachine();
     key_scan();
 }
 
@@ -392,8 +393,10 @@ INTERRUPT_HANDLER(UART2_RX_IRQHandler, 21)
     /* In order to detect unexpected events during development,
        it is recommended to set a breakpoint on the following instruction.
     */
-    UART2_ClearITPendingBit(UART2_IT_RXNE);
-    UART2_SendData8(UART2_ReceiveData8());
+    /* UART2_ClearITPendingBit(UART2_IT_RXNE); */
+    uart_recv_buf[uart_recv_buf_index++] = uart_recv_byte();
+    if (uart_recv_buf_index >= 255)
+        uart_recv_buf_index = 0;
 }
 #endif /* STM8S105*/
 
@@ -498,7 +501,7 @@ INTERRUPT_HANDLER(TIM4_UPD_OVF_IRQHandler, 23)
     if (++count >= 500 * 2) {//1000ms * 2 -> 2s更新一次dht11
         /* lcd_light_back = !lcd_light_back; */
         count = 0;//reset counter
-        //dht11_read_data();
+        dht11_read_data();
         display_dht11();
     }
 

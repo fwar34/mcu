@@ -13,8 +13,12 @@ unsigned char IrValue[4];//用于存储数据码，对应前两个是地址位�
 unsigned char ch_count = 0;//两次ch键进入设置的时间计数
 unsigned char enter_settings_flag = 0;//进入设置的标志
 unsigned short idle_count = 0;//最后一次设置开始空闲计数
-unsigned char hex_array[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 unsigned int LowTime, HighTime; //储存高、低电平的宽度 
+
+unsigned char get_header = 0; //是否获取到了头部
+unsigned char ir_repeat_count = 0; //重复码的次数
+unsigned char surge_count = 0; //下降沿计数器
+unsigned char ir_repeat_flag = 0; //是否有重复码
 
 extern unsigned int new_value;
 extern unsigned char ch_count;//两次ch键进入设置的时间计数
@@ -248,7 +252,7 @@ unsigned char DeCode(void)
             while (!GPIO_ReadInputPin(INFRARED_PORT, INFRARED_PIN)) { //如果是低电平就等待 //低电平计时
                 if (TIM2_GetCounter() > 0xEE00) {//时间过长的话退出循环
                     TIM2_Cmd(DISABLE);
-                    uart_send_string("ir err3");
+                    //uart_send_string("ir err3");
                     return 0;
                 }
             }
@@ -261,7 +265,7 @@ unsigned char DeCode(void)
             {
                 if (TIM2_GetCounter() > 0xEE00) {//时间过长的话退出循环
                     TIM2_Cmd(DISABLE);
-                    uart_send_string("ir err4");
+                    //uart_send_string("ir err4");
                     return 0;
                 }
             };
@@ -291,13 +295,15 @@ void ReadIr()
         return;
     }
 
+    GPIOD->CR2 &= ~(1 << 3);
     TIM2_Cmd(DISABLE);
     TIM2_SetCounter(0x0000);
     TIM2_Cmd(ENABLE);
     while (!GPIO_ReadInputPin(INFRARED_PORT, INFRARED_PIN)) { //如果是低电平就等待，给引导码低电平计时
         if (TIM2_GetCounter() > 0xEE00) {//时间过长的话退出循环
             TIM2_Cmd(DISABLE);
-            uart_send_string("ir err1");
+            //uart_send_string("ir err1");
+            GPIOD->CR2 |= 1 << 3;
             return;
         }
     }
@@ -306,17 +312,19 @@ void ReadIr()
     TIM2_SetCounter(0x0000);
     TIM2_Cmd(ENABLE);
 
+
     while (GPIO_ReadInputPin(INFRARED_PORT, INFRARED_PIN)) { //如果是高电平就等待，给引导码高电平计时
         if (TIM2_GetCounter() > 0xEE00) {//时间过长的话退出循环
             TIM2_Cmd(DISABLE);
-            uart_send_string("ir err2");
+
+            //uart_send_string("ir err2");
+            GPIOD->CR2 |= 1 << 3;
             return;
         }
     };  
     TIM2_Cmd(DISABLE);
     HighTime = TIM2_GetCounter();
 
-        GPIO_WriteReverse(LED_PORT, LED_PIN);
     if (LowTime > 8500 && LowTime < 9500 && HighTime > 4000 && HighTime < 5000)
     {
         //如果是引导码,就开始解码,否则放弃,引导码的低电平计时
@@ -329,8 +337,69 @@ void ReadIr()
             enter_settings();
             display_current_setting();
 
-            uart_send_byte(IrValue[2]);
-            GPIO_WriteReverse(LED_PORT, LED_PIN);
+            //uart_send_byte(IrValue[2]);
+            /* GPIO_WriteReverse(LED_PORT, LED_PIN); */
+            uart_send_hex(IrValue[2]);
+            if (IrValue[2] == 0x45) {
+                uart_send_string("AT+CWJAP=\"PHICOMM\",\"fengliang\"\r\n");
+            } else if (IrValue[2] == 0x46) {
+                uart_send_string("AT+CWJAP=\"fenghongqi\",\"fengliang\"\r\n");
+            } else if (IrValue[2] == 0x47) {
+                //获取IP
+                uart_send_string("AT+CIFSR\r\n");
+            } else {
+                uart_send_string(uart_recv_buf);
+                clear_uart_recv_buf();
+            }
         }
+    }
+    GPIOD->CR2 |= 1 << 3;
+}
+
+void IrMachine()
+{
+    if (GPIOD->IDR & (1 << 3)) {
+        return;
+    }
+
+    unsigned int timer_count = 0;
+    TIM2->CR1 &= ~TIM2_CR1_CEN;
+    timer_count = TIM2->CNTRH << 8 | TIM2->CNTRL;
+    TIM2->CNTRH = 0;
+    TIM2->CNTRL = 0;
+    TIM2->CR1 |= TIM2_CR1_CEN;
+    //引导码解析
+    if (timer_count >= 13300 && timer_count <= 13700  && !get_header) {
+        ir_repeat_count = 0; //IR重复码清零
+        ir_repeat_flag = 0;
+        get_header = 1; //成功解析了头部位置
+        surge_count = 1; //第一个下降沿
+    //解析用户码和用户反码，键码和键码反码
+    //1到32个下降沿是用户码和用户反码,键码和键码反码,32bit（4个字节）
+    } else if (surge_count >= 1 && surge_count <= 32) { 
+        if (timer_count >= 1000 && timer_count <= 1300) { //0
+            IrValue[(surge_count - 1) / 8] >>= 1;
+            ++surge_count;
+        } else if (timer_count >= 2000 && timer_count <= 2450) { //1
+            IrValue[(surge_count - 1) / 8] >>= 1;
+            IrValue[(surge_count - 1) / 8] |= 0x80;
+            ++surge_count;
+        }
+
+        //解析完成
+        if (surge_count - 1 == 32) {
+            /* GPIO_WriteReverse(LED_PORT, LED_PIN); */
+        }
+    } else if (surge_count > 32 && !ir_repeat_flag) {
+        ir_repeat_flag = 1;
+        surge_count = 0;
+        get_header = 0;
+    } else if (timer_count >= 11000 && timer_count <= 11500) {
+        ir_repeat_flag = 1;
+        if (ir_repeat_count < 250)
+            ++ir_repeat_count;
+
+        if (ir_repeat_count > 3)
+            GPIO_WriteReverse(LED_PORT, LED_PIN);
     }
 }

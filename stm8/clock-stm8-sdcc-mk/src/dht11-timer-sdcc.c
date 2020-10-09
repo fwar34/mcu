@@ -84,7 +84,7 @@ void dht11_read_data()
 
             TIM2_SetCounter(0x0000);
             while (GPIO_ReadInputPin(DHT11_DAT_PORT, DHT11_DAT_PIN)) { //拉高。持续26~28us表示0，持续70us表示1
-                if (TIM2_GetCounter() > 64) { //64 × 1.085 = 70us
+                if (TIM2_GetCounter() > 100) { //64 × 1.085 = 70us
                     uart_send_string("dht11 error4");
                     TIM2_Cmd(DISABLE);
                     return;
