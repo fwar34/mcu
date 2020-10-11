@@ -17,7 +17,7 @@
 
 void ds1302_init();
 unsigned char ds1302_read(unsigned char address);
-void ds1302_read_time(DS1302_TIME* time);
+void ds1302_read_time(void* time);
 void ds1302_write_time(DS1302_TIME* time);
 void ds1302_write_ram(unsigned char ram_num, unsigned char dat);
 unsigned char ds1302_read_ram(unsigned char ram_num);

@@ -257,11 +257,6 @@ void IrMachine()
     TIM2_DISABLE();
     timer_count = TIM2_GET_COUNTER();
     ++debug_ir;
-    /* if (test == 1) { */
-    /*     uart_send_string("IR:"); */
-    /*     uart_send_hex(timer_count >> 8); */
-    /*     uart_send_hex((uint8_t)timer_count); */
-    /* } */
 
     TIM2_SET_COUNTER(0x0000);
     TIM2_ENABLE();
