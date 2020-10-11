@@ -11,10 +11,10 @@
 
 #define DHT11_CLR() DHT11_DAT_OPIN = 0
 #define DHT11_SET() DHT11_DAT_OPIN = 1
-#define TIM2_SET_COUNTER(count) TIM2_CNTRH = (uint8_t)((count) >> 8); TIM2_CNTRL = (uint8_t)(count)
-#define TIM2_GET_COUNTER() ((uint16_t)TIM2_CNTRH << 8 | TIM2_CNTRL)
-#define TIM2_ENABLE() TIM2_CR1_CEN = 1
-#define TIM2_DISABLE() TIM2_CR1_CEN = 0
+#define TIM2_SET_COUNTER(count) TIM3_CNTRH = (uint8_t)((count) >> 8); TIM3_CNTRL = (uint8_t)(count)
+#define TIM2_GET_COUNTER() ((uint16_t)TIM3_CNTRH << 8 | TIM3_CNTRL)
+#define TIM2_ENABLE() TIM3_CR1_CEN = 1
+#define TIM2_DISABLE() TIM3_CR1_CEN = 0
 #define SET_DHT11_READ() PF_DDR_DDR4 = 0; PF_CR1_C14 = 1; PF_CR2_C24 = 0
 #define SET_DHT11_WRITE() PF_DDR_DDR4 = 1; PF_CR1_C14 = 1; PF_CR2_C24 = 1
 
@@ -34,6 +34,7 @@ uint8_t dht11_check_sum()
 
 void dht11_read_data()
 {
+    uart_send_string("dht11_read_data");
     uint16_t high_count = 0;
     uint8_t i, j = 0;
 

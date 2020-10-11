@@ -297,6 +297,7 @@ void display(void* time)
 
 void display_dht11()
 {
+    uart_send_string("display_dht11");
     unsigned char i, j;
     /* UART_send_byte(dht11_data[4]); */
     //dht11因为2秒钟才读一次，所以只需要2秒钟更新下显示就行

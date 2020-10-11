@@ -81,7 +81,7 @@ void Timer2Init(void)        //timer2@1MHz, dht11和ir在使用 每次tick为1us
     TIM2_CR1_CEN = 0; //暂停TIM2
 }
 
-void Timer3Init(void)        //0.5微秒tick@16MHz
+void Timer3Init(void)        //1微秒tick@16MHz
 {
     TIM3_PSCR = 0x04;
     TIM3_ARRH = 0xFF;
@@ -139,8 +139,10 @@ void main(void)
     beep_mute();
     IrInit();
 
-    AddLoopTask(1, ds1302_read_time, &current_time);
-    AddLoopTask(1, display, &current_time);
+    AddLoopTask(10, ds1302_read_time, &current_time);
+    AddLoopTask(10, display, &current_time);
+    AddLoopTask(1000, dht11_read_data, 0);
+    AddLoopTask(1000, display_dht11, 0);
 
     wait_for_dht11();
     lcdWriteCmd(0x01); //1602清屏

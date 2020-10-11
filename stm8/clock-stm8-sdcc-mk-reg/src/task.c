@@ -1,4 +1,5 @@
 #include "task.h"
+#include "uart_sdcc.h"
 
 #define task_len 20
 
@@ -10,21 +11,21 @@ typedef struct _Task {
     uint8_t is_vaild_;
     uint16_t over_flow_count_;
     uint16_t count_;
-    task_func task_func_;
+    void* task_func_;
     void* data_;
 } Task;
 
 typedef struct _MsgTaskList {
     uint8_t msg_queue_[task_len];
     uint8_t msg_[task_len];
-    msg_func msg_func_[task_len];
+    task_func2 msg_func_[task_len];
 } MsgTaskList;
 
 Task loop_task_list[task_len];
 Task once_task_list[task_len];
 MsgTaskList msg_task_list;
 
-uint8_t AddLoopTask(uint8_t over_flow_count, task_func tsk, void* data)
+uint8_t AddLoopTask(uint8_t over_flow_count, void* tsk, void* data)
 {
     uint8_t i = 0;
     for (; i < task_len; ++i) {
@@ -40,7 +41,7 @@ uint8_t AddLoopTask(uint8_t over_flow_count, task_func tsk, void* data)
     return 0;
 }
 
-uint8_t AddOnceTask(uint8_t over_flow_count, task_func tsk, void* data)
+uint8_t AddOnceTask(uint8_t over_flow_count, void* tsk, void* data)
 {
     uint8_t i = 0;
     for (; i < task_len; ++i) {
@@ -56,7 +57,7 @@ uint8_t AddOnceTask(uint8_t over_flow_count, task_func tsk, void* data)
     return 0;
 }
 
-uint8_t AddMsgTask(uint8_t msg, msg_func tsk)
+uint8_t AddMsgTask(uint8_t msg, task_func2 tsk)
 {
     uint8_t i = 0;
     for (; i < task_len; ++i) {
@@ -91,9 +92,22 @@ void ProcessLoopTask()
     uint8_t i = 0;
     for (; i < task_len; ++i) {
         if (loop_task_list[i].is_vaild_) {
-            if (++loop_task_list[i].count_ >= loop_task_list[i].over_flow_count_) {
+            ++loop_task_list[i].count_;
+            /* if (i == 5) { */
+            /*     uart_send_hex(i); */
+            /*     uart_send_string(":"); */
+            /*     uart_send_hex((loop_task_list[i].count_) >> 8); */
+            /*     uart_send_hex((uint8_t)(loop_task_list[i].count_)); */
+            /* } */
+            if (loop_task_list[i].count_ >= loop_task_list[i].over_flow_count_) {
                 loop_task_list[i].count_ = 0;
-                loop_task_list[i].task_func_(loop_task_list[i].data_);
+                if (loop_task_list[i].data_) {
+                    task_func func = (task_func)(loop_task_list[i].task_func_);
+                    func(loop_task_list[i].data_);
+                } else {
+                    task_func2 func = (task_func)(loop_task_list[i].task_func_);
+                    func();
+                }
             }
         } else {
             return;
@@ -113,7 +127,13 @@ void ProcessOnceTask()
         if (once_task_list[i].is_vaild_) {
             if (++once_task_list[i].count_ >= loop_task_list[i].over_flow_count_) {
                 once_task_list[i].is_vaild_ = 0;
-                once_task_list[i].task_func_(once_task_list[i].data_);
+                if (loop_task_list[i].data_) {
+                    task_func func = (task_func)(once_task_list[i].task_func_);
+                    func(once_task_list[i].data_);
+                } else {
+                    task_func2 func = (task_func)(once_task_list[i].task_func_);
+                    func();
+                }
             }
         }
     }
