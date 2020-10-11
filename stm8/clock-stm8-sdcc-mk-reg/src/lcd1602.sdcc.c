@@ -138,10 +138,18 @@ void wait_for_dht11()
         delay_ms(50);
     }
 
-    for (i = 15; i == 0; --i) {
+    i = 15;
+    while (i--) {
         write_char(1, i, '<');
         delay_ms(50);
     }
+
+    delay_ms(300);
+
+    /* for (i = 15; i >= 0; --i) { */
+    /*     write_char(1, i, '<'); */
+    /*     delay_ms(50); */
+    /* } */
 }
 
 //--------------------------------------------------------------------------
@@ -300,12 +308,15 @@ void display_dht11()
         write_char(1, 10, j + '0');
         write_char(1, 11, '%');
         write_char(1, 12, ' ');
+        /* uart_send_string("wendu:"); */
+        /* uart_send_hex(dht11_data[0]); */
     
         i = dht11_data[2] / 10;//温度十位
         j = dht11_data[2] % 10;//温度个位
         write_char(1, 13, i + '0');
         write_char(1, 14, j + '0');
         write_char(1, 15, 'C');
-        /* UART_send_string("dht11_display"); */
+        /* uart_send_string("shidu:"); */
+        /* uart_send_hex(dht11_data[2]); */
     }
 }

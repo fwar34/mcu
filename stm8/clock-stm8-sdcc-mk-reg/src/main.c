@@ -1,4 +1,3 @@
-/* Includes ------------------------------------------------------------------*/
 #include "iostm8.h"
 #include "key.sdcc.h"
 #include "ds1302.sdcc.h"
@@ -18,14 +17,13 @@ extern unsigned short idle_count;//最后一次设置开始空闲计数
 
 static unsigned int count = 40;//dht11更新的计数
 
-void exti_isr() __interrupt(6)
+void extid_isr() __interrupt(EXTI3_vector)
 {
-    /* ReadIr(); */
     IrMachine();
     key_scan();
 }
 
-void uart2_isr() __interrupt(21)
+void uart2_isr() __interrupt(UART2_R_RXNE_vector)
 {
     /* UART2_ClearITPendingBit(UART2_IT_RXNE); */
     uart_recv_buf[uart_recv_buf_index++] = uart_recv_byte();
@@ -33,7 +31,7 @@ void uart2_isr() __interrupt(21)
         uart_recv_buf_index = 0;
 }
 
-void tim4_isr() __interrupt(23)
+void tim4_isr() __interrupt(TIM4_OVR_UIF_vector)
 {
     TIM4_SR_UIF = 0;
         
@@ -57,23 +55,13 @@ void tim4_isr() __interrupt(23)
         count = 0;//reset counter
         dht11_read_data();
         display_dht11();
+        uart_send_string("debug ir:");
+        uart_send_hex(debug_ir >> 8);
+        uart_send_hex((uint8_t)debug_ir);
+        debug_ir = 0;
     }
 
     process_key();//处理物理按键
-}
-
-/**
- * @brief Delay
- * @param nCount
- * @retval None
- */
-void Delay(uint32_t nCount)
-{
-    /* Decrement nCount value */
-    while (nCount != 0)
-    {
-        nCount--;
-    }
 }
 
 void Timer2Init(void)        //timer2@1MHz, dht11和ir在使用 每次tick为1us
@@ -81,14 +69,20 @@ void Timer2Init(void)        //timer2@1MHz, dht11和ir在使用 每次tick为1us
     TIM2_PSCR = 0x04;  //2^4=16分频
     TIM2_ARRH = 0xFF;
     TIM2_ARRL = 0xFF;
-    TIM2_IER_UIE = 0;
+    TIM2_IER_UIE = 0; //禁止中断
     /* TIM2_IER &= ~MASK_TIM2_IER_UIE; */
     TIM2_EGR_UG = 1; //软件产生更新事件，可以立即更新预分频寄存器
-    TIM2_CR1_CEN = 0;
+    TIM2_CR1_CEN = 0; //暂停TIM2
 }
 
 void Timer3Init(void)        //0.5微秒@2MHz
 {
+    TIM3_PSCR = 0x04;
+    TIM3_ARRH = 0xFF;
+    TIM3_ARRL = 0xFF;
+    TIM3_IER_UIE = 0;
+    TIM3_EGR_UG = 1;
+    TIM3_CR1_CEN = 0;
 }
 
 void Timer4Init(void)        //2毫秒@2MHz
@@ -102,20 +96,6 @@ void Timer4Init(void)        //2毫秒@2MHz
     TIM4_CR1_CEN = 1;
 }
 
-/**
- * @addtogroup clock-stm8-sdcc-mk
- * @{
- */
-
-/* Private typedef -----------------------------------------------------------*/
-/* Private define ------------------------------------------------------------*/
-/* Evalboard I/Os configuration */
-
-
-/* Private macro -------------------------------------------------------------*/
-/* Private variables ---------------------------------------------------------*/
-/* Private function prototypes -----------------------------------------------*/
-
 void display_idle_count()
 {
     /* unsigned char i = idle_count / 10; */
@@ -126,15 +106,6 @@ void display_idle_count()
     write_char(0, 15, j + '0');
 }
 
-
-/* Private functions ---------------------------------------------------------*/
-/* Public functions ----------------------------------------------------------*/
-
-/**
- * @brief  Main program.
- * @param  None
- * @retval None
- */
 void main(void)
 {
     CLK_CKDIVR = 0x00;//HSI 不分频，主时钟 16M
@@ -163,6 +134,8 @@ void main(void)
 
     wait_for_dht11();
     lcdWriteCmd(0x01); //1602清屏
+    dht11_read_data();
+    display_dht11();
 
     enableInterrupts();
     clear_uart_recv_buf();
@@ -174,6 +147,3 @@ void main(void)
         display(&current_time);
     }
 }
-
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

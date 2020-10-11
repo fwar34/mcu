@@ -5193,6 +5193,40 @@ __IO_REG8    (DM_ENFCTR,   0x7F9A, __READ_WRITE);
 #define FLASH_EOP_vector                     0x1A - 2
 #define FLASH_WR_PG_DIS_vector               0x1A - 2
 
+
+/*-------------------------------------------------------------------------
+ *      Interrupt vector numbers
+ *
+ *  Note: The vector numbers listed in ST's manuals for STM8 are offset
+ *        by 2 compared to the vector numbers used by EWSTM8.
+ *-----------------------------------------------------------------------*/
+#define EXTI0_vector                          5 - 2 /* IRQ No. in STM8 manual:  3 */
+#define EXTI1_vector                          6 - 2 /* IRQ No. in STM8 manual:  4 */
+#define EXTI2_vector                          7 - 2 /* IRQ No. in STM8 manual:  5 */
+#define EXTI3_vector                          8 - 2 /* IRQ No. in STM8 manual:  6 */
+#define EXTI4_vector                          9 - 2 /* IRQ No. in STM8 manual:  7 */
+#define TIM1_OVR_BIF_vector                  13 - 2 /* IRQ No. in STM8 manual: 11 */
+#define TIM1_OVR_TIF_vector                  13 - 2 /* IRQ No. in STM8 manual: 11 */
+#define UART2_T_TC_vector                    22 - 2 /* IRQ No. in STM8 manual: 20 */
+#define UART2_T_TXE_vector                   22 - 2 /* IRQ No. in STM8 manual: 20 */
+#define UART2_R_IDLE_vector                  23 - 2 /* IRQ No. in STM8 manual: 21 */
+#define UART2_R_LBDF_vector                  23 - 2 /* IRQ No. in STM8 manual: 21 */
+#define UART2_R_OR_vector                    23 - 2 /* IRQ No. in STM8 manual: 21 */
+#define UART2_R_PE_vector                    23 - 2 /* IRQ No. in STM8 manual: 21 */
+#define UART2_R_RXNE_vector                  23 - 2 /* IRQ No. in STM8 manual: 21 */
+#define ADC1_AWDG_vector                     24 - 2 /* IRQ No. in STM8 manual: 22 */
+#define ADC1_AWS0_vector                     24 - 2 /* IRQ No. in STM8 manual: 22 */
+#define ADC1_AWS1_vector                     24 - 2 /* IRQ No. in STM8 manual: 22 */
+#define ADC1_AWS2_vector                     24 - 2 /* IRQ No. in STM8 manual: 22 */
+#define ADC1_AWS3_vector                     24 - 2 /* IRQ No. in STM8 manual: 22 */
+#define ADC1_AWS4_vector                     24 - 2 /* IRQ No. in STM8 manual: 22 */
+#define ADC1_AWS5_vector                     24 - 2 /* IRQ No. in STM8 manual: 22 */
+#define ADC1_AWS6_vector                     24 - 2 /* IRQ No. in STM8 manual: 22 */
+#define ADC1_AWS7_vector                     24 - 2 /* IRQ No. in STM8 manual: 22 */
+#define ADC1_AWS8_vector                     24 - 2 /* IRQ No. in STM8 manual: 22 */
+#define ADC1_AWS9_vector                     24 - 2 /* IRQ No. in STM8 manual: 22 */
+#define ADC1_EOC_vector                      24 - 2 /* IRQ No. in STM8 manual: 22 */
+
 /* #ifdef __SDCC */
 /* #pragma language=restore */
 /* #endif */

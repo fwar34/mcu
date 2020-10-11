@@ -10,6 +10,8 @@ extern unsigned char hex_array[16];
 extern unsigned char uart_recv_buf[256];
 extern unsigned char uart_recv_buf_index;
 
+extern unsigned int debug_ir;
+
 #define LCD_BK_PORT GPIOC
 #define LCD_BK_PIN GPIO_PIN_2
 

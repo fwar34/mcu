@@ -503,6 +503,10 @@ INTERRUPT_HANDLER(TIM4_UPD_OVF_IRQHandler, 23)
         count = 0;//reset counter
         dht11_read_data();
         display_dht11();
+        uart_send_string("debug_ir:");
+        uart_send_hex(debug_ir >> 8);
+        uart_send_hex((unsigned char)debug_ir);
+        debug_ir = 0;
     }
 
     process_key();//处理物理按键

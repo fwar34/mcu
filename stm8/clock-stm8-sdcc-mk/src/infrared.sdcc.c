@@ -362,6 +362,8 @@ void IrMachine()
         return;
     }
 
+    ++debug_ir;
+
     unsigned int timer_count = 0;
     TIM2->CR1 &= ~TIM2_CR1_CEN;
     timer_count = TIM2->CNTRH << 8 | TIM2->CNTRL;

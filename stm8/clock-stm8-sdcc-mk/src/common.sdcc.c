@@ -10,6 +10,8 @@ unsigned char hex_array[16] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
 unsigned char uart_recv_buf[256];
 unsigned char uart_recv_buf_index = 0;
 
+unsigned int debug_ir = 0;
+
 
 //蜂鸣器提醒声
 void beep_ring_1s()

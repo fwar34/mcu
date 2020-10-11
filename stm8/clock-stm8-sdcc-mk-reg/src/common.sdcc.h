@@ -10,6 +10,8 @@ extern unsigned char hex_array[16];
 extern unsigned char uart_recv_buf[256];
 extern unsigned char uart_recv_buf_index;
 
+extern uint16_t debug_ir;
+
 #define LCD_BK_PIN PC_ODR_ODR2
 
 #define BEEP_PIN PD_ODR_ODR4

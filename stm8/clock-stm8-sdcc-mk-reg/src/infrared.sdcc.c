@@ -6,18 +6,15 @@
 #include "uart_sdcc.h"
 
 #define INFRARED_PIN PD_IDR_IDR3
-#define TIM2_SET_COUNTER(count) TIM2_ARRH = (count) >> 8; TIM2_ARRL = (count) & 0x0F
-#define TIM2_GET_COUNTER() (TIM2_ARRH << 8 | TIM2_ARRL)
+#define TIM2_SET_COUNTER(count) TIM2_CNTRH = (uint8_t)((count) >> 8); TIM2_CNTRL = (uint8_t)(count)
+#define TIM2_GET_COUNTER() ((uint16_t)TIM2_CNTRH << 8 | TIM2_CNTRL)
 #define TIM2_ENABLE() TIM2_CR1_CEN = 1
 #define TIM2_DISABLE() TIM2_CR1_CEN = 0
-#define DISABLE_IR_INTERRUPT() PD_CR2_C23 = 0
-#define ENABLE_IR_INTERRUPT() PD_CR2_C23 = 1
 
 unsigned char IrValue[4];//用于存储数据码，对应前两个是地址位，后两个是数据位和校验位
 unsigned char ch_count = 0;//两次ch键进入设置的时间计数
 unsigned char enter_settings_flag = 0;//进入设置的标志
 unsigned short idle_count = 0;//最后一次设置开始空闲计数
-unsigned int LowTime, HighTime; //储存高、低电平的宽度 
 
 unsigned char get_header = 0; //是否获取到了头部
 unsigned char ir_repeat_count = 0; //重复码的次数
@@ -239,138 +236,33 @@ unsigned char process_irkey()
 void IrInit()
 {
     PD_DDR_DDR3 = 0;
-    PD_CR1_C13 = 0; //浮动输入
+    PD_CR1_C13 = 1; //浮动输入
     PD_CR2_C23 = 1; //带中断
-    EXTI_CR1_PDIS &= ~MASK_EXTI_CR1_PDIS;
-    EXTI_CR1_PDIS |= 0x02 << 6; //仅下降沿触发
-}
+    //注意EXTI_CR1_PDIS是2bit
+    EXTI_CR1_PDIS = 0;
+    EXTI_CR1_PDIS = 0x02; //仅下降沿触发
 
-unsigned char DeCode(void)
-{
-    unsigned char i,j;
-    unsigned char temp = 0;    //储存解码出的数据
-    for (i = 0; i < 4; i++)      //连续读取4个用户码和键数据码
-    {
-        for (j = 0; j < 8; j++)  //每个码有8位数字
-        {
-            temp = temp >> 1;  //temp中的各数据位右移一位，因为先读出的是高位数据
-            TIM2_SET_COUNTER(0x0000);
-            TIM2_ENABLE();
-            while (!INFRARED_PIN) { //如果是低电平就等待 //低电平计时
-                if (TIM2_GET_COUNTER() > 0xEE00) {//时间过长的话退出循环
-                    TIM2_DISABLE();
-                    //uart_send_string("ir err3");
-                    return 0;
-                }
-            }
-            TIM2_DISABLE();
-            LowTime = TIM2_GET_COUNTER();
-            TIM2_SET_COUNTER(0x0000);
-            TIM2_ENABLE();
-
-            while (INFRARED_PIN)   //如果是高电平就等待
-            {
-                if (TIM2_GET_COUNTER() > 0xEE00) {//时间过长的话退出循环
-                    TIM2_DISABLE();
-                    //uart_send_string("ir err4");
-                    return 0;
-                }
-            };
-            TIM2_DISABLE();
-            HighTime = TIM2_GET_COUNTER();
-
-            if (LowTime < 420 || LowTime > 700) //560 - 140, 560 + 140
-                return 0;        //如果低电平长度不在合理范围，则认为出错，停止解码
-            if (HighTime > 460 && HighTime < 660)   //如果高电平时间在560微秒左右，即计数560／1＝560次
-                temp = temp & 0x7f;       //(560-100=460, 560+100=660)，则该位是0
-            if (HighTime > 1430 && HighTime < 1930) //如果高电平时间在1680微秒左右，即计数1680／1＝1680次
-                temp = temp | 0x80;       //(1680-250=1430,1680+250=1930),则该位是1
-        }
-        IrValue[i] = temp;//将解码出的字节值保存在a[i]
-    }
-
-    if (IrValue[2] = ~IrValue[3])  //验证键数据码和其反码是否相等,一般情况下不必验证用户码
-    {
-        return 1;     //解码正确，返回1
-    }
-    return 0;
-}
-
-void ReadIr()
-{
-    if (INFRARED_PIN) {
-        return;
-    }
-
-    DISABLE_IR_INTERRUPT();
-    TIM2_DISABLE();
-    TIM2_SET_COUNTER(0x0000);
-    TIM2_ENABLE();
-    while (!INFRARED_PIN) { //如果是低电平就等待，给引导码低电平计时
-        if (TIM2_GET_COUNTER() > 0xEE00) {//时间过长的话退出循环
-            TIM2_DISABLE();
-            //uart_send_string("ir err1");
-            ENABLE_IR_INTERRUPT();
-            return;
-        }
-    }
-    TIM2_DISABLE();
-    LowTime = TIM2_GET_COUNTER();
-    TIM2_SET_COUNTER(0x0000);
-    TIM2_ENABLE();
-
-    while (INFRARED_PIN) { //如果是高电平就等待，给引导码高电平计时
-        if (TIM2_GET_COUNTER() > 0xEE00) {//时间过长的话退出循环
-            TIM2_DISABLE();
-
-            //uart_send_string("ir err2");
-            ENABLE_IR_INTERRUPT();
-            return;
-        }
-    };  
-    TIM2_DISABLE();
-    HighTime = TIM2_GET_COUNTER();
-
-    if (LowTime > 8500 && LowTime < 9500 && HighTime > 4000 && HighTime < 5000)
-    {
-        //如果是引导码,就开始解码,否则放弃,引导码的低电平计时
-        //低电平次数＝9000us/1=9000, 判断区间:9000－500＝8500，9000＋500＝9500.
-        //高电平次数=4500us/1=4500, 判断区间:4500 - 500 = 4000, 4500 + 500 = 5000
-        if (DeCode() == 1) // 执行遥控解码功能
-        {
-            /* Disp();//调用1602LCD显示函数 */
-            process_irkey();
-            enter_settings();
-            display_current_setting();
-
-            //uart_send_byte(IrValue[2]);
-            /* GPIO_WriteReverse(LED_PORT, LED_PIN); */
-            uart_send_hex(IrValue[2]);
-            if (IrValue[2] == 0x45) {
-                uart_send_string("AT+CWJAP=\"PHICOMM\",\"fengliang\"\r\n");
-            } else if (IrValue[2] == 0x46) {
-                uart_send_string("AT+CWJAP=\"fenghongqi\",\"fengliang\"\r\n");
-            } else if (IrValue[2] == 0x47) {
-                //获取IP
-                uart_send_string("AT+CIFSR\r\n");
-            } else {
-                uart_send_string(uart_recv_buf);
-                clear_uart_recv_buf();
-            }
-        }
-    }
-    ENABLE_IR_INTERRUPT();
+    /* EXTI_CR1 &= ~MASK_EXTI_CR1_PDIS; */
+    /* EXTI_CR1 |= 0x02 << 6; //仅下降沿触发 */
 }
 
 void IrMachine()
 {
+    //外部中断配置的是下降沿触发，如果是高电平就不是自己触发的外部中断
     if (INFRARED_PIN) {
         return;
     }
 
-    unsigned int timer_count = 0;
+    uint16_t timer_count = 0;
     TIM2_DISABLE();
     timer_count = TIM2_GET_COUNTER();
+    ++debug_ir;
+    /* if (test == 1) { */
+    /*     uart_send_string("IR:"); */
+    /*     uart_send_hex(timer_count >> 8); */
+    /*     uart_send_hex((uint8_t)timer_count); */
+    /* } */
+
     TIM2_SET_COUNTER(0x0000);
     TIM2_ENABLE();
     //引导码解析
@@ -383,17 +275,18 @@ void IrMachine()
     //1到32个下降沿是用户码和用户反码,键码和键码反码,32bit（4个字节）
     } else if (surge_count >= 1 && surge_count <= 32) { 
         if (timer_count >= 1000 && timer_count <= 1300) { //0
-            IrValue[(surge_count - 1) / 8] >>= 1;
+            /* IrValue[(surge_count - 1) / 8] >>= 1; */
+            IrValue[(surge_count - 1) >> 3] >>= 1;
             ++surge_count;
         } else if (timer_count >= 2000 && timer_count <= 2450) { //1
-            IrValue[(surge_count - 1) / 8] >>= 1;
-            IrValue[(surge_count - 1) / 8] |= 0x80;
+            IrValue[(surge_count - 1) >> 3] >>= 1;
+            IrValue[(surge_count - 1) >> 3] |= 0x80;
             ++surge_count;
         }
 
         //解析完成
         if (surge_count - 1 == 32) {
-            /* GPIO_WriteReverse(LED_PORT, LED_PIN); */
+            LED_PIN = !LED_PIN;
         }
     } else if (surge_count > 32 && !ir_repeat_flag) {
         ir_repeat_flag = 1;
