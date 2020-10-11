@@ -1,4 +1,4 @@
-#include "stm8s.h"
+#include "iostm8.h"
 #include "uart_sdcc.h"
 #include "common.sdcc.h"
 
@@ -13,12 +13,12 @@ void delay(unsigned int n)
 /*波特率=fmaster/UART_DIV，BRR2的高四位+BRR1+BRR2的第四位组成了UART_DIV*/
 void uart_init()//115200@16Mhz，因为8266默认的波特率就是115200
 {
-    UART2->CR1=0x00;//1个起始位，8个数据位，无校验位
-    UART2->CR2=0x2c;//接收中断使能，使能发送、接收
-    UART2->CR3=0x00;//1个停止位
+    UART2_CR1=0x00;//1个起始位，8个数据位，无校验位
+    UART2_CR2=0x2c;//接收中断使能，使能发送、接收
+    UART2_CR3=0x00;//1个停止位
     //设置波特率近似115200
-    UART2->BRR2=0x0B;
-    UART2->BRR1=0x08;
+    UART2_BRR2=0x0B;
+    UART2_BRR1=0x08;
 }
 
 /*******************************************************************************
@@ -29,8 +29,8 @@ void uart_init()//115200@16Mhz，因为8266默认的波特率就是115200
  *******************************************************************************/
 void uart_send_byte(unsigned char Data)
 {
-    while((UART2->SR&0x80)==0);
-    UART2->DR = Data;
+    while((UART2_SR&0x80)==0);
+    UART2_DR = Data;
 }
 
 /*******************************************************************************
@@ -77,7 +77,7 @@ void uart_send_string(unsigned char *dat)
  *******************************************************************************/
 unsigned char uart_recv_byte(void)
 {
-    while((UART2->SR&0x20)==0);
-    return ((unsigned char)UART2->DR);
+    while((UART2_SR&0x20)==0);
+    return ((unsigned char)UART2_DR);
 }
 

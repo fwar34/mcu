@@ -1,5 +1,4 @@
 #include "common.sdcc.h"
-#include "delay.sdcc.h"
 #include "delay.h"
 
 unsigned char current_setting;//当前设置项
@@ -18,7 +17,7 @@ void beep_ring_1s()
         unsigned char i = 0;
         for (;i < 100;++i) {
             delay_us(100);
-            GPIO_WriteReverse(BEEP_PORT, BEEP_PIN);
+            BEEP_PIN = !BEEP_PIN;
         }
         beep_mute();
     }
@@ -26,9 +25,23 @@ void beep_ring_1s()
 
 void common_gpio_init()
 {
-    GPIO_Init(LED_PORT, LED_PIN, GPIO_MODE_OUT_PP_HIGH_FAST);
-    GPIO_Init(BEEP_PORT, BEEP_PIN, GPIO_MODE_OUT_PP_HIGH_FAST);
-    GPIO_Init(LCD_BK_PORT, LCD_BK_PIN, GPIO_MODE_OUT_PP_HIGH_FAST);
+    //LED
+    PA_DDR |= 1 << 2;
+    PA_CR1 |= 1 << 2;
+    PA_CR2 |= 1 << 2;
+    PA_ODR |= 1 << 2;
+
+    //BEEP
+    PD_DDR_DDR4 = 1;
+    PD_CR1_C14 = 1;
+    PD_CR2_C24 = 1;
+    PD_ODR_ODR4 = 1;
+
+    //lcd light
+    PC_DDR_DDR2 = 1;
+    PC_CR1_C12 = 1;
+    PC_CR2_C22 = 1;
+    PC_ODR_ODR2 = 1;
 }
 
 void clear_uart_recv_buf()

@@ -1,4 +1,4 @@
-#include "stm8s.h"
+#include "iostm8.h"
 #include "lcd1602.sdcc.h"
 #include "ds1302.sdcc.h"
 #include "common.sdcc.h"
@@ -6,34 +6,45 @@
 extern unsigned char enter_settings_flag;//进入设置的标志
 extern unsigned short idle_count;//最后一次设置开始空闲计数
 
-#define DS1302_CLK_PORT GPIOC
-#define DS1302_CLK_PIN GPIO_PIN_3
+#define DS1302_CLK_PIN PC_ODR_ODR3
 
-#define DS1302_IO_CE_PORT GPIOD
-#define DS1302_IO_PIN GPIO_PIN_0
-#define DS1302_RST_PIN GPIO_PIN_2
+#define DS1302_RST_PIN PD_ODR_ODR2
+#define DS1302_IO_IPIN PD_IDR_IDR0
+#define DS1302_IO_OPIN PD_ODR_ODR0
 
 unsigned int new_value = 0;
 
 void ds1302_init()
 {
-    GPIO_Init(DS1302_CLK_PORT, DS1302_CLK_PIN, GPIO_MODE_OUT_PP_LOW_FAST);
-    GPIO_Init(DS1302_IO_CE_PORT, DS1302_RST_PIN, GPIO_MODE_OUT_PP_LOW_FAST);
+    //CLK
+    PC_DDR_DDR3 = 1;
+    PC_CR1_C13 = 1;
+    PC_CR2_C23 = 0;
+    PC_ODR_ODR3 = 0;
+
+    //RST
+    PD_DDR_DDR2 = 1;
+    PD_CR1_C12 = 1;
+    PD_CR2_C22 = 0;
+    PD_ODR_ODR2 = 0;
 }
 
-#define DS1302_CLK_CLR() GPIO_WriteLow(DS1302_CLK_PORT, DS1302_CLK_PIN)
-#define DS1302_CLK_SET() GPIO_WriteHigh(DS1302_CLK_PORT, DS1302_CLK_PIN)
+#define DS1302_CLK_CLR() DS1302_CLK_PIN = 0
+#define DS1302_CLK_SET() DS1302_CLK_PIN = 1
 
-#define DS1302_RST_CLR() GPIO_WriteLow(DS1302_IO_CE_PORT, DS1302_RST_PIN)
-#define DS1302_RST_SET() GPIO_WriteHigh(DS1302_IO_CE_PORT, DS1302_RST_PIN)
+#define DS1302_RST_CLR() DS1302_RST_PIN = 0
+#define DS1302_RST_SET() DS1302_RST_PIN = 1
 
-#define DS1302_IO_CLR() GPIO_WriteLow(DS1302_IO_CE_PORT, DS1302_IO_PIN)
-#define DS1302_IO_SET() GPIO_WriteHigh(DS1302_IO_CE_PORT, DS1302_IO_PIN)
+#define DS1302_IO_CLR() DS1302_IO_OPIN = 0
+#define DS1302_IO_SET() DS1302_IO_OPIN = 1
+
+#define SET_IO_PIN_WRITE() PD_DDR_DDR0 = 1; PD_CR1_C10 = 1; PD_CR2_C20 = 0; PD_ODR_ODR0 = 1
+#define SET_IO_PIN_READ() PD_DDR_DDR0 = 0; PD_CR1_C10 = 1; PD_CR2_C20 = 0
 
 void ds1302_write_byte(unsigned char dat)
 {
     unsigned char i;
-    GPIO_Init(DS1302_IO_CE_PORT, DS1302_IO_PIN, GPIO_MODE_OUT_PP_HIGH_FAST);
+    SET_IO_PIN_WRITE();
     for (i = 0;i < 8;i++) {
         DS1302_CLK_CLR();
         if (dat & 0x01) {
@@ -49,11 +60,11 @@ void ds1302_write_byte(unsigned char dat)
 unsigned char ds1302_read_byte()
 {
     unsigned char i,ret = 0;
-    GPIO_Init(DS1302_IO_CE_PORT, DS1302_IO_PIN, GPIO_MODE_IN_PU_NO_IT);
+    SET_IO_PIN_READ();
     for (i = 0;i < 8;i++) {
         DS1302_CLK_CLR();
         ret >>= 1;
-        if (GPIO_ReadInputPin(DS1302_IO_CE_PORT, DS1302_IO_PIN)) {
+        if (DS1302_IO_IPIN) {
             ret |= 0x80;
         }
         DS1302_CLK_SET();
@@ -153,7 +164,7 @@ char process_time_settings(unsigned char row, unsigned char column)
     if (row == 1 && column == 1) {//key1 beep开关
         beep_setting = !beep_setting;
     } else if (row == 2 && column == 1) {//key3 lcd背光开关
-        GPIO_WriteReverse(LCD_BK_PORT, LCD_BK_PIN);
+        LCD_BK_PIN = !LCD_BK_PIN;
     } else {
         return -1;//返回非0表示没有按键按下
     }

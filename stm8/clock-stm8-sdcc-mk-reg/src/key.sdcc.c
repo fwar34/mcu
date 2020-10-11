@@ -1,26 +1,28 @@
-#include "stm8s.h"
+#include "iostm8.h"
 #include "key.sdcc.h"
 #include "ds1302.sdcc.h"
-#include "delay.sdcc.h"
 
-#define KEY1_PORT GPIOB
-#define KEY1_PIN GPIO_PIN_2
-#define KEY2_PORT GPIOB
-#define KEY2_PIN GPIO_PIN_3
-#define KEY3_PORT GPIOD
-#define KEY3_PIN GPIO_PIN_7
-#define KEY4_PORT GPIOA
-#define KEY4_PIN GPIO_PIN_1
+#define KEY1_PIN PB_IDR_IDR2
+#define KEY2_PIN PB_IDR_IDR3
+#define KEY3_PIN PD_IDR_IDR7
+#define KEY4_PIN PA_IDR_IDR1
 
 unsigned char row = 0;
 unsigned char column = 0;
 
 void key_init()
 {
-    GPIO_Init(KEY1_PORT, KEY1_PIN, GPIO_MODE_IN_PU_IT);
-    GPIO_Init(KEY2_PORT, KEY2_PIN, GPIO_MODE_IN_PU_IT);
-    GPIO_Init(KEY3_PORT, KEY3_PIN, GPIO_MODE_IN_PU_IT);
-    GPIO_Init(KEY4_PORT, KEY4_PIN, GPIO_MODE_IN_PU_IT);
+    PB_DDR &= ~(MASK_PB_DDR_DDR2 | MASK_PB_DDR_DDR3);
+    PB_CR1 |= MASK_PB_CR1_C12 | MASK_PB_CR1_C13;
+    PB_CR2 |= MASK_PB_CR2_C22 | MASK_PB_CR2_C23;
+
+    PD_DDR_DDR7 = 0;
+    PD_CR1_C17 = 1;
+    PD_CR2_C27 = 1;
+
+    PA_DDR_DDR1 = 0;
+    PA_CR1_C11 = 1;
+    PA_CR2_C21 = 1;
 }
 
 void key_scan()

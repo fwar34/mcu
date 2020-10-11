@@ -1,13 +1,17 @@
 /* https://blog.csdn.net/qq_42012736/article/details/80555951 */
-#include "stm8s.h"
+#include "iostm8.h"
 #include "lcd1602.sdcc.h"
-#include "delay.sdcc.h"
 #include "common.sdcc.h"
 #include "ds1302.sdcc.h"
 #include "uart_sdcc.h"
 
-#define INFRARED_PORT GPIOD
-#define INFRARED_PIN GPIO_PIN_3
+#define INFRARED_PIN PD_IDR_IDR3
+#define TIM2_SET_COUNTER(count) TIM2_ARRH = (count) >> 8; TIM2_ARRL = (count) & 0x0F
+#define TIM2_GET_COUNTER() (TIM2_ARRH << 8 | TIM2_ARRL)
+#define TIM2_ENABLE() TIM2_CR1_CEN = 1
+#define TIM2_DISABLE() TIM2_CR1_CEN = 0
+#define DISABLE_IR_INTERRUPT() PD_CR2_C23 = 0
+#define ENABLE_IR_INTERRUPT() PD_CR2_C23 = 1
 
 unsigned char IrValue[4];//用于存储数据码，对应前两个是地址位，后两个是数据位和校验位
 unsigned char ch_count = 0;//两次ch键进入设置的时间计数
@@ -196,7 +200,7 @@ unsigned char process_irkey()
     if (IrValue[2] == 0x46) {//CH 双击进入设置，单击确认（设置的时候暂停ds1302）
         process_ch();
     } else if (IrValue[2] == 0x19) {//100+ 背光开关
-        GPIO_WriteReverse(LCD_BK_PORT, LCD_BK_PIN);
+        LCD_BK_PIN = !LCD_BK_PIN;
     } else if (IrValue[2] == 0x0D) {//200+ beep开关
         beep_setting = !beep_setting;
     } else if (enter_settings_flag) {
@@ -234,8 +238,11 @@ unsigned char process_irkey()
 
 void IrInit()
 {
-    GPIO_Init(INFRARED_PORT, INFRARED_PIN, GPIO_MODE_IN_FL_IT); //浮动输入带中断，外部有上拉电阻
-    EXTI_SetExtIntSensitivity(EXTI_PORT_GPIOD, EXTI_SENSITIVITY_FALL_ONLY); //下降沿出发
+    PD_DDR_DDR3 = 0;
+    PD_CR1_C13 = 0; //浮动输入
+    PD_CR2_C23 = 1; //带中断
+    EXTI_CR1_PDIS &= ~MASK_EXTI_CR1_PDIS;
+    EXTI_CR1_PDIS |= 0x02 << 6; //仅下降沿触发
 }
 
 unsigned char DeCode(void)
@@ -247,30 +254,30 @@ unsigned char DeCode(void)
         for (j = 0; j < 8; j++)  //每个码有8位数字
         {
             temp = temp >> 1;  //temp中的各数据位右移一位，因为先读出的是高位数据
-            TIM2_SetCounter(0x0000);
-            TIM2_Cmd(ENABLE);
-            while (!GPIO_ReadInputPin(INFRARED_PORT, INFRARED_PIN)) { //如果是低电平就等待 //低电平计时
-                if (TIM2_GetCounter() > 0xEE00) {//时间过长的话退出循环
-                    TIM2_Cmd(DISABLE);
+            TIM2_SET_COUNTER(0x0000);
+            TIM2_ENABLE();
+            while (!INFRARED_PIN) { //如果是低电平就等待 //低电平计时
+                if (TIM2_GET_COUNTER() > 0xEE00) {//时间过长的话退出循环
+                    TIM2_DISABLE();
                     //uart_send_string("ir err3");
                     return 0;
                 }
             }
-            TIM2_Cmd(DISABLE);
-            LowTime = TIM2_GetCounter();
-            TIM2_SetCounter(0x0000);
-            TIM2_Cmd(ENABLE);
+            TIM2_DISABLE();
+            LowTime = TIM2_GET_COUNTER();
+            TIM2_SET_COUNTER(0x0000);
+            TIM2_ENABLE();
 
-            while (GPIO_ReadInputPin(INFRARED_PORT, INFRARED_PIN))   //如果是高电平就等待
+            while (INFRARED_PIN)   //如果是高电平就等待
             {
-                if (TIM2_GetCounter() > 0xEE00) {//时间过长的话退出循环
-                    TIM2_Cmd(DISABLE);
+                if (TIM2_GET_COUNTER() > 0xEE00) {//时间过长的话退出循环
+                    TIM2_DISABLE();
                     //uart_send_string("ir err4");
                     return 0;
                 }
             };
-            TIM2_Cmd(DISABLE);
-            HighTime = TIM2_GetCounter();
+            TIM2_DISABLE();
+            HighTime = TIM2_GET_COUNTER();
 
             if (LowTime < 420 || LowTime > 700) //560 - 140, 560 + 140
                 return 0;        //如果低电平长度不在合理范围，则认为出错，停止解码
@@ -291,39 +298,38 @@ unsigned char DeCode(void)
 
 void ReadIr()
 {
-    if (GPIO_ReadInputPin(INFRARED_PORT, INFRARED_PIN)) {
+    if (INFRARED_PIN) {
         return;
     }
 
-    GPIOD->CR2 &= ~(1 << 3);
-    TIM2_Cmd(DISABLE);
-    TIM2_SetCounter(0x0000);
-    TIM2_Cmd(ENABLE);
-    while (!GPIO_ReadInputPin(INFRARED_PORT, INFRARED_PIN)) { //如果是低电平就等待，给引导码低电平计时
-        if (TIM2_GetCounter() > 0xEE00) {//时间过长的话退出循环
-            TIM2_Cmd(DISABLE);
+    DISABLE_IR_INTERRUPT();
+    TIM2_DISABLE();
+    TIM2_SET_COUNTER(0x0000);
+    TIM2_ENABLE();
+    while (!INFRARED_PIN) { //如果是低电平就等待，给引导码低电平计时
+        if (TIM2_GET_COUNTER() > 0xEE00) {//时间过长的话退出循环
+            TIM2_DISABLE();
             //uart_send_string("ir err1");
-            GPIOD->CR2 |= 1 << 3;
+            ENABLE_IR_INTERRUPT();
             return;
         }
     }
-    TIM2_Cmd(DISABLE);
-    LowTime = TIM2_GetCounter();
-    TIM2_SetCounter(0x0000);
-    TIM2_Cmd(ENABLE);
+    TIM2_DISABLE();
+    LowTime = TIM2_GET_COUNTER();
+    TIM2_SET_COUNTER(0x0000);
+    TIM2_ENABLE();
 
-
-    while (GPIO_ReadInputPin(INFRARED_PORT, INFRARED_PIN)) { //如果是高电平就等待，给引导码高电平计时
-        if (TIM2_GetCounter() > 0xEE00) {//时间过长的话退出循环
-            TIM2_Cmd(DISABLE);
+    while (INFRARED_PIN) { //如果是高电平就等待，给引导码高电平计时
+        if (TIM2_GET_COUNTER() > 0xEE00) {//时间过长的话退出循环
+            TIM2_DISABLE();
 
             //uart_send_string("ir err2");
-            GPIOD->CR2 |= 1 << 3;
+            ENABLE_IR_INTERRUPT();
             return;
         }
     };  
-    TIM2_Cmd(DISABLE);
-    HighTime = TIM2_GetCounter();
+    TIM2_DISABLE();
+    HighTime = TIM2_GET_COUNTER();
 
     if (LowTime > 8500 && LowTime < 9500 && HighTime > 4000 && HighTime < 5000)
     {
@@ -353,21 +359,20 @@ void ReadIr()
             }
         }
     }
-    GPIOD->CR2 |= 1 << 3;
+    ENABLE_IR_INTERRUPT();
 }
 
 void IrMachine()
 {
-    if (GPIOD->IDR & (1 << 3)) {
+    if (INFRARED_PIN) {
         return;
     }
 
     unsigned int timer_count = 0;
-    TIM2->CR1 &= ~TIM2_CR1_CEN;
-    timer_count = TIM2->CNTRH << 8 | TIM2->CNTRL;
-    TIM2->CNTRH = 0;
-    TIM2->CNTRL = 0;
-    TIM2->CR1 |= TIM2_CR1_CEN;
+    TIM2_DISABLE();
+    timer_count = TIM2_GET_COUNTER();
+    TIM2_SET_COUNTER(0x0000);
+    TIM2_ENABLE();
     //引导码解析
     if (timer_count >= 13300 && timer_count <= 13700  && !get_header) {
         ir_repeat_count = 0; //IR重复码清零
@@ -400,6 +405,6 @@ void IrMachine()
             ++ir_repeat_count;
 
         if (ir_repeat_count > 3)
-            GPIO_WriteReverse(LED_PORT, LED_PIN);
+            LED_PIN = !LED_PIN;
     }
 }

@@ -3084,6 +3084,214 @@ __IO_REG8    (UART1_PSCR,  0x523A, __READ_WRITE);
 #define MASK_UART1_CR5_NACK      0x10
 #define MASK_UART1_CR5_SCEN      0x20
 
+/*-------------------------------------------------------------------------
+ *      UART2 register definitions
+ *-----------------------------------------------------------------------*/
+/* UART2 status register */
+#ifdef __SDCC
+typedef struct
+{
+    unsigned char PE          : 1;
+    unsigned char FE          : 1;
+    unsigned char NF          : 1;
+    unsigned char OR_LHE      : 1;
+    unsigned char IDLE        : 1;
+    unsigned char RXNE        : 1;
+    unsigned char TC          : 1;
+    unsigned char TXE         : 1;
+} __BITS_UART2_SR;
+#endif
+__IO_REG8_BIT(UART2_SR,    0x5240, __READ_WRITE, __BITS_UART2_SR);
+
+/* UART2 data register */
+__IO_REG8    (UART2_DR,    0x5241, __READ_WRITE);
+/* UART2 baud rate register 1 */
+__IO_REG8    (UART2_BRR1,  0x5242, __READ_WRITE);
+/* UART2 baud rate register 2 */
+__IO_REG8    (UART2_BRR2,  0x5243, __READ_WRITE);
+/* UART2 control register 1 */
+#ifdef __SDCC
+typedef struct
+{
+    unsigned char PIEN        : 1;
+    unsigned char PS          : 1;
+    unsigned char PCEN        : 1;
+    unsigned char WAKE        : 1;
+    unsigned char M           : 1;
+    unsigned char UART0       : 1;
+    unsigned char T8          : 1;
+    unsigned char R8          : 1;
+} __BITS_UART2_CR1;
+#endif
+__IO_REG8_BIT(UART2_CR1,   0x5244, __READ_WRITE, __BITS_UART2_CR1);
+
+/* UART2 control register 2 */
+#ifdef __SDCC
+typedef struct
+{
+    unsigned char SBK         : 1;
+    unsigned char RWU         : 1;
+    unsigned char REN         : 1;
+    unsigned char TEN         : 1;
+    unsigned char ILIEN       : 1;
+    unsigned char RIEN        : 1;
+    unsigned char TCIEN       : 1;
+    unsigned char TIEN        : 1;
+} __BITS_UART2_CR2;
+#endif
+__IO_REG8_BIT(UART2_CR2,   0x5245, __READ_WRITE, __BITS_UART2_CR2);
+
+/* UART2 control register 3 */
+#ifdef __SDCC
+typedef struct
+{
+    unsigned char LBCL        : 1;
+    unsigned char CPHA        : 1;
+    unsigned char CPOL        : 1;
+    unsigned char CKEN        : 1;
+    unsigned char STOP        : 2;
+    unsigned char             : 1;
+    unsigned char LINEN       : 1;
+} __BITS_UART2_CR3;
+#endif
+__IO_REG8_BIT(UART2_CR3,   0x5246, __READ_WRITE, __BITS_UART2_CR3);
+
+/* UART2 control register 4 */
+#ifdef __SDCC
+typedef struct
+{
+    unsigned char ADD         : 4;
+    unsigned char LBDF        : 1;
+    unsigned char LBDL        : 1;
+    unsigned char LBDIEN      : 1;
+} __BITS_UART2_CR4;
+#endif
+__IO_REG8_BIT(UART2_CR4,   0x5247, __READ_WRITE, __BITS_UART2_CR4);
+
+/* UART2 control register 6 */
+#ifdef __SDCC
+typedef struct
+{
+    unsigned char LSF         : 1;
+    unsigned char LHDF        : 1;
+    unsigned char LHDIEN      : 1;
+    unsigned char             : 1;
+    unsigned char LASE        : 1;
+    unsigned char LSLV        : 1;
+    unsigned char             : 1;
+    unsigned char LDUM        : 1;
+} __BITS_UART2_CR6;
+#endif
+__IO_REG8_BIT(UART2_CR6,   0x5249, __READ_WRITE, __BITS_UART2_CR6);
+
+/* UART2 guard time register */
+__IO_REG8    (UART2_GTR,   0x524A, __READ_WRITE);
+/* UART2 prescaler register */
+__IO_REG8    (UART2_PSCR,  0x524B, __READ_WRITE);
+
+/*-------------------------------------------------------------------------
+ *      UART2 bit fields
+ *-----------------------------------------------------------------------*/
+#ifdef __SDCC
+
+#define UART2_SR_PE              UART2_SR_bit.PE
+#define UART2_SR_FE              UART2_SR_bit.FE
+#define UART2_SR_NF              UART2_SR_bit.NF
+#define UART2_SR_OR_LHE          UART2_SR_bit.OR_LHE
+#define UART2_SR_IDLE            UART2_SR_bit.IDLE
+#define UART2_SR_RXNE            UART2_SR_bit.RXNE
+#define UART2_SR_TC              UART2_SR_bit.TC
+#define UART2_SR_TXE             UART2_SR_bit.TXE
+
+#define UART2_CR1_PIEN           UART2_CR1_bit.PIEN
+#define UART2_CR1_PS             UART2_CR1_bit.PS
+#define UART2_CR1_PCEN           UART2_CR1_bit.PCEN
+#define UART2_CR1_WAKE           UART2_CR1_bit.WAKE
+#define UART2_CR1_M              UART2_CR1_bit.M
+#define UART2_CR1_UART0          UART2_CR1_bit.UART0
+#define UART2_CR1_T8             UART2_CR1_bit.T8
+#define UART2_CR1_R8             UART2_CR1_bit.R8
+
+#define UART2_CR2_SBK            UART2_CR2_bit.SBK
+#define UART2_CR2_RWU            UART2_CR2_bit.RWU
+#define UART2_CR2_REN            UART2_CR2_bit.REN
+#define UART2_CR2_TEN            UART2_CR2_bit.TEN
+#define UART2_CR2_ILIEN          UART2_CR2_bit.ILIEN
+#define UART2_CR2_RIEN           UART2_CR2_bit.RIEN
+#define UART2_CR2_TCIEN          UART2_CR2_bit.TCIEN
+#define UART2_CR2_TIEN           UART2_CR2_bit.TIEN
+
+#define UART2_CR3_LBCL           UART2_CR3_bit.LBCL
+#define UART2_CR3_CPHA           UART2_CR3_bit.CPHA
+#define UART2_CR3_CPOL           UART2_CR3_bit.CPOL
+#define UART2_CR3_CKEN           UART2_CR3_bit.CKEN
+#define UART2_CR3_STOP           UART2_CR3_bit.STOP
+#define UART2_CR3_LINEN          UART2_CR3_bit.LINEN
+
+#define UART2_CR4_ADD            UART2_CR4_bit.ADD
+#define UART2_CR4_LBDF           UART2_CR4_bit.LBDF
+#define UART2_CR4_LBDL           UART2_CR4_bit.LBDL
+#define UART2_CR4_LBDIEN         UART2_CR4_bit.LBDIEN
+
+#define UART2_CR6_LSF            UART2_CR6_bit.LSF
+#define UART2_CR6_LHDF           UART2_CR6_bit.LHDF
+#define UART2_CR6_LHDIEN         UART2_CR6_bit.LHDIEN
+#define UART2_CR6_LASE           UART2_CR6_bit.LASE
+#define UART2_CR6_LSLV           UART2_CR6_bit.LSLV
+#define UART2_CR6_LDUM           UART2_CR6_bit.LDUM
+
+#endif
+
+/*-------------------------------------------------------------------------
+ *      UART2 bit masks
+ *-----------------------------------------------------------------------*/
+#define MASK_UART2_SR_PE         0x01
+#define MASK_UART2_SR_FE         0x02
+#define MASK_UART2_SR_NF         0x04
+#define MASK_UART2_SR_OR_LHE     0x08
+#define MASK_UART2_SR_IDLE       0x10
+#define MASK_UART2_SR_RXNE       0x20
+#define MASK_UART2_SR_TC         0x40
+#define MASK_UART2_SR_TXE        0x80
+
+#define MASK_UART2_CR1_PIEN      0x01
+#define MASK_UART2_CR1_PS        0x02
+#define MASK_UART2_CR1_PCEN      0x04
+#define MASK_UART2_CR1_WAKE      0x08
+#define MASK_UART2_CR1_M         0x10
+#define MASK_UART2_CR1_UART0     0x20
+#define MASK_UART2_CR1_T8        0x40
+#define MASK_UART2_CR1_R8        0x80
+
+#define MASK_UART2_CR2_SBK       0x01
+#define MASK_UART2_CR2_RWU       0x02
+#define MASK_UART2_CR2_REN       0x04
+#define MASK_UART2_CR2_TEN       0x08
+#define MASK_UART2_CR2_ILIEN     0x10
+#define MASK_UART2_CR2_RIEN      0x20
+#define MASK_UART2_CR2_TCIEN     0x40
+#define MASK_UART2_CR2_TIEN      0x80
+
+#define MASK_UART2_CR3_LBCL      0x01
+#define MASK_UART2_CR3_CPHA      0x02
+#define MASK_UART2_CR3_CPOL      0x04
+#define MASK_UART2_CR3_CKEN      0x08
+#define MASK_UART2_CR3_STOP      0x30
+#define MASK_UART2_CR3_LINEN     0x80
+
+#define MASK_UART2_CR4_ADD       0x0F
+#define MASK_UART2_CR4_LBDF      0x10
+#define MASK_UART2_CR4_LBDL      0x20
+#define MASK_UART2_CR4_LBDIEN    0x40
+
+#define MASK_UART2_CR6_LSF       0x01
+#define MASK_UART2_CR6_LHDF      0x02
+#define MASK_UART2_CR6_LHDIEN    0x04
+#define MASK_UART2_CR6_LASE      0x10
+#define MASK_UART2_CR6_LSLV      0x20
+#define MASK_UART2_CR6_LDUM      0x80
+
+
 
 /*-------------------------------------------------------------------------
  *      UART3 register definitions
@@ -4988,6 +5196,38 @@ __IO_REG8    (DM_ENFCTR,   0x7F9A, __READ_WRITE);
 /* #ifdef __SDCC */
 /* #pragma language=restore */
 /* #endif */
+
+#if defined(__SDCC)                    /* SDCC patch: standard inline asm macros */
+ #define enableInterrupts()    __asm__("rim")    /* enable interrupts */
+ #define disableInterrupts()   __asm__("sim")    /* disable interrupts */
+ #define rim()                 __asm__("rim")    /* enable interrupts */
+ #define sim()                 __asm__("sim")    /* disable interrupts */
+ #define nop()                 __asm__("nop")    /* no operation */
+ #define trap()                __asm__("trap")   /* trap (soft IT) */
+ #define wfi()                 __asm__("wfi")    /* wait for interrupt */
+ #define wfe()                 __asm__("wfe")    /* wait for event */
+ #define halt()                __asm__("halt")   /* halt CPU */
+#endif    /* __SDCC */
+
+/*!< Signed integer types  */
+typedef   signed char     int8_t;
+typedef   signed short    int16_t;
+typedef   signed long     int32_t;
+
+/*!< Unsigned integer types  */
+typedef unsigned char     uint8_t;
+typedef unsigned short    uint16_t;
+typedef unsigned long     uint32_t;
+
+#define U8_MAX     (255)
+#define S8_MAX     (127)
+#define S8_MIN     (-128)
+#define U16_MAX    (65535u)
+#define S16_MAX    (32767)
+#define S16_MIN    (-32768)
+#define U32_MAX    (4294967295uL)
+#define S32_MAX    (2147483647)
+#define S32_MIN    (-2147483648uL)
 
 #endif    /* __IOSTM8S208MB_H__ */
 

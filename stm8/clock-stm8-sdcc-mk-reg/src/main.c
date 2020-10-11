@@ -1,37 +1,9 @@
-/**
-******************************************************************************
-* @file    GPIO_Toggle\main.c
-* @author  MCD Application Team
-* @version V2.0.4
-* @date    26-April-2018
-* @brief   This file contains the main function for GPIO Toggle example.
-******************************************************************************
-* @attention
-*
-* <h2><center>&copy; COPYRIGHT 2014 STMicroelectronics</center></h2>
-*
-* Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
-* You may not use this file except in compliance with the License.
-* You may obtain a copy of the License at:
-*
-*        http://www.st.com/software_license_agreement_liberty_v2
-*
-* Unless required by applicable law or agreed to in writing, software 
-* distributed under the License is distributed on an "AS IS" BASIS, 
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*
-******************************************************************************
-*/ 
-
 /* Includes ------------------------------------------------------------------*/
-#include "stm8s.h"
-
+#include "iostm8.h"
+#include "key.sdcc.h"
 #include "ds1302.sdcc.h"
 #include "lcd1602.sdcc.h"
 #include "dht11.sdcc.h"
-#include "delay.sdcc.h"
 #include "infrared.sdcc.h"
 #include "common.sdcc.h"
 #include "uart_sdcc.h"
@@ -39,6 +11,56 @@
 
 extern unsigned int new_value;
 
+extern unsigned char ch_count;//两次ch键进入设置的时间计数
+extern unsigned char first_ch_flag;//表示第一次按ch的标志
+extern unsigned char dht11_data[5];//湿度十位，湿度个位，温度十位，温度个位，是否显示的标志
+extern unsigned short idle_count;//最后一次设置开始空闲计数
+
+static unsigned int count = 40;//dht11更新的计数
+
+void exti_isr() __interrupt(6)
+{
+    /* ReadIr(); */
+    IrMachine();
+    key_scan();
+}
+
+void uart2_isr() __interrupt(21)
+{
+    /* UART2_ClearITPendingBit(UART2_IT_RXNE); */
+    uart_recv_buf[uart_recv_buf_index++] = uart_recv_byte();
+    if (uart_recv_buf_index >= 255)
+        uart_recv_buf_index = 0;
+}
+
+void tim4_isr() __interrupt(23)
+{
+    TIM4_SR_UIF = 0;
+        
+    if (ch_count > 0) {//第一次点击ch按钮会把ch_count设置成1
+        ++ch_count;
+        if (ch_count > 20) {//1s过后没有点击第二次ch按钮的话重置字段
+            ch_count = 0;
+        }
+    }
+
+    if (idle_count > 0) {//每一次设置会把idle_count设置成1,所以大于0才判断是否是设置空闲超时
+        ++idle_count;
+        if (idle_count > 20 * 10) {//设置空闲了10秒之后退出
+            idle_count = 0;
+            exit_settings();
+        }
+    }
+
+    if (++count >= 500 * 2) {//1000ms * 2 -> 2s更新一次dht11
+        /* lcd_light_back = !lcd_light_back; */
+        count = 0;//reset counter
+        dht11_read_data();
+        display_dht11();
+    }
+
+    process_key();//处理物理按键
+}
 
 /**
  * @brief Delay
@@ -57,12 +79,12 @@ void Delay(uint32_t nCount)
 void Timer2Init(void)        //timer2@1MHz, dht11和ir在使用 每次tick为1us
 {
     TIM2_PSCR = 0x04;  //2^4=16分频
-    TIM2_IER &= ~TIM2_IT_UPDATE;
-
-    TIM2_TimeBaseInit(TIM2_PRESCALER_16, 0xFFFF); //16分频
-    TIM2_ITConfig(TIM2_IT_UPDATE, DISABLE);
-    TIM2_GenerateEvent(TIM2_EVENTSOURCE_UPDATE); //软件产生更新事件，可以立即更新预分频寄存器
-    TIM2_Cmd(DISABLE);
+    TIM2_ARRH = 0xFF;
+    TIM2_ARRL = 0xFF;
+    TIM2_IER_UIE = 0;
+    /* TIM2_IER &= ~MASK_TIM2_IER_UIE; */
+    TIM2_EGR_UG = 1; //软件产生更新事件，可以立即更新预分频寄存器
+    TIM2_CR1_CEN = 0;
 }
 
 void Timer3Init(void)        //0.5微秒@2MHz
@@ -71,13 +93,13 @@ void Timer3Init(void)        //0.5微秒@2MHz
 
 void Timer4Init(void)        //2毫秒@2MHz
 {
-    TIM4_TimeBaseInit(TIM4_PRESCALER_128, 249);
-    TIM2_GenerateEvent(TIM2_EVENTSOURCE_UPDATE); //软件产生更新事件，可以立即更新预分频寄存器，
-                                                 //与TIM4_PrescalerConfig(TIM4_PRESCALER_128, TIM4_PSCRELOADMODE_IMMEDIATE)一个作用
-    TIM4_ARRPreloadConfig(ENABLE);
-    TIM4_ClearFlag(TIM4_FLAG_UPDATE);
-    TIM4_ITConfig(TIM4_IT_UPDATE, ENABLE);
-    TIM4_Cmd(ENABLE);
+    TIM4_PSCR = 0x07; //128分频
+    TIM4_ARR = 249;
+    TIM4_EGR_UG = 1;//软件产生更新事件，可以立即更新预分频寄存器
+    TIM4_CR1_ARPE = 1;
+    TIM4_SR_UIF = 0;
+    TIM4_IER_UIE = 1;
+    TIM4_CR1_CEN = 1;
 }
 
 /**
@@ -115,7 +137,7 @@ void display_idle_count()
  */
 void main(void)
 {
-    CLK_HSIPrescalerConfig(CLK_PRESCALER_HSIDIV1);//HSI 不分频，主时钟 16M
+    CLK_CKDIVR = 0x00;//HSI 不分频，主时钟 16M
     delay_init(16);
     disableInterrupts();
 
@@ -152,36 +174,6 @@ void main(void)
         display(&current_time);
     }
 }
-
-
-#ifdef USE_FULL_ASSERT
-
-/**
- * @brief  Reports the name of the source file and the source line number
- *   where the assert_param error has occurred.
- * @param file: pointer to the source file name
- * @param line: assert_param error line source number
- * @retval None
- */
-void assert_failed(uint8_t* file, uint32_t line)
-{ 
-    /* User can add his own implementation to report the file name and line number,
-       ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
-
-    //remove unuse warning
-    (void)file; 
-    (void)line;
-
-    /* Infinite loop */
-    while (1)
-    {
-    }
-}
-#endif
-
-/**
- * @}
- */
 
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
