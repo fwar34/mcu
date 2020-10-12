@@ -1,0 +1,386 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ANSI-C Compiler
+                                      3 ; Version 4.0.0 #11528 (Linux)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module OSAL_Memory
+                                      6 	.optsdcc -mstm8
+                                      7 	
+                                      8 ;--------------------------------------------------------
+                                      9 ; Public variables in this module
+                                     10 ;--------------------------------------------------------
+                                     11 	.globl _osal_mem_init
+                                     12 	.globl _osal_mem_kick
+                                     13 	.globl _osal_mem_alloc
+                                     14 	.globl _osal_mem_free
+                                     15 ;--------------------------------------------------------
+                                     16 ; ram data
+                                     17 ;--------------------------------------------------------
+                                     18 	.area DATA
+      000000                         19 _theHeap:
+      000000                         20 	.ds 1024
+      000400                         21 _ff1:
+      000400                         22 	.ds 2
+      000402                         23 _osalMemStat:
+      000402                         24 	.ds 1
+                                     25 ;--------------------------------------------------------
+                                     26 ; ram data
+                                     27 ;--------------------------------------------------------
+                                     28 	.area INITIALIZED
+                                     29 ;--------------------------------------------------------
+                                     30 ; absolute external ram data
+                                     31 ;--------------------------------------------------------
+                                     32 	.area DABS (ABS)
+                                     33 
+                                     34 ; default segment ordering for linker
+                                     35 	.area HOME
+                                     36 	.area GSINIT
+                                     37 	.area GSFINAL
+                                     38 	.area CONST
+                                     39 	.area INITIALIZER
+                                     40 	.area CODE
+                                     41 
+                                     42 ;--------------------------------------------------------
+                                     43 ; global & static initialisations
+                                     44 ;--------------------------------------------------------
+                                     45 	.area HOME
+                                     46 	.area GSINIT
+                                     47 	.area GSFINAL
+                                     48 	.area GSINIT
+                                     49 ;--------------------------------------------------------
+                                     50 ; Home
+                                     51 ;--------------------------------------------------------
+                                     52 	.area HOME
+                                     53 	.area HOME
+                                     54 ;--------------------------------------------------------
+                                     55 ; code
+                                     56 ;--------------------------------------------------------
+                                     57 	.area CODE
+                                     58 ;	./src/OSAL_Memory.c: 191: void osal_mem_init(void)
+                                     59 ;	-----------------------------------------
+                                     60 ;	 function osal_mem_init
+                                     61 ;	-----------------------------------------
+      000000                         62 _osal_mem_init:
+                                     63 ;	./src/OSAL_Memory.c: 202: theHeap[OSALMEM_LASTBLK_IDX].val = 0;
+      000000 AEr03rFE         [ 2]   64 	ldw	x, #(_theHeap + 0)+1022
+      000003 6F 01            [ 1]   65 	clr	(0x1, x)
+      000005 7F               [ 1]   66 	clr	(x)
+                                     67 ;	./src/OSAL_Memory.c: 205: ff1 = theHeap;
+      000006 AEr00r00         [ 2]   68 	ldw	x, #(_theHeap + 0)
+                                     69 ;	./src/OSAL_Memory.c: 206: ff1->val = OSALMEM_SMALLBLK_BUCKET;                   // Set 'len' & clear 'inUse' field.
+      000009 CFu04u00         [ 2]   70 	ldw	_ff1+0, x
+      00000C 90 AE 02 48      [ 2]   71 	ldw	y, #0x0248
+      000010 FF               [ 2]   72 	ldw	(x), y
+                                     73 ;	./src/OSAL_Memory.c: 209: theHeap[OSALMEM_SMALLBLK_HDRCNT].val = (OSALMEM_HDRSZ | OSALMEM_IN_USE);
+      000011 AEr02r48         [ 2]   74 	ldw	x, #(_theHeap + 0)+584
+      000014 90 AE 80 02      [ 2]   75 	ldw	y, #0x8002
+      000018 FF               [ 2]   76 	ldw	(x), y
+                                     77 ;	./src/OSAL_Memory.c: 212: theHeap[OSALMEM_BIGBLK_IDX].val = OSALMEM_BIGBLK_SZ;  // Set 'len' & clear 'inUse' field.
+      000019 AEr02r4A         [ 2]   78 	ldw	x, #(_theHeap + 0)+586
+      00001C 90 AE 01 B4      [ 2]   79 	ldw	y, #0x01b4
+      000020 FF               [ 2]   80 	ldw	(x), y
+                                     81 ;	./src/OSAL_Memory.c: 220: }
+      000021 81               [ 4]   82 	ret
+                                     83 ;	./src/OSAL_Memory.c: 240: void osal_mem_kick(void)
+                                     84 ;	-----------------------------------------
+                                     85 ;	 function osal_mem_kick
+                                     86 ;	-----------------------------------------
+      000022                         87 _osal_mem_kick:
+                                     88 ;	./src/OSAL_Memory.c: 243: osalMemHdr_t *tmp = osal_mem_alloc(1);
+      000022 4B 01            [ 1]   89 	push	#0x01
+      000024 4B 00            [ 1]   90 	push	#0x00
+      000026 CDr00r47         [ 4]   91 	call	_osal_mem_alloc
+      000029 5B 02            [ 2]   92 	addw	sp, #2
+                                     93 ;	./src/OSAL_Memory.c: 245: HAL_ASSERT((tmp != NULL));
+      00002B 5D               [ 2]   94 	tnzw	x
+      00002C 26 02            [ 1]   95 	jrne	00107$
+      00002E                         96 00102$:
+      00002E 20 FE            [ 2]   97 	jra	00102$
+      000030                         98 00107$:
+                                     99 ;	./src/OSAL_Memory.c: 246: HAL_ENTER_CRITICAL_SECTION(intState);  // Hold off interrupts.
+      000030 9B               [ 1]  100 	sim
+      000031 9D               [ 1]  101 	nop
+      000032 9D               [ 1]  102 	nop
+                                    103 ;	./src/OSAL_Memory.c: 252: ff1 = tmp - 1;       // Set 'ff1' to point to the first available memory after the LL block.
+      000033 90 93            [ 1]  104 	ldw	y, x
+      000035 72 A2 00 02      [ 2]  105 	subw	y, #0x0002
+      000039 90 CFu04u00      [ 2]  106 	ldw	_ff1+0, y
+                                    107 ;	./src/OSAL_Memory.c: 253: osal_mem_free(tmp);
+      00003D 89               [ 2]  108 	pushw	x
+      00003E CDr01r5D         [ 4]  109 	call	_osal_mem_free
+      000041 85               [ 2]  110 	popw	x
+                                    111 ;	./src/OSAL_Memory.c: 254: osalMemStat = 0x01;  // Set 'osalMemStat' after the free because it enables memory profiling.
+      000042 35 01u04u02      [ 1]  112 	mov	_osalMemStat+0, #0x01
+                                    113 ;	./src/OSAL_Memory.c: 256: HAL_EXIT_CRITICAL_SECTION(intState);  // Re-enable interrupts.
+                                    114 ;	./src/OSAL_Memory.c: 257: }
+      000046 81               [ 4]  115 	ret
+                                    116 ;	./src/OSAL_Memory.c: 277: void *osal_mem_alloc( uint16 size )
+                                    117 ;	-----------------------------------------
+                                    118 ;	 function osal_mem_alloc
+                                    119 ;	-----------------------------------------
+      000047                        120 _osal_mem_alloc:
+      000047 52 09            [ 2]  121 	sub	sp, #9
+                                    122 ;	./src/OSAL_Memory.c: 280: osalMemHdr_t *prev = NULL;
+      000049 5F               [ 1]  123 	clrw	x
+      00004A 1F 01            [ 2]  124 	ldw	(0x01, sp), x
+                                    125 ;	./src/OSAL_Memory.c: 283: uint8 coal = 0;
+      00004C 0F 03            [ 1]  126 	clr	(0x03, sp)
+                                    127 ;	./src/OSAL_Memory.c: 285: size += OSALMEM_HDRSZ;
+      00004E 1E 0C            [ 2]  128 	ldw	x, (0x0c, sp)
+      000050 5C               [ 1]  129 	incw	x
+      000051 5C               [ 1]  130 	incw	x
+      000052 1F 0C            [ 2]  131 	ldw	(0x0c, sp), x
+                                    132 ;	./src/OSAL_Memory.c: 302: HAL_ENTER_CRITICAL_SECTION( intState );  // Hold off interrupts.
+      000054 9B               [ 1]  133 	sim
+      000055 9D               [ 1]  134 	nop
+      000056 9D               [ 1]  135 	nop
+                                    136 ;	./src/OSAL_Memory.c: 306: if ((osalMemStat == 0) || (size <= OSALMEM_SMALL_BLKSZ))
+      000057 72 5Du04u02      [ 1]  137 	tnz	_osalMemStat+0
+      00005B 27 07            [ 1]  138 	jreq	00114$
+      00005D 1E 0C            [ 2]  139 	ldw	x, (0x0c, sp)
+      00005F A3 00 10         [ 2]  140 	cpw	x, #0x0010
+      000062 22 07            [ 1]  141 	jrugt	00115$
+      000064                        142 00114$:
+                                    143 ;	./src/OSAL_Memory.c: 308: hdr = ff1;
+      000064 CEu04u00         [ 2]  144 	ldw	x, _ff1+0
+      000067 1F 04            [ 2]  145 	ldw	(0x04, sp), x
+      000069 20 05            [ 2]  146 	jra	00130$
+      00006B                        147 00115$:
+                                    148 ;	./src/OSAL_Memory.c: 312: hdr = (theHeap + OSALMEM_BIGBLK_IDX);
+      00006B AEr02r4A         [ 2]  149 	ldw	x, #(_theHeap + 586)
+      00006E 1F 04            [ 2]  150 	ldw	(0x04, sp), x
+                                    151 ;	./src/OSAL_Memory.c: 315: do
+      000070                        152 00130$:
+                                    153 ;	./src/OSAL_Memory.c: 317: if ( hdr->hdr.inUse )
+      000070 1E 04            [ 2]  154 	ldw	x, (0x04, sp)
+      000072 E6 01            [ 1]  155 	ld	a, (0x1, x)
+      000074 4E               [ 1]  156 	swap	a
+      000075 44               [ 1]  157 	srl	a
+      000076 44               [ 1]  158 	srl	a
+      000077 44               [ 1]  159 	srl	a
+      000078 A4 01            [ 1]  160 	and	a, #0x01
+      00007A 27 04            [ 1]  161 	jreq	00126$
+                                    162 ;	./src/OSAL_Memory.c: 319: coal = 0;
+      00007C 0F 03            [ 1]  163 	clr	(0x03, sp)
+      00007E 20 61            [ 2]  164 	jra	00127$
+      000080                        165 00126$:
+                                    166 ;	./src/OSAL_Memory.c: 323: if ( coal != 0 )
+      000080 0D 03            [ 1]  167 	tnz	(0x03, sp)
+      000082 27 45            [ 1]  168 	jreq	00123$
+                                    169 ;	./src/OSAL_Memory.c: 330: prev->hdr.len += hdr->hdr.len;
+      000084 16 01            [ 2]  170 	ldw	y, (0x01, sp)
+      000086 1E 01            [ 2]  171 	ldw	x, (0x01, sp)
+      000088 F6               [ 1]  172 	ld	a, (x)
+      000089 6B 07            [ 1]  173 	ld	(0x07, sp), a
+      00008B E6 01            [ 1]  174 	ld	a, (0x1, x)
+      00008D A4 7F            [ 1]  175 	and	a, #0x7f
+      00008F 6B 06            [ 1]  176 	ld	(0x06, sp), a
+      000091 1E 04            [ 2]  177 	ldw	x, (0x04, sp)
+      000093 F6               [ 1]  178 	ld	a, (x)
+      000094 6B 09            [ 1]  179 	ld	(0x09, sp), a
+      000096 E6 01            [ 1]  180 	ld	a, (0x1, x)
+      000098 A4 7F            [ 1]  181 	and	a, #0x7f
+      00009A 6B 08            [ 1]  182 	ld	(0x08, sp), a
+      00009C 1E 06            [ 2]  183 	ldw	x, (0x06, sp)
+      00009E 72 FB 08         [ 2]  184 	addw	x, (0x08, sp)
+      0000A1 9F               [ 1]  185 	ld	a, xl
+      0000A2 90 F7            [ 1]  186 	ld	(y), a
+      0000A4 9E               [ 1]  187 	ld	a, xh
+      0000A5 A4 7F            [ 1]  188 	and	a, #0x7f
+      0000A7 88               [ 1]  189 	push	a
+      0000A8 A6 80            [ 1]  190 	ld	a, #0x80
+      0000AA 90 E4 01         [ 1]  191 	and	a, (0x1, y)
+      0000AD 1A 01            [ 1]  192 	or	a, (1, sp)
+      0000AF 90 E7 01         [ 1]  193 	ld	(0x1, y), a
+      0000B2 84               [ 1]  194 	pop	a
+                                    195 ;	./src/OSAL_Memory.c: 332: if ( prev->hdr.len >= size )
+      0000B3 1E 01            [ 2]  196 	ldw	x, (0x01, sp)
+      0000B5 F6               [ 1]  197 	ld	a, (x)
+      0000B6 90 97            [ 1]  198 	ld	yl, a
+      0000B8 E6 01            [ 1]  199 	ld	a, (0x1, x)
+      0000BA A4 7F            [ 1]  200 	and	a, #0x7f
+      0000BC 90 95            [ 1]  201 	ld	yh, a
+      0000BE 93               [ 1]  202 	ldw	x, y
+      0000BF 13 0C            [ 2]  203 	cpw	x, (0x0c, sp)
+      0000C1 25 1E            [ 1]  204 	jrc	00127$
+                                    205 ;	./src/OSAL_Memory.c: 334: hdr = prev;
+      0000C3 16 01            [ 2]  206 	ldw	y, (0x01, sp)
+      0000C5 17 04            [ 2]  207 	ldw	(0x04, sp), y
+                                    208 ;	./src/OSAL_Memory.c: 335: break;
+      0000C7 20 34            [ 2]  209 	jra	00132$
+      0000C9                        210 00123$:
+                                    211 ;	./src/OSAL_Memory.c: 340: if ( hdr->hdr.len >= size )
+      0000C9 1E 04            [ 2]  212 	ldw	x, (0x04, sp)
+      0000CB F6               [ 1]  213 	ld	a, (x)
+      0000CC 90 97            [ 1]  214 	ld	yl, a
+      0000CE E6 01            [ 1]  215 	ld	a, (0x1, x)
+      0000D0 A4 7F            [ 1]  216 	and	a, #0x7f
+      0000D2 90 95            [ 1]  217 	ld	yh, a
+      0000D4 93               [ 1]  218 	ldw	x, y
+      0000D5 13 0C            [ 2]  219 	cpw	x, (0x0c, sp)
+      0000D7 24 24            [ 1]  220 	jrnc	00132$
+                                    221 ;	./src/OSAL_Memory.c: 345: coal = 1;
+      0000D9 A6 01            [ 1]  222 	ld	a, #0x01
+      0000DB 6B 03            [ 1]  223 	ld	(0x03, sp), a
+                                    224 ;	./src/OSAL_Memory.c: 346: prev = hdr;
+      0000DD 16 04            [ 2]  225 	ldw	y, (0x04, sp)
+      0000DF 17 01            [ 2]  226 	ldw	(0x01, sp), y
+      0000E1                        227 00127$:
+                                    228 ;	./src/OSAL_Memory.c: 350: hdr = (osalMemHdr_t *)((uint8 *)hdr + hdr->hdr.len);
+      0000E1 16 04            [ 2]  229 	ldw	y, (0x04, sp)
+      0000E3 1E 04            [ 2]  230 	ldw	x, (0x04, sp)
+      0000E5 F6               [ 1]  231 	ld	a, (x)
+      0000E6 6B 09            [ 1]  232 	ld	(0x09, sp), a
+      0000E8 E6 01            [ 1]  233 	ld	a, (0x1, x)
+      0000EA A4 7F            [ 1]  234 	and	a, #0x7f
+      0000EC 6B 08            [ 1]  235 	ld	(0x08, sp), a
+      0000EE 72 F9 08         [ 2]  236 	addw	y, (0x08, sp)
+                                    237 ;	./src/OSAL_Memory.c: 352: if ( hdr->val == 0 )
+      0000F1 17 04            [ 2]  238 	ldw	(0x04, sp), y
+      0000F3 93               [ 1]  239 	ldw	x, y
+      0000F4 FE               [ 2]  240 	ldw	x, (x)
+      0000F5 27 03            [ 1]  241 	jreq	00225$
+      0000F7 CCr00r70         [ 2]  242 	jp	00130$
+      0000FA                        243 00225$:
+                                    244 ;	./src/OSAL_Memory.c: 354: hdr = NULL;
+      0000FA 5F               [ 1]  245 	clrw	x
+      0000FB 1F 04            [ 2]  246 	ldw	(0x04, sp), x
+                                    247 ;	./src/OSAL_Memory.c: 357: } while (1);
+      0000FD                        248 00132$:
+                                    249 ;	./src/OSAL_Memory.c: 359: if ( hdr != NULL )
+                                    250 ;	./src/OSAL_Memory.c: 361: uint16 tmp = hdr->hdr.len - size;
+      0000FD 1E 04            [ 2]  251 	ldw	x, (0x04, sp)
+      0000FF 27 51            [ 1]  252 	jreq	00141$
+      000101 F6               [ 1]  253 	ld	a, (x)
+      000102 90 97            [ 1]  254 	ld	yl, a
+      000104 E6 01            [ 1]  255 	ld	a, (0x1, x)
+      000106 A4 7F            [ 1]  256 	and	a, #0x7f
+      000108 90 95            [ 1]  257 	ld	yh, a
+      00010A 72 F2 0C         [ 2]  258 	subw	y, (0x0c, sp)
+                                    259 ;	./src/OSAL_Memory.c: 350: hdr = (osalMemHdr_t *)((uint8 *)hdr + hdr->hdr.len);
+      00010D 1E 04            [ 2]  260 	ldw	x, (0x04, sp)
+      00010F 1F 08            [ 2]  261 	ldw	(0x08, sp), x
+                                    262 ;	./src/OSAL_Memory.c: 364: if ( tmp >= OSALMEM_MIN_BLKSZ )
+      000111 90 A3 00 04      [ 2]  263 	cpw	y, #0x0004
+      000115 25 11            [ 1]  264 	jrc	00134$
+                                    265 ;	./src/OSAL_Memory.c: 367: osalMemHdr_t *next = (osalMemHdr_t *)((uint8 *)hdr + size);
+      000117 1E 08            [ 2]  266 	ldw	x, (0x08, sp)
+      000119 72 FB 0C         [ 2]  267 	addw	x, (0x0c, sp)
+                                    268 ;	./src/OSAL_Memory.c: 368: next->val = tmp;                     // Set 'len' & clear 'inUse' field.
+      00011C FF               [ 2]  269 	ldw	(x), y
+                                    270 ;	./src/OSAL_Memory.c: 369: hdr->val = (size | OSALMEM_IN_USE);  // Set 'len' & 'inUse' field.
+      00011D 1E 0C            [ 2]  271 	ldw	x, (0x0c, sp)
+      00011F 58               [ 2]  272 	sllw	x
+      000120 99               [ 1]  273 	scf
+      000121 56               [ 2]  274 	rrcw	x
+      000122 16 04            [ 2]  275 	ldw	y, (0x04, sp)
+      000124 90 FF            [ 2]  276 	ldw	(y), x
+      000126 20 06            [ 2]  277 	jra	00135$
+      000128                        278 00134$:
+                                    279 ;	./src/OSAL_Memory.c: 387: hdr->hdr.inUse = TRUE;
+      000128 1E 04            [ 2]  280 	ldw	x, (0x04, sp)
+      00012A 5C               [ 1]  281 	incw	x
+      00012B 79               [ 1]  282 	rlc	(x)
+      00012C 99               [ 1]  283 	scf
+      00012D 76               [ 1]  284 	rrc	(x)
+      00012E                        285 00135$:
+                                    286 ;	./src/OSAL_Memory.c: 435: if ((osalMemStat != 0) && (ff1 == hdr))
+      00012E 72 5Du04u02      [ 1]  287 	tnz	_osalMemStat+0
+      000132 27 18            [ 1]  288 	jreq	00137$
+      000134 1E 04            [ 2]  289 	ldw	x, (0x04, sp)
+      000136 C3u04u00         [ 2]  290 	cpw	x, _ff1+0
+      000139 26 11            [ 1]  291 	jrne	00137$
+                                    292 ;	./src/OSAL_Memory.c: 437: ff1 = (osalMemHdr_t *)((uint8 *)hdr + hdr->hdr.len);
+      00013B 1E 04            [ 2]  293 	ldw	x, (0x04, sp)
+      00013D F6               [ 1]  294 	ld	a, (x)
+      00013E 88               [ 1]  295 	push	a
+      00013F E6 01            [ 1]  296 	ld	a, (0x1, x)
+      000141 A4 7F            [ 1]  297 	and	a, #0x7f
+      000143 95               [ 1]  298 	ld	xh, a
+      000144 84               [ 1]  299 	pop	a
+      000145 97               [ 1]  300 	ld	xl, a
+      000146 72 FB 08         [ 2]  301 	addw	x, (0x08, sp)
+      000149 CFu04u00         [ 2]  302 	ldw	_ff1+0, x
+      00014C                        303 00137$:
+                                    304 ;	./src/OSAL_Memory.c: 440: hdr++;
+      00014C 1E 04            [ 2]  305 	ldw	x, (0x04, sp)
+      00014E 5C               [ 1]  306 	incw	x
+      00014F 5C               [ 1]  307 	incw	x
+      000150 1F 04            [ 2]  308 	ldw	(0x04, sp), x
+                                    309 ;	./src/OSAL_Memory.c: 443: HAL_EXIT_CRITICAL_SECTION( intState );  // Re-enable interrupts.
+      000152                        310 00141$:
+                                    311 ;	./src/OSAL_Memory.c: 447: HAL_ASSERT(((halDataAlign_t)hdr % sizeof(halDataAlign_t)) == 0);
+      000152 4F               [ 1]  312 	clr	a
+      000153 4D               [ 1]  313 	tnz	a
+      000154 27 02            [ 1]  314 	jreq	00149$
+      000156                        315 00144$:
+      000156 20 FE            [ 2]  316 	jra	00144$
+      000158                        317 00149$:
+                                    318 ;	./src/OSAL_Memory.c: 455: return (void *)hdr;
+      000158 1E 04            [ 2]  319 	ldw	x, (0x04, sp)
+                                    320 ;	./src/OSAL_Memory.c: 456: }
+      00015A 5B 09            [ 2]  321 	addw	sp, #9
+      00015C 81               [ 4]  322 	ret
+                                    323 ;	./src/OSAL_Memory.c: 476: void osal_mem_free(void *ptr)
+                                    324 ;	-----------------------------------------
+                                    325 ;	 function osal_mem_free
+                                    326 ;	-----------------------------------------
+      00015D                        327 _osal_mem_free:
+      00015D 52 04            [ 2]  328 	sub	sp, #4
+                                    329 ;	./src/OSAL_Memory.c: 479: osalMemHdr_t *hdr = (osalMemHdr_t *)ptr - 1;
+      00015F 1E 07            [ 2]  330 	ldw	x, (0x07, sp)
+      000161 5A               [ 2]  331 	decw	x
+      000162 5A               [ 2]  332 	decw	x
+      000163 1F 01            [ 2]  333 	ldw	(0x01, sp), x
+                                    334 ;	./src/OSAL_Memory.c: 486: HAL_ASSERT(((uint8 *)ptr >= (uint8 *)theHeap) && ((uint8 *)ptr < (uint8 *)theHeap+MAXMEMHEAP));
+      000165 16 07            [ 2]  335 	ldw	y, (0x07, sp)
+      000167 AEr00r00         [ 2]  336 	ldw	x, #(_theHeap + 0)
+      00016A 1F 03            [ 2]  337 	ldw	(0x03, sp), x
+      00016C 51               [ 1]  338 	exgw	x, y
+      00016D 13 03            [ 2]  339 	cpw	x, (0x03, sp)
+      00016F 51               [ 1]  340 	exgw	x, y
+      000170 25 0D            [ 1]  341 	jrc	00102$
+      000172 AEr00r00         [ 2]  342 	ldw	x, #(_theHeap + 0)
+      000175 1C 04 00         [ 2]  343 	addw	x, #0x0400
+      000178 1F 03            [ 2]  344 	ldw	(0x03, sp), x
+      00017A 93               [ 1]  345 	ldw	x, y
+      00017B 13 03            [ 2]  346 	cpw	x, (0x03, sp)
+      00017D 25 02            [ 1]  347 	jrc	00108$
+      00017F                        348 00102$:
+      00017F 20 FE            [ 2]  349 	jra	00102$
+      000181                        350 00108$:
+                                    351 ;	./src/OSAL_Memory.c: 487: HAL_ASSERT(hdr->hdr.inUse);
+      000181 1E 01            [ 2]  352 	ldw	x, (0x01, sp)
+      000183 5C               [ 1]  353 	incw	x
+      000184 F6               [ 1]  354 	ld	a, (x)
+      000185 4E               [ 1]  355 	swap	a
+      000186 44               [ 1]  356 	srl	a
+      000187 44               [ 1]  357 	srl	a
+      000188 44               [ 1]  358 	srl	a
+      000189 A4 01            [ 1]  359 	and	a, #0x01
+      00018B 26 02            [ 1]  360 	jrne	00116$
+      00018D                        361 00111$:
+      00018D 20 FE            [ 2]  362 	jra	00111$
+      00018F                        363 00116$:
+                                    364 ;	./src/OSAL_Memory.c: 489: HAL_ENTER_CRITICAL_SECTION( intState );  // Hold off interrupts.
+      00018F 9B               [ 1]  365 	sim
+      000190 9D               [ 1]  366 	nop
+      000191 9D               [ 1]  367 	nop
+                                    368 ;	./src/OSAL_Memory.c: 490: hdr->hdr.inUse = FALSE;
+      000192 A6 7F            [ 1]  369 	ld	a, #0x7f
+      000194 F4               [ 1]  370 	and	a, (x)
+      000195 F7               [ 1]  371 	ld	(x), a
+                                    372 ;	./src/OSAL_Memory.c: 492: if (ff1 > hdr)
+                                    373 ;	./src/OSAL_Memory.c: 494: ff1 = hdr;
+      000196 1E 01            [ 2]  374 	ldw	x, (0x01, sp)
+      000198 C3u04u00         [ 2]  375 	cpw	x, _ff1+0
+      00019B 24 03            [ 1]  376 	jrnc	00128$
+      00019D CFu04u00         [ 2]  377 	ldw	_ff1+0, x
+                                    378 ;	./src/OSAL_Memory.c: 522: HAL_EXIT_CRITICAL_SECTION( intState );  // Re-enable interrupts.
+      0001A0                        379 00128$:
+                                    380 ;	./src/OSAL_Memory.c: 523: }
+      0001A0 5B 04            [ 2]  381 	addw	sp, #4
+      0001A2 81               [ 4]  382 	ret
+                                    383 	.area CODE
+                                    384 	.area CONST
+                                    385 	.area INITIALIZER
+                                    386 	.area CABS (ABS)

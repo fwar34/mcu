@@ -1,0 +1,520 @@
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 1.
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+    .__.$$$.                                                    =  002710 L
+    .__.ABS.                                                    =  000000 G
+    .__.CPU.                                                    =  000000 L
+    .__.H$L.                                                    =  000001 L
+    _ADC_CR1                                                    =  005401 G
+    _ADC_CR1_bit                                                =  005401 G
+    _ADC_CR2                                                    =  005402 G
+    _ADC_CR2_bit                                                =  005402 G
+    _ADC_CR3                                                    =  005403 G
+    _ADC_CR3_bit                                                =  005403 G
+    _ADC_CSR                                                    =  005400 G
+    _ADC_CSR_bit                                                =  005400 G
+    _ADC_DRH                                                    =  005404 G
+    _ADC_DRL                                                    =  005405 G
+    _ADC_TDRH                                                   =  005406 G
+    _ADC_TDRL                                                   =  005407 G
+    _AWU_APR                                                    =  0050F1 G
+    _AWU_CSR1                                                   =  0050F0 G
+    _AWU_CSR1_bit                                               =  0050F0 G
+    _AWU_TBR                                                    =  0050F2 G
+    _AWU_TBR_bit                                                =  0050F2 G
+    _BEEP_CSR                                                   =  0050F3 G
+    _BEEP_CSR_bit                                               =  0050F3 G
+    _CAN_DGR                                                    =  005426 G
+    _CAN_DGR_bit                                                =  005426 G
+    _CAN_EIER                                                   =  005429 G
+    _CAN_EIER_bit                                               =  005429 G
+    _CAN_ESR                                                    =  005428 G
+    _CAN_ESR_bit                                                =  005428 G
+    _CAN_FPSR                                                   =  005427 G
+    _CAN_IER                                                    =  005425 G
+    _CAN_IER_bit                                                =  005425 G
+    _CAN_MCR                                                    =  005420 G
+    _CAN_MCR_bit                                                =  005420 G
+    _CAN_MSR                                                    =  005421 G
+    _CAN_MSR_bit                                                =  005421 G
+    _CAN_P0                                                     =  005428 G
+    _CAN_P1                                                     =  005429 G
+    _CAN_P2                                                     =  00542A G
+    _CAN_P3                                                     =  00542B G
+    _CAN_P4                                                     =  00542C G
+    _CAN_P5                                                     =  00542D G
+    _CAN_P6                                                     =  00542E G
+    _CAN_P7                                                     =  00542F G
+    _CAN_P8                                                     =  005430 G
+    _CAN_P9                                                     =  005431 G
+    _CAN_PA                                                     =  005432 G
+    _CAN_PB                                                     =  005433 G
+    _CAN_PC                                                     =  005434 G
+    _CAN_PD                                                     =  005435 G
+    _CAN_PE                                                     =  005436 G
+    _CAN_PF                                                     =  005437 G
+    _CAN_RFR                                                    =  005424 G
+    _CAN_RFR_bit                                                =  005424 G
+    _CAN_TPR                                                    =  005423 G
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 2.
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+    _CAN_TPR_bit                                                =  005423 G
+    _CAN_TSR                                                    =  005422 G
+    _CAN_TSR_bit                                                =  005422 G
+    _CLK_CANCCR                                                 =  0050CB G
+    _CLK_CANCCR_bit                                             =  0050CB G
+    _CLK_CCOR                                                   =  0050C9 G
+    _CLK_CCOR_bit                                               =  0050C9 G
+    _CLK_CKDIVR                                                 =  0050C6 G
+    _CLK_CKDIVR_bit                                             =  0050C6 G
+    _CLK_CMSR                                                   =  0050C3 G
+    _CLK_CSSR                                                   =  0050C8 G
+    _CLK_CSSR_bit                                               =  0050C8 G
+    _CLK_ECKR                                                   =  0050C1 G
+    _CLK_ECKR_bit                                               =  0050C1 G
+    _CLK_HSITRIMR                                               =  0050CC G
+    _CLK_HSITRIMR_bit                                           =  0050CC G
+    _CLK_ICKR                                                   =  0050C0 G
+    _CLK_ICKR_bit                                               =  0050C0 G
+    _CLK_PCKENR1                                                =  0050C7 G
+    _CLK_PCKENR2                                                =  0050CA G
+    _CLK_SWCR                                                   =  0050C5 G
+    _CLK_SWCR_bit                                               =  0050C5 G
+    _CLK_SWIMCCR                                                =  0050CD G
+    _CLK_SWIMCCR_bit                                            =  0050CD G
+    _CLK_SWR                                                    =  0050C4 G
+    _CPU_A                                                      =  007F00 G
+    _CPU_CCR                                                    =  007F0A G
+    _CPU_CCR_bit                                                =  007F0A G
+    _CPU_CFG_GCR                                                =  007F60 G
+    _CPU_CFG_GCR_bit                                            =  007F60 G
+    _CPU_PCE                                                    =  007F01 G
+    _CPU_PCH                                                    =  007F02 G
+    _CPU_PCL                                                    =  007F03 G
+    _CPU_SPH                                                    =  007F08 G
+    _CPU_SPL                                                    =  007F09 G
+    _CPU_XH                                                     =  007F04 G
+    _CPU_XL                                                     =  007F05 G
+    _CPU_YH                                                     =  007F06 G
+    _CPU_YL                                                     =  007F07 G
+    _DM_BK1RE                                                   =  007F90 G
+    _DM_BK1RH                                                   =  007F91 G
+    _DM_BK1RL                                                   =  007F92 G
+    _DM_BK2RE                                                   =  007F93 G
+    _DM_BK2RH                                                   =  007F94 G
+    _DM_BK2RL                                                   =  007F95 G
+    _DM_CR1                                                     =  007F96 G
+    _DM_CR2                                                     =  007F97 G
+    _DM_CSR1                                                    =  007F98 G
+    _DM_CSR2                                                    =  007F99 G
+    _DM_ENFCTR                                                  =  007F9A G
+    _EXTI_CR1                                                   =  0050A0 G
+    _EXTI_CR1_bit                                               =  0050A0 G
+    _EXTI_CR2                                                   =  0050A1 G
+    _EXTI_CR2_bit                                               =  0050A1 G
+    _FLASH_CR1                                                  =  00505A G
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 3.
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+    _FLASH_CR1_bit                                              =  00505A G
+    _FLASH_CR2                                                  =  00505B G
+    _FLASH_CR2_bit                                              =  00505B G
+    _FLASH_DUKR                                                 =  005064 G
+    _FLASH_FPR                                                  =  00505D G
+    _FLASH_IAPSR                                                =  00505F G
+    _FLASH_IAPSR_bit                                            =  00505F G
+    _FLASH_NCR2                                                 =  00505C G
+    _FLASH_NCR2_bit                                             =  00505C G
+    _FLASH_NFPR                                                 =  00505E G
+    _FLASH_PUKR                                                 =  005062 G
+    _I2C_CCRH                                                   =  00521C G
+    _I2C_CCRH_bit                                               =  00521C G
+    _I2C_CCRL                                                   =  00521B G
+    _I2C_CR1                                                    =  005210 G
+    _I2C_CR1_bit                                                =  005210 G
+    _I2C_CR2                                                    =  005211 G
+    _I2C_CR2_bit                                                =  005211 G
+    _I2C_DR                                                     =  005216 G
+    _I2C_FREQR                                                  =  005212 G
+    _I2C_FREQR_bit                                              =  005212 G
+    _I2C_ITR                                                    =  00521A G
+    _I2C_ITR_bit                                                =  00521A G
+    _I2C_OARH                                                   =  005214 G
+    _I2C_OARH_bit                                               =  005214 G
+    _I2C_OARL                                                   =  005213 G
+    _I2C_OARL_bit                                               =  005213 G
+    _I2C_PECR                                                   =  00521E G
+    _I2C_SR1                                                    =  005217 G
+    _I2C_SR1_bit                                                =  005217 G
+    _I2C_SR2                                                    =  005218 G
+    _I2C_SR2_bit                                                =  005218 G
+    _I2C_SR3                                                    =  005219 G
+    _I2C_SR3_bit                                                =  005219 G
+    _I2C_TRISER                                                 =  00521D G
+    _I2C_TRISER_bit                                             =  00521D G
+    _ITC_SPR1                                                   =  007F70 G
+    _ITC_SPR1_bit                                               =  007F70 G
+    _ITC_SPR2                                                   =  007F71 G
+    _ITC_SPR2_bit                                               =  007F71 G
+    _ITC_SPR3                                                   =  007F72 G
+    _ITC_SPR3_bit                                               =  007F72 G
+    _ITC_SPR4                                                   =  007F73 G
+    _ITC_SPR4_bit                                               =  007F73 G
+    _ITC_SPR5                                                   =  007F74 G
+    _ITC_SPR5_bit                                               =  007F74 G
+    _ITC_SPR6                                                   =  007F75 G
+    _ITC_SPR6_bit                                               =  007F75 G
+    _ITC_SPR7                                                   =  007F76 G
+    _ITC_SPR7_bit                                               =  007F76 G
+    _ITC_SPR8                                                   =  007F77 G
+    _ITC_SPR8_bit                                               =  007F77 G
+    _IWDG_KR                                                    =  0050E0 G
+    _IWDG_PR                                                    =  0050E1 G
+    _IWDG_PR_bit                                                =  0050E1 G
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 4.
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+    _IWDG_RLR                                                   =  0050E2 G
+    _PA_CR1                                                     =  005003 G
+    _PA_CR1_bit                                                 =  005003 G
+    _PA_CR2                                                     =  005004 G
+    _PA_CR2_bit                                                 =  005004 G
+    _PA_DDR                                                     =  005002 G
+    _PA_DDR_bit                                                 =  005002 G
+    _PA_IDR                                                     =  005001 G
+    _PA_IDR_bit                                                 =  005001 G
+    _PA_ODR                                                     =  005000 G
+    _PA_ODR_bit                                                 =  005000 G
+    _PB_CR1                                                     =  005008 G
+    _PB_CR1_bit                                                 =  005008 G
+    _PB_CR2                                                     =  005009 G
+    _PB_CR2_bit                                                 =  005009 G
+    _PB_DDR                                                     =  005007 G
+    _PB_DDR_bit                                                 =  005007 G
+    _PB_IDR                                                     =  005006 G
+    _PB_IDR_bit                                                 =  005006 G
+    _PB_ODR                                                     =  005005 G
+    _PB_ODR_bit                                                 =  005005 G
+    _PC_CR1                                                     =  00500D G
+    _PC_CR1_bit                                                 =  00500D G
+    _PC_CR2                                                     =  00500E G
+    _PC_CR2_bit                                                 =  00500E G
+    _PC_DDR                                                     =  00500C G
+    _PC_DDR_bit                                                 =  00500C G
+    _PC_IDR                                                     =  00500B G
+    _PC_IDR_bit                                                 =  00500B G
+    _PC_ODR                                                     =  00500A G
+    _PC_ODR_bit                                                 =  00500A G
+    _PD_CR1                                                     =  005012 G
+    _PD_CR1_bit                                                 =  005012 G
+    _PD_CR2                                                     =  005013 G
+    _PD_CR2_bit                                                 =  005013 G
+    _PD_DDR                                                     =  005011 G
+    _PD_DDR_bit                                                 =  005011 G
+    _PD_IDR                                                     =  005010 G
+    _PD_IDR_bit                                                 =  005010 G
+    _PD_ODR                                                     =  00500F G
+    _PD_ODR_bit                                                 =  00500F G
+    _PE_CR1                                                     =  005017 G
+    _PE_CR1_bit                                                 =  005017 G
+    _PE_CR2                                                     =  005018 G
+    _PE_CR2_bit                                                 =  005018 G
+    _PE_DDR                                                     =  005016 G
+    _PE_DDR_bit                                                 =  005016 G
+    _PE_IDR                                                     =  005015 G
+    _PE_IDR_bit                                                 =  005015 G
+    _PE_ODR                                                     =  005014 G
+    _PE_ODR_bit                                                 =  005014 G
+    _PF_CR1                                                     =  00501C G
+    _PF_CR1_bit                                                 =  00501C G
+    _PF_CR2                                                     =  00501D G
+    _PF_CR2_bit                                                 =  00501D G
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 5.
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+    _PF_DDR                                                     =  00501B G
+    _PF_DDR_bit                                                 =  00501B G
+    _PF_IDR                                                     =  00501A G
+    _PF_IDR_bit                                                 =  00501A G
+    _PF_ODR                                                     =  005019 G
+    _PF_ODR_bit                                                 =  005019 G
+    _PG_CR1                                                     =  005021 G
+    _PG_CR1_bit                                                 =  005021 G
+    _PG_CR2                                                     =  005022 G
+    _PG_CR2_bit                                                 =  005022 G
+    _PG_DDR                                                     =  005020 G
+    _PG_DDR_bit                                                 =  005020 G
+    _PG_IDR                                                     =  00501F G
+    _PG_IDR_bit                                                 =  00501F G
+    _PG_ODR                                                     =  00501E G
+    _PG_ODR_bit                                                 =  00501E G
+    _PH_CR1                                                     =  005026 G
+    _PH_CR1_bit                                                 =  005026 G
+    _PH_CR2                                                     =  005027 G
+    _PH_CR2_bit                                                 =  005027 G
+    _PH_DDR                                                     =  005025 G
+    _PH_DDR_bit                                                 =  005025 G
+    _PH_IDR                                                     =  005024 G
+    _PH_IDR_bit                                                 =  005024 G
+    _PH_ODR                                                     =  005023 G
+    _PH_ODR_bit                                                 =  005023 G
+    _PI_CR1                                                     =  00502B G
+    _PI_CR1_bit                                                 =  00502B G
+    _PI_CR2                                                     =  00502C G
+    _PI_CR2_bit                                                 =  00502C G
+    _PI_DDR                                                     =  00502A G
+    _PI_DDR_bit                                                 =  00502A G
+    _PI_IDR                                                     =  005029 G
+    _PI_IDR_bit                                                 =  005029 G
+    _PI_ODR                                                     =  005028 G
+    _PI_ODR_bit                                                 =  005028 G
+    _RST_SR                                                     =  0050B3 G
+    _RST_SR_bit                                                 =  0050B3 G
+    _SPI_CR1                                                    =  005200 G
+    _SPI_CR1_bit                                                =  005200 G
+    _SPI_CR2                                                    =  005201 G
+    _SPI_CR2_bit                                                =  005201 G
+    _SPI_CRCPR                                                  =  005205 G
+    _SPI_DR                                                     =  005204 G
+    _SPI_ICR                                                    =  005202 G
+    _SPI_ICR_bit                                                =  005202 G
+    _SPI_RXCRCR                                                 =  005206 G
+    _SPI_SR                                                     =  005203 G
+    _SPI_SR_bit                                                 =  005203 G
+    _SPI_TXCRCR                                                 =  005207 G
+    _SWIM_CSR                                                   =  007F80 G
+    _TIM1_ARRH                                                  =  005262 G
+    _TIM1_ARRL                                                  =  005263 G
+    _TIM1_BKR                                                   =  00526D G
+    _TIM1_BKR_bit                                               =  00526D G
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 6.
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+    _TIM1_CCER1                                                 =  00525C G
+    _TIM1_CCER1_bit                                             =  00525C G
+    _TIM1_CCER2                                                 =  00525D G
+    _TIM1_CCER2_bit                                             =  00525D G
+    _TIM1_CCMR1                                                 =  005258 G
+    _TIM1_CCMR1_bit                                             =  005258 G
+    _TIM1_CCMR2                                                 =  005259 G
+    _TIM1_CCMR2_bit                                             =  005259 G
+    _TIM1_CCMR3                                                 =  00525A G
+    _TIM1_CCMR3_bit                                             =  00525A G
+    _TIM1_CCMR4                                                 =  00525B G
+    _TIM1_CCMR4_bit                                             =  00525B G
+    _TIM1_CCR1H                                                 =  005265 G
+    _TIM1_CCR1L                                                 =  005266 G
+    _TIM1_CCR2H                                                 =  005267 G
+    _TIM1_CCR2L                                                 =  005268 G
+    _TIM1_CCR3H                                                 =  005269 G
+    _TIM1_CCR3L                                                 =  00526A G
+    _TIM1_CCR4H                                                 =  00526B G
+    _TIM1_CCR4L                                                 =  00526C G
+    _TIM1_CNTRH                                                 =  00525E G
+    _TIM1_CNTRL                                                 =  00525F G
+    _TIM1_CR1                                                   =  005250 G
+    _TIM1_CR1_bit                                               =  005250 G
+    _TIM1_CR2                                                   =  005251 G
+    _TIM1_CR2_bit                                               =  005251 G
+    _TIM1_DTR                                                   =  00526E G
+    _TIM1_EGR                                                   =  005257 G
+    _TIM1_EGR_bit                                               =  005257 G
+    _TIM1_ETR                                                   =  005253 G
+    _TIM1_ETR_bit                                               =  005253 G
+    _TIM1_IER                                                   =  005254 G
+    _TIM1_IER_bit                                               =  005254 G
+    _TIM1_OISR                                                  =  00526F G
+    _TIM1_OISR_bit                                              =  00526F G
+    _TIM1_PSCRH                                                 =  005260 G
+    _TIM1_PSCRL                                                 =  005261 G
+    _TIM1_RCR                                                   =  005264 G
+    _TIM1_SMCR                                                  =  005252 G
+    _TIM1_SMCR_bit                                              =  005252 G
+    _TIM1_SR1                                                   =  005255 G
+    _TIM1_SR1_bit                                               =  005255 G
+    _TIM1_SR2                                                   =  005256 G
+    _TIM1_SR2_bit                                               =  005256 G
+    _TIM2_ARRH                                                  =  00530D G
+    _TIM2_ARRL                                                  =  00530E G
+    _TIM2_CCER1                                                 =  005308 G
+    _TIM2_CCER1_bit                                             =  005308 G
+    _TIM2_CCER2                                                 =  005309 G
+    _TIM2_CCER2_bit                                             =  005309 G
+    _TIM2_CCMR1                                                 =  005305 G
+    _TIM2_CCMR1_bit                                             =  005305 G
+    _TIM2_CCMR2                                                 =  005306 G
+    _TIM2_CCMR2_bit                                             =  005306 G
+    _TIM2_CCMR3                                                 =  005307 G
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 7.
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+    _TIM2_CCMR3_bit                                             =  005307 G
+    _TIM2_CCR1H                                                 =  00530F G
+    _TIM2_CCR1L                                                 =  005310 G
+    _TIM2_CCR2H                                                 =  005311 G
+    _TIM2_CCR2L                                                 =  005312 G
+    _TIM2_CCR3H                                                 =  005313 G
+    _TIM2_CCR3L                                                 =  005314 G
+    _TIM2_CNTRH                                                 =  00530A G
+    _TIM2_CNTRL                                                 =  00530B G
+    _TIM2_CR1                                                   =  005300 G
+    _TIM2_CR1_bit                                               =  005300 G
+    _TIM2_EGR                                                   =  005304 G
+    _TIM2_EGR_bit                                               =  005304 G
+    _TIM2_IER                                                   =  005301 G
+    _TIM2_IER_bit                                               =  005301 G
+    _TIM2_PSCR                                                  =  00530C G
+    _TIM2_PSCR_bit                                              =  00530C G
+    _TIM2_SR1                                                   =  005302 G
+    _TIM2_SR1_bit                                               =  005302 G
+    _TIM2_SR2                                                   =  005303 G
+    _TIM2_SR2_bit                                               =  005303 G
+    _TIM3_ARRH                                                  =  00532B G
+    _TIM3_ARRL                                                  =  00532C G
+    _TIM3_CCER1                                                 =  005327 G
+    _TIM3_CCER1_bit                                             =  005327 G
+    _TIM3_CCMR1                                                 =  005325 G
+    _TIM3_CCMR1_bit                                             =  005325 G
+    _TIM3_CCMR2                                                 =  005326 G
+    _TIM3_CCMR2_bit                                             =  005326 G
+    _TIM3_CCR1H                                                 =  00532D G
+    _TIM3_CCR1L                                                 =  00532E G
+    _TIM3_CCR2H                                                 =  00532F G
+    _TIM3_CCR2L                                                 =  005330 G
+    _TIM3_CNTRH                                                 =  005328 G
+    _TIM3_CNTRL                                                 =  005329 G
+    _TIM3_CR1                                                   =  005320 G
+    _TIM3_CR1_bit                                               =  005320 G
+    _TIM3_EGR                                                   =  005324 G
+    _TIM3_EGR_bit                                               =  005324 G
+    _TIM3_IER                                                   =  005321 G
+    _TIM3_IER_bit                                               =  005321 G
+    _TIM3_PSCR                                                  =  00532A G
+    _TIM3_PSCR_bit                                              =  00532A G
+    _TIM3_SR1                                                   =  005322 G
+    _TIM3_SR1_bit                                               =  005322 G
+    _TIM3_SR2                                                   =  005323 G
+    _TIM3_SR2_bit                                               =  005323 G
+    _TIM4_ARR                                                   =  005346 G
+    _TIM4_CNTR                                                  =  005344 G
+    _TIM4_CR1                                                   =  005340 G
+    _TIM4_CR1_bit                                               =  005340 G
+    _TIM4_EGR                                                   =  005343 G
+    _TIM4_EGR_bit                                               =  005343 G
+    _TIM4_IER                                                   =  005341 G
+    _TIM4_IER_bit                                               =  005341 G
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 8.
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+    _TIM4_PSCR                                                  =  005345 G
+    _TIM4_PSCR_bit                                              =  005345 G
+    _TIM4_SR                                                    =  005342 G
+    _TIM4_SR_bit                                                =  005342 G
+    _UART1_BRR1                                                 =  005232 G
+    _UART1_BRR2                                                 =  005233 G
+    _UART1_CR1                                                  =  005234 G
+    _UART1_CR1_bit                                              =  005234 G
+    _UART1_CR2                                                  =  005235 G
+    _UART1_CR2_bit                                              =  005235 G
+    _UART1_CR3                                                  =  005236 G
+    _UART1_CR3_bit                                              =  005236 G
+    _UART1_CR4                                                  =  005237 G
+    _UART1_CR4_bit                                              =  005237 G
+    _UART1_CR5                                                  =  005238 G
+    _UART1_CR5_bit                                              =  005238 G
+    _UART1_DR                                                   =  005231 G
+    _UART1_GTR                                                  =  005239 G
+    _UART1_PSCR                                                 =  00523A G
+    _UART1_SR                                                   =  005230 G
+    _UART1_SR_bit                                               =  005230 G
+    _UART2_BRR1                                                 =  005242 G
+    _UART2_BRR2                                                 =  005243 G
+    _UART2_CR1                                                  =  005244 G
+    _UART2_CR1_bit                                              =  005244 G
+    _UART2_CR2                                                  =  005245 G
+    _UART2_CR2_bit                                              =  005245 G
+    _UART2_CR3                                                  =  005246 G
+    _UART2_CR3_bit                                              =  005246 G
+    _UART2_CR4                                                  =  005247 G
+    _UART2_CR4_bit                                              =  005247 G
+    _UART2_CR6                                                  =  005249 G
+    _UART2_CR6_bit                                              =  005249 G
+    _UART2_DR                                                   =  005241 G
+    _UART2_GTR                                                  =  00524A G
+    _UART2_PSCR                                                 =  00524B G
+    _UART2_SR                                                   =  005240 G
+    _UART2_SR_bit                                               =  005240 G
+    _UART3_BRR1                                                 =  005242 G
+    _UART3_BRR2                                                 =  005243 G
+    _UART3_CR1                                                  =  005244 G
+    _UART3_CR1_bit                                              =  005244 G
+    _UART3_CR2                                                  =  005245 G
+    _UART3_CR2_bit                                              =  005245 G
+    _UART3_CR3                                                  =  005246 G
+    _UART3_CR3_bit                                              =  005246 G
+    _UART3_CR4                                                  =  005247 G
+    _UART3_CR4_bit                                              =  005247 G
+    _UART3_CR6                                                  =  005249 G
+    _UART3_CR6_bit                                              =  005249 G
+    _UART3_DR                                                   =  005241 G
+    _UART3_SR                                                   =  005240 G
+    _UART3_SR_bit                                               =  005240 G
+    _WWDG_CR                                                    =  0050D1 G
+    _WWDG_CR_bit                                                =  0050D1 G
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 9.
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+    _WWDG_WR                                                    =  0050D2 G
+    _WWDG_WR_bit                                                =  0050D2 G
+  5 __interrupt_vect                                               000000 R
+  6 __sdcc_gs_init_startup                                         000000 R
+  6 __sdcc_init_data                                               000000 R
+  5 __sdcc_program_startup                                         000004 R
+  3 __start__stack                                                 000000 R
+  A _gpio_init                                                     000000 GR
+  A _main                                                          00002D GR
+    l_DATA                                                         ****** GX
+    l_INITIALIZER                                                  ****** GX
+    s_DATA                                                         ****** GX
+    s_GSINIT                                                       ****** GX
+    s_INITIALIZED                                                  ****** GX
+    s_INITIALIZER                                                  ****** GX
+
+
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 10.
+Hexadecimal [24-Bits]
+
+Area Table
+
+   0 _CODE                                      size      0   flags    0
+   1 DATA                                       size      0   flags    0
+   2 INITIALIZED                                size      0   flags    0
+   3 SSEG                                       size      1   flags    0
+   4 DABS                                       size      0   flags    8
+   5 HOME                                       size      7   flags    0
+   6 GSINIT                                     size     1A   flags    0
+   7 GSFINAL                                    size      3   flags    0
+   8 CONST                                      size      0   flags    0
+   9 INITIALIZER                                size      0   flags    0
+   A CODE                                       size     33   flags    0
+   B CABS                                       size      0   flags    8
+

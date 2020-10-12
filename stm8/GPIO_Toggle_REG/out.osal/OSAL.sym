@@ -1,0 +1,67 @@
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 1.
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+    .__.$$$.                                                    =  002710 L
+    .__.ABS.                                                    =  000000 G
+    .__.CPU.                                                    =  000000 L
+    .__.H$L.                                                    =  000001 L
+  8 __xinit__activeTaskID                                          000000 R
+  2 _activeTaskID                                                  000000 R
+    _memset                                                        ****** GX
+    _osalInitTasks                                                 ****** GX
+    _osalTimerInit                                                 ****** GX
+  9 _osal_clear_event                                              000330 GR
+  9 _osal_init_system                                              000377 GR
+  9 _osal_int_disable                                              00036A GR
+  9 _osal_int_enable                                               00035D GR
+  9 _osal_isr_register                                             00035B GR
+    _osal_mem_alloc                                                ****** GX
+    _osal_mem_free                                                 ****** GX
+    _osal_mem_init                                                 ****** GX
+    _osal_mem_kick                                                 ****** GX
+  9 _osal_memcmp                                                   00007F GR
+  9 _osal_memcpy                                                   000000 GR
+  9 _osal_memdup                                                   00005E GR
+  9 _osal_memset                                                   0000B0 GR
+  9 _osal_msg_allocate                                             0000C2 GR
+  9 _osal_msg_deallocate                                           0000F1 GR
+  9 _osal_msg_dequeue                                              00024D GR
+  9 _osal_msg_enqueue                                              00021B GR
+  9 _osal_msg_enqueue_max                                          0002C4 GR
+  9 _osal_msg_enqueue_push                                         00012C R
+  9 _osal_msg_extract                                              00028E GR
+  9 _osal_msg_find                                                 0001F3 GR
+  9 _osal_msg_push                                                 000277 GR
+  9 _osal_msg_push_front                                           00011E GR
+  9 _osal_msg_receive                                              00018B GR
+  9 _osal_msg_send                                                 000110 GR
+  1 _osal_qHead                                                    000000 GR
+  9 _osal_revmemcpy                                                00002B GR
+  9 _osal_run_system                                               00038F GR
+  9 _osal_self                                                     0003F5 GR
+  9 _osal_set_event                                                00030C GR
+  9 _osal_start_system                                             000389 GR
+    _tasksArr                                                      ****** GX
+    _tasksCnt                                                      ****** GX
+    _tasksEvents                                                   ****** GX
+
+
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 2.
+Hexadecimal [24-Bits]
+
+Area Table
+
+   0 _CODE                                      size      0   flags    0
+   1 DATA                                       size      2   flags    0
+   2 INITIALIZED                                size      1   flags    0
+   3 DABS                                       size      0   flags    8
+   4 HOME                                       size      0   flags    0
+   5 GSINIT                                     size      0   flags    0
+   6 GSFINAL                                    size      0   flags    0
+   7 CONST                                      size      0   flags    0
+   8 INITIALIZER                                size      1   flags    0
+   9 CODE                                       size    3F9   flags    0
+   A CABS                                       size      0   flags    8
+

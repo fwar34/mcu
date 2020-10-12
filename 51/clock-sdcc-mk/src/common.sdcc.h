@@ -5,6 +5,7 @@
 extern unsigned char current_setting;//当前设置项
 //current_setting可以作为下标来取，秒不用设置，所以不在数组里面
 extern unsigned char ds1302_reg_addr[11];
+extern unsigned char key;
 
 extern __bit beep_setting;//beep开关
 #define lcd_light_back P0_3
@@ -25,6 +26,7 @@ typedef struct _DS1302_TIME
     unsigned char minute;
     unsigned char second;
 } DS1302_TIME;
+extern DS1302_TIME current_time;
 
 void beep_ring_1s();
 

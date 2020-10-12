@@ -28,6 +28,7 @@ void dht11_read_data()
     unsigned char high_count = 0;
     unsigned char i, j = 0;
 
+    UART_send_string("display_dht11");
     /* UART_send_string("read dht11\n"); */
     
     /* 主机发送起始信号 */

@@ -1,0 +1,18 @@
+-muwx
+-i ./out/STM8S105.hex
+-Y
+-b HOME = 0x8000
+-b DATA = 0x0001
+-b SSEG = 0xffffffff
+-k /usr/local/bin/../share/sdcc/lib/stm8
+-k /usr/local/share/sdcc/lib/stm8
+-l stm8
+-l stm8
+out/OSAL.rel
+out/OSAL_App.rel
+out/OSAL_Memory.rel
+out/main.rel
+out/OSAL_Timers.rel
+out/OSAL_ClockBLE.rel
+
+-e

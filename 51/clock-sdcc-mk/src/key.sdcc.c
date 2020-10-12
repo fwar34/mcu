@@ -2,6 +2,7 @@
 #include "key.sdcc.h"
 #include "ds1302.sdcc.h"
 #include "delay.sdcc.h"
+#include "uart_sdcc.h"
 
 #define key1 P3_4
 #define key2 P3_5
@@ -15,14 +16,12 @@ void key_scan()
 {
 }
 
-unsigned char process_key()
+void process_key()
 {
-    char ret = 0;
+    UART_send_string("process_key");
     key_scan();
     if (row && column)
-        ret = process_time_settings(row, column);
+        key = process_time_settings(row, column);
     row = 0;
     column = 0;
-
-    return ret;
 }

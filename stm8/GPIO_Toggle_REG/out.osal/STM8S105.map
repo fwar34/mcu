@@ -1,0 +1,738 @@
+ASxxxx Linker V03.00 + NoICE + sdld,  page 1.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+.  .ABS.                            00000000    00000000 =           0. bytes (ABS,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+     FFFFFFFF  s_SSEG                          
+     00000000  .__.ABS.                           
+     00000000  l_CABS                          
+     00000000  l_DABS                          
+     00000000  l__CODE                         
+     00000000  s_CABS                          
+     00000000  s_DABS                          
+     00000000  s__CODE                         
+     00000001  l_SSEG                          
+     00000001  s_DATA                          
+     00000003  l_CONST                         
+     00000003  l_GSFINAL                       
+     00000007  l_HOME                          
+     00000007  l_INITIALIZED                   
+     00000007  l_INITIALIZER                   
+     0000001A  l_GSINIT                        
+     0000040D  l_DATA                          
+     0000040E  s_INITIALIZED                   
+     00000D88  l_CODE                          
+     00005000  _PA_ODR                            main
+     00005000  _PA_ODR_bit                        main
+     00005001  _PA_IDR                            main
+     00005001  _PA_IDR_bit                        main
+     00005002  _PA_DDR                            main
+     00005002  _PA_DDR_bit                        main
+     00005003  _PA_CR1                            main
+     00005003  _PA_CR1_bit                        main
+     00005004  _PA_CR2                            main
+     00005004  _PA_CR2_bit                        main
+     00005005  _PB_ODR                            main
+     00005005  _PB_ODR_bit                        main
+     00005006  _PB_IDR                            main
+     00005006  _PB_IDR_bit                        main
+     00005007  _PB_DDR                            main
+     00005007  _PB_DDR_bit                        main
+     00005008  _PB_CR1                            main
+     00005008  _PB_CR1_bit                        main
+     00005009  _PB_CR2                            main
+     00005009  _PB_CR2_bit                        main
+     0000500A  _PC_ODR                            main
+     0000500A  _PC_ODR_bit                        main
+     0000500B  _PC_IDR                            main
+     0000500B  _PC_IDR_bit                        main
+     0000500C  _PC_DDR                            main
+     0000500C  _PC_DDR_bit                        main
+     0000500D  _PC_CR1                            main
+     0000500D  _PC_CR1_bit                        main
+     0000500E  _PC_CR2                            main
+     0000500E  _PC_CR2_bit                        main
+     0000500F  _PD_ODR                            main
+ASxxxx Linker V03.00 + NoICE + sdld,  page 2.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+.  .ABS.                            00000000    00000000 =           0. bytes (ABS,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+     0000500F  _PD_ODR_bit                        main
+     00005010  _PD_IDR                            main
+     00005010  _PD_IDR_bit                        main
+     00005011  _PD_DDR                            main
+     00005011  _PD_DDR_bit                        main
+     00005012  _PD_CR1                            main
+     00005012  _PD_CR1_bit                        main
+     00005013  _PD_CR2                            main
+     00005013  _PD_CR2_bit                        main
+     00005014  _PE_ODR                            main
+     00005014  _PE_ODR_bit                        main
+     00005015  _PE_IDR                            main
+     00005015  _PE_IDR_bit                        main
+     00005016  _PE_DDR                            main
+     00005016  _PE_DDR_bit                        main
+     00005017  _PE_CR1                            main
+     00005017  _PE_CR1_bit                        main
+     00005018  _PE_CR2                            main
+     00005018  _PE_CR2_bit                        main
+     00005019  _PF_ODR                            main
+     00005019  _PF_ODR_bit                        main
+     0000501A  _PF_IDR                            main
+     0000501A  _PF_IDR_bit                        main
+     0000501B  _PF_DDR                            main
+     0000501B  _PF_DDR_bit                        main
+     0000501C  _PF_CR1                            main
+     0000501C  _PF_CR1_bit                        main
+     0000501D  _PF_CR2                            main
+     0000501D  _PF_CR2_bit                        main
+     0000501E  _PG_ODR                            main
+     0000501E  _PG_ODR_bit                        main
+     0000501F  _PG_IDR                            main
+     0000501F  _PG_IDR_bit                        main
+     00005020  _PG_DDR                            main
+     00005020  _PG_DDR_bit                        main
+     00005021  _PG_CR1                            main
+     00005021  _PG_CR1_bit                        main
+     00005022  _PG_CR2                            main
+     00005022  _PG_CR2_bit                        main
+     00005023  _PH_ODR                            main
+     00005023  _PH_ODR_bit                        main
+     00005024  _PH_IDR                            main
+     00005024  _PH_IDR_bit                        main
+     00005025  _PH_DDR                            main
+     00005025  _PH_DDR_bit                        main
+     00005026  _PH_CR1                            main
+     00005026  _PH_CR1_bit                        main
+     00005027  _PH_CR2                            main
+     00005027  _PH_CR2_bit                        main
+     00005028  _PI_ODR                            main
+     00005028  _PI_ODR_bit                        main
+ASxxxx Linker V03.00 + NoICE + sdld,  page 3.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+.  .ABS.                            00000000    00000000 =           0. bytes (ABS,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+     00005029  _PI_IDR                            main
+     00005029  _PI_IDR_bit                        main
+     0000502A  _PI_DDR                            main
+     0000502A  _PI_DDR_bit                        main
+     0000502B  _PI_CR1                            main
+     0000502B  _PI_CR1_bit                        main
+     0000502C  _PI_CR2                            main
+     0000502C  _PI_CR2_bit                        main
+     0000505A  _FLASH_CR1                         main
+     0000505A  _FLASH_CR1_bit                     main
+     0000505B  _FLASH_CR2                         main
+     0000505B  _FLASH_CR2_bit                     main
+     0000505C  _FLASH_NCR2                        main
+     0000505C  _FLASH_NCR2_bit                    main
+     0000505D  _FLASH_FPR                         main
+     0000505E  _FLASH_NFPR                        main
+     0000505F  _FLASH_IAPSR                       main
+     0000505F  _FLASH_IAPSR_bit                   main
+     00005062  _FLASH_PUKR                        main
+     00005064  _FLASH_DUKR                        main
+     000050A0  _EXTI_CR1                          main
+     000050A0  _EXTI_CR1_bit                      main
+     000050A1  _EXTI_CR2                          main
+     000050A1  _EXTI_CR2_bit                      main
+     000050B3  _RST_SR                            main
+     000050B3  _RST_SR_bit                        main
+     000050C0  _CLK_ICKR                          main
+     000050C0  _CLK_ICKR_bit                      main
+     000050C1  _CLK_ECKR                          main
+     000050C1  _CLK_ECKR_bit                      main
+     000050C3  _CLK_CMSR                          main
+     000050C4  _CLK_SWR                           main
+     000050C5  _CLK_SWCR                          main
+     000050C5  _CLK_SWCR_bit                      main
+     000050C6  _CLK_CKDIVR                        main
+     000050C6  _CLK_CKDIVR_bit                    main
+     000050C7  _CLK_PCKENR1                       main
+     000050C8  _CLK_CSSR                          main
+     000050C8  _CLK_CSSR_bit                      main
+     000050C9  _CLK_CCOR                          main
+     000050C9  _CLK_CCOR_bit                      main
+     000050CA  _CLK_PCKENR2                       main
+     000050CB  _CLK_CANCCR                        main
+     000050CB  _CLK_CANCCR_bit                    main
+     000050CC  _CLK_HSITRIMR                      main
+     000050CC  _CLK_HSITRIMR_bit                  main
+     000050CD  _CLK_SWIMCCR                       main
+     000050CD  _CLK_SWIMCCR_bit                   main
+     000050D1  _WWDG_CR                           main
+     000050D1  _WWDG_CR_bit                       main
+     000050D2  _WWDG_WR                           main
+ASxxxx Linker V03.00 + NoICE + sdld,  page 4.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+.  .ABS.                            00000000    00000000 =           0. bytes (ABS,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+     000050D2  _WWDG_WR_bit                       main
+     000050E0  _IWDG_KR                           main
+     000050E1  _IWDG_PR                           main
+     000050E1  _IWDG_PR_bit                       main
+     000050E2  _IWDG_RLR                          main
+     000050F0  _AWU_CSR1                          main
+     000050F0  _AWU_CSR1_bit                      main
+     000050F1  _AWU_APR                           main
+     000050F2  _AWU_TBR                           main
+     000050F2  _AWU_TBR_bit                       main
+     000050F3  _BEEP_CSR                          main
+     000050F3  _BEEP_CSR_bit                      main
+     00005200  _SPI_CR1                           main
+     00005200  _SPI_CR1_bit                       main
+     00005201  _SPI_CR2                           main
+     00005201  _SPI_CR2_bit                       main
+     00005202  _SPI_ICR                           main
+     00005202  _SPI_ICR_bit                       main
+     00005203  _SPI_SR                            main
+     00005203  _SPI_SR_bit                        main
+     00005204  _SPI_DR                            main
+     00005205  _SPI_CRCPR                         main
+     00005206  _SPI_RXCRCR                        main
+     00005207  _SPI_TXCRCR                        main
+     00005210  _I2C_CR1                           main
+     00005210  _I2C_CR1_bit                       main
+     00005211  _I2C_CR2                           main
+     00005211  _I2C_CR2_bit                       main
+     00005212  _I2C_FREQR                         main
+     00005212  _I2C_FREQR_bit                     main
+     00005213  _I2C_OARL                          main
+     00005213  _I2C_OARL_bit                      main
+     00005214  _I2C_OARH                          main
+     00005214  _I2C_OARH_bit                      main
+     00005216  _I2C_DR                            main
+     00005217  _I2C_SR1                           main
+     00005217  _I2C_SR1_bit                       main
+     00005218  _I2C_SR2                           main
+     00005218  _I2C_SR2_bit                       main
+     00005219  _I2C_SR3                           main
+     00005219  _I2C_SR3_bit                       main
+     0000521A  _I2C_ITR                           main
+     0000521A  _I2C_ITR_bit                       main
+     0000521B  _I2C_CCRL                          main
+     0000521C  _I2C_CCRH                          main
+     0000521C  _I2C_CCRH_bit                      main
+     0000521D  _I2C_TRISER                        main
+     0000521D  _I2C_TRISER_bit                    main
+     0000521E  _I2C_PECR                          main
+     00005230  _UART1_SR                          main
+     00005230  _UART1_SR_bit                      main
+ASxxxx Linker V03.00 + NoICE + sdld,  page 5.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+.  .ABS.                            00000000    00000000 =           0. bytes (ABS,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+     00005231  _UART1_DR                          main
+     00005232  _UART1_BRR1                        main
+     00005233  _UART1_BRR2                        main
+     00005234  _UART1_CR1                         main
+     00005234  _UART1_CR1_bit                     main
+     00005235  _UART1_CR2                         main
+     00005235  _UART1_CR2_bit                     main
+     00005236  _UART1_CR3                         main
+     00005236  _UART1_CR3_bit                     main
+     00005237  _UART1_CR4                         main
+     00005237  _UART1_CR4_bit                     main
+     00005238  _UART1_CR5                         main
+     00005238  _UART1_CR5_bit                     main
+     00005239  _UART1_GTR                         main
+     0000523A  _UART1_PSCR                        main
+     00005240  _UART2_SR                          main
+     00005240  _UART2_SR_bit                      main
+     00005240  _UART3_SR                          main
+     00005240  _UART3_SR_bit                      main
+     00005241  _UART2_DR                          main
+     00005241  _UART3_DR                          main
+     00005242  _UART2_BRR1                        main
+     00005242  _UART3_BRR1                        main
+     00005243  _UART2_BRR2                        main
+     00005243  _UART3_BRR2                        main
+     00005244  _UART2_CR1                         main
+     00005244  _UART2_CR1_bit                     main
+     00005244  _UART3_CR1                         main
+     00005244  _UART3_CR1_bit                     main
+     00005245  _UART2_CR2                         main
+     00005245  _UART2_CR2_bit                     main
+     00005245  _UART3_CR2                         main
+     00005245  _UART3_CR2_bit                     main
+     00005246  _UART2_CR3                         main
+     00005246  _UART2_CR3_bit                     main
+     00005246  _UART3_CR3                         main
+     00005246  _UART3_CR3_bit                     main
+     00005247  _UART2_CR4                         main
+     00005247  _UART2_CR4_bit                     main
+     00005247  _UART3_CR4                         main
+     00005247  _UART3_CR4_bit                     main
+     00005249  _UART2_CR6                         main
+     00005249  _UART2_CR6_bit                     main
+     00005249  _UART3_CR6                         main
+     00005249  _UART3_CR6_bit                     main
+     0000524A  _UART2_GTR                         main
+     0000524B  _UART2_PSCR                        main
+     00005250  _TIM1_CR1                          main
+     00005250  _TIM1_CR1_bit                      main
+     00005251  _TIM1_CR2                          main
+     00005251  _TIM1_CR2_bit                      main
+ASxxxx Linker V03.00 + NoICE + sdld,  page 6.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+.  .ABS.                            00000000    00000000 =           0. bytes (ABS,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+     00005252  _TIM1_SMCR                         main
+     00005252  _TIM1_SMCR_bit                     main
+     00005253  _TIM1_ETR                          main
+     00005253  _TIM1_ETR_bit                      main
+     00005254  _TIM1_IER                          main
+     00005254  _TIM1_IER_bit                      main
+     00005255  _TIM1_SR1                          main
+     00005255  _TIM1_SR1_bit                      main
+     00005256  _TIM1_SR2                          main
+     00005256  _TIM1_SR2_bit                      main
+     00005257  _TIM1_EGR                          main
+     00005257  _TIM1_EGR_bit                      main
+     00005258  _TIM1_CCMR1                        main
+     00005258  _TIM1_CCMR1_bit                    main
+     00005259  _TIM1_CCMR2                        main
+     00005259  _TIM1_CCMR2_bit                    main
+     0000525A  _TIM1_CCMR3                        main
+     0000525A  _TIM1_CCMR3_bit                    main
+     0000525B  _TIM1_CCMR4                        main
+     0000525B  _TIM1_CCMR4_bit                    main
+     0000525C  _TIM1_CCER1                        main
+     0000525C  _TIM1_CCER1_bit                    main
+     0000525D  _TIM1_CCER2                        main
+     0000525D  _TIM1_CCER2_bit                    main
+     0000525E  _TIM1_CNTRH                        main
+     0000525F  _TIM1_CNTRL                        main
+     00005260  _TIM1_PSCRH                        main
+     00005261  _TIM1_PSCRL                        main
+     00005262  _TIM1_ARRH                         main
+     00005263  _TIM1_ARRL                         main
+     00005264  _TIM1_RCR                          main
+     00005265  _TIM1_CCR1H                        main
+     00005266  _TIM1_CCR1L                        main
+     00005267  _TIM1_CCR2H                        main
+     00005268  _TIM1_CCR2L                        main
+     00005269  _TIM1_CCR3H                        main
+     0000526A  _TIM1_CCR3L                        main
+     0000526B  _TIM1_CCR4H                        main
+     0000526C  _TIM1_CCR4L                        main
+     0000526D  _TIM1_BKR                          main
+     0000526D  _TIM1_BKR_bit                      main
+     0000526E  _TIM1_DTR                          main
+     0000526F  _TIM1_OISR                         main
+     0000526F  _TIM1_OISR_bit                     main
+     00005300  _TIM2_CR1                          main
+     00005300  _TIM2_CR1_bit                      main
+     00005301  _TIM2_IER                          main
+     00005301  _TIM2_IER_bit                      main
+     00005302  _TIM2_SR1                          main
+     00005302  _TIM2_SR1_bit                      main
+     00005303  _TIM2_SR2                          main
+ASxxxx Linker V03.00 + NoICE + sdld,  page 7.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+.  .ABS.                            00000000    00000000 =           0. bytes (ABS,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+     00005303  _TIM2_SR2_bit                      main
+     00005304  _TIM2_EGR                          main
+     00005304  _TIM2_EGR_bit                      main
+     00005305  _TIM2_CCMR1                        main
+     00005305  _TIM2_CCMR1_bit                    main
+     00005306  _TIM2_CCMR2                        main
+     00005306  _TIM2_CCMR2_bit                    main
+     00005307  _TIM2_CCMR3                        main
+     00005307  _TIM2_CCMR3_bit                    main
+     00005308  _TIM2_CCER1                        main
+     00005308  _TIM2_CCER1_bit                    main
+     00005309  _TIM2_CCER2                        main
+     00005309  _TIM2_CCER2_bit                    main
+     0000530A  _TIM2_CNTRH                        main
+     0000530B  _TIM2_CNTRL                        main
+     0000530C  _TIM2_PSCR                         main
+     0000530C  _TIM2_PSCR_bit                     main
+     0000530D  _TIM2_ARRH                         main
+     0000530E  _TIM2_ARRL                         main
+     0000530F  _TIM2_CCR1H                        main
+     00005310  _TIM2_CCR1L                        main
+     00005311  _TIM2_CCR2H                        main
+     00005312  _TIM2_CCR2L                        main
+     00005313  _TIM2_CCR3H                        main
+     00005314  _TIM2_CCR3L                        main
+     00005320  _TIM3_CR1                          main
+     00005320  _TIM3_CR1_bit                      main
+     00005321  _TIM3_IER                          main
+     00005321  _TIM3_IER_bit                      main
+     00005322  _TIM3_SR1                          main
+     00005322  _TIM3_SR1_bit                      main
+     00005323  _TIM3_SR2                          main
+     00005323  _TIM3_SR2_bit                      main
+     00005324  _TIM3_EGR                          main
+     00005324  _TIM3_EGR_bit                      main
+     00005325  _TIM3_CCMR1                        main
+     00005325  _TIM3_CCMR1_bit                    main
+     00005326  _TIM3_CCMR2                        main
+     00005326  _TIM3_CCMR2_bit                    main
+     00005327  _TIM3_CCER1                        main
+     00005327  _TIM3_CCER1_bit                    main
+     00005328  _TIM3_CNTRH                        main
+     00005329  _TIM3_CNTRL                        main
+     0000532A  _TIM3_PSCR                         main
+     0000532A  _TIM3_PSCR_bit                     main
+     0000532B  _TIM3_ARRH                         main
+     0000532C  _TIM3_ARRL                         main
+     0000532D  _TIM3_CCR1H                        main
+     0000532E  _TIM3_CCR1L                        main
+     0000532F  _TIM3_CCR2H                        main
+     00005330  _TIM3_CCR2L                        main
+ASxxxx Linker V03.00 + NoICE + sdld,  page 8.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+.  .ABS.                            00000000    00000000 =           0. bytes (ABS,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+     00005340  _TIM4_CR1                          main
+     00005340  _TIM4_CR1_bit                      main
+     00005341  _TIM4_IER                          main
+     00005341  _TIM4_IER_bit                      main
+     00005342  _TIM4_SR                           main
+     00005342  _TIM4_SR_bit                       main
+     00005343  _TIM4_EGR                          main
+     00005343  _TIM4_EGR_bit                      main
+     00005344  _TIM4_CNTR                         main
+     00005345  _TIM4_PSCR                         main
+     00005345  _TIM4_PSCR_bit                     main
+     00005346  _TIM4_ARR                          main
+     00005400  _ADC_CSR                           main
+     00005400  _ADC_CSR_bit                       main
+     00005401  _ADC_CR1                           main
+     00005401  _ADC_CR1_bit                       main
+     00005402  _ADC_CR2                           main
+     00005402  _ADC_CR2_bit                       main
+     00005403  _ADC_CR3                           main
+     00005403  _ADC_CR3_bit                       main
+     00005404  _ADC_DRH                           main
+     00005405  _ADC_DRL                           main
+     00005406  _ADC_TDRH                          main
+     00005407  _ADC_TDRL                          main
+     00005420  _CAN_MCR                           main
+     00005420  _CAN_MCR_bit                       main
+     00005421  _CAN_MSR                           main
+     00005421  _CAN_MSR_bit                       main
+     00005422  _CAN_TSR                           main
+     00005422  _CAN_TSR_bit                       main
+     00005423  _CAN_TPR                           main
+     00005423  _CAN_TPR_bit                       main
+     00005424  _CAN_RFR                           main
+     00005424  _CAN_RFR_bit                       main
+     00005425  _CAN_IER                           main
+     00005425  _CAN_IER_bit                       main
+     00005426  _CAN_DGR                           main
+     00005426  _CAN_DGR_bit                       main
+     00005427  _CAN_FPSR                          main
+     00005428  _CAN_ESR                           main
+     00005428  _CAN_ESR_bit                       main
+     00005428  _CAN_P0                            main
+     00005429  _CAN_EIER                          main
+     00005429  _CAN_EIER_bit                      main
+     00005429  _CAN_P1                            main
+     0000542A  _CAN_P2                            main
+     0000542B  _CAN_P3                            main
+     0000542C  _CAN_P4                            main
+     0000542D  _CAN_P5                            main
+     0000542E  _CAN_P6                            main
+     0000542F  _CAN_P7                            main
+ASxxxx Linker V03.00 + NoICE + sdld,  page 9.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+.  .ABS.                            00000000    00000000 =           0. bytes (ABS,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+     00005430  _CAN_P8                            main
+     00005431  _CAN_P9                            main
+     00005432  _CAN_PA                            main
+     00005433  _CAN_PB                            main
+     00005434  _CAN_PC                            main
+     00005435  _CAN_PD                            main
+     00005436  _CAN_PE                            main
+     00005437  _CAN_PF                            main
+     00007F00  _CPU_A                             main
+     00007F01  _CPU_PCE                           main
+     00007F02  _CPU_PCH                           main
+     00007F03  _CPU_PCL                           main
+     00007F04  _CPU_XH                            main
+     00007F05  _CPU_XL                            main
+     00007F06  _CPU_YH                            main
+     00007F07  _CPU_YL                            main
+     00007F08  _CPU_SPH                           main
+     00007F09  _CPU_SPL                           main
+     00007F0A  _CPU_CCR                           main
+     00007F0A  _CPU_CCR_bit                       main
+     00007F60  _CPU_CFG_GCR                       main
+     00007F60  _CPU_CFG_GCR_bit                   main
+     00007F70  _ITC_SPR1                          main
+     00007F70  _ITC_SPR1_bit                      main
+     00007F71  _ITC_SPR2                          main
+     00007F71  _ITC_SPR2_bit                      main
+     00007F72  _ITC_SPR3                          main
+     00007F72  _ITC_SPR3_bit                      main
+     00007F73  _ITC_SPR4                          main
+     00007F73  _ITC_SPR4_bit                      main
+     00007F74  _ITC_SPR5                          main
+     00007F74  _ITC_SPR5_bit                      main
+     00007F75  _ITC_SPR6                          main
+     00007F75  _ITC_SPR6_bit                      main
+     00007F76  _ITC_SPR7                          main
+     00007F76  _ITC_SPR7_bit                      main
+     00007F77  _ITC_SPR8                          main
+     00007F77  _ITC_SPR8_bit                      main
+     00007F80  _SWIM_CSR                          main
+     00007F90  _DM_BK1RE                          main
+     00007F91  _DM_BK1RH                          main
+     00007F92  _DM_BK1RL                          main
+     00007F93  _DM_BK2RE                          main
+     00007F94  _DM_BK2RH                          main
+     00007F95  _DM_BK2RL                          main
+     00007F96  _DM_CR1                            main
+     00007F97  _DM_CR2                            main
+     00007F98  _DM_CSR1                           main
+     00007F99  _DM_CSR2                           main
+     00007F9A  _DM_ENFCTR                         main
+     00008000  s_HOME                          
+ASxxxx Linker V03.00 + NoICE + sdld,  page 10.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+.  .ABS.                            00000000    00000000 =           0. bytes (ABS,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+     00008007  s_GSINIT                        
+     00008021  s_GSFINAL                       
+     00008024  s_CONST                         
+     00008027  s_INITIALIZER                   
+     0000802E  s_CODE                          
+
+ASxxxx Linker V03.00 + NoICE + sdld,  page 11.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+DATA                                00000001    0000040D =        1037. bytes (REL,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+     00000001  _osal_qHead                        OSAL
+     00000003  _tasksEvents                       OSAL_App
+     00000408  _timerHead                         OSAL_Timers
+ASxxxx Linker V03.00 + NoICE + sdld,  page 12.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+INITIALIZED                         0000040E    00000007 =           7. bytes (REL,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+     00000411  _OSAL_timeSeconds                  OSAL_ClockBLE
+
+ASxxxx Linker V03.00 + NoICE + sdld,  page 13.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+HOME                                00008000    00000007 =           7. bytes (REL,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+ASxxxx Linker V03.00 + NoICE + sdld,  page 14.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+GSINIT                              00008007    0000001A =          26. bytes (REL,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+ASxxxx Linker V03.00 + NoICE + sdld,  page 15.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+GSFINAL                             00008021    00000003 =           3. bytes (REL,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+ASxxxx Linker V03.00 + NoICE + sdld,  page 16.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+CONST                               00008024    00000003 =           3. bytes (REL,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+     00008024  _tasksArr                          OSAL_App
+     00008026  _tasksCnt                          OSAL_App
+
+ASxxxx Linker V03.00 + NoICE + sdld,  page 17.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+INITIALIZER                         00008027    00000007 =           7. bytes (REL,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+ASxxxx Linker V03.00 + NoICE + sdld,  page 18.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+CODE                                0000802E    00000D88 =        3464. bytes (REL,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+     0000802E  _osal_memcpy                       OSAL
+     00008059  _osal_revmemcpy                    OSAL
+     0000808C  _osal_memdup                       OSAL
+     000080AD  _osal_memcmp                       OSAL
+     000080DE  _osal_memset                       OSAL
+     000080F0  _osal_msg_allocate                 OSAL
+     0000811F  _osal_msg_deallocate               OSAL
+     0000813E  _osal_msg_send                     OSAL
+     0000814C  _osal_msg_push_front               OSAL
+     000081B9  _osal_msg_receive                  OSAL
+     00008221  _osal_msg_find                     OSAL
+     00008249  _osal_msg_enqueue                  OSAL
+     0000827B  _osal_msg_dequeue                  OSAL
+     000082A5  _osal_msg_push                     OSAL
+     000082BC  _osal_msg_extract                  OSAL
+     000082F2  _osal_msg_enqueue_max              OSAL
+     0000833A  _osal_set_event                    OSAL
+     0000835E  _osal_clear_event                  OSAL
+     00008389  _osal_isr_register                 OSAL
+     0000838B  _osal_int_enable                   OSAL
+     00008398  _osal_int_disable                  OSAL
+     000083A5  _osal_init_system                  OSAL
+     000083B7  _osal_start_system                 OSAL
+     000083BD  _osal_run_system                   OSAL
+     00008423  _osal_self                         OSAL
+     00008427  _Application_ProcessEvent          OSAL_App
+     00008429  _osalInitTasks                     OSAL_App
+     0000842A  _osal_mem_init                     OSAL_Memory
+     0000844C  _osal_mem_kick                     OSAL_Memory
+     00008471  _osal_mem_alloc                    OSAL_Memory
+     00008587  _osal_mem_free                     OSAL_Memory
+     000085CD  _gpio_init                         main
+     000085FA  _main                              main
+     00008600  _osalTimerInit                     OSAL_Timers
+     00008608  _osalAddTimer                      OSAL_Timers
+     0000867C  _osalFindTimer                     OSAL_Timers
+     00008698  _osalDeleteTimer                   OSAL_Timers
+     000086A6  _osal_start_timerEx                OSAL_Timers
+     000086C2  _osal_start_reload_timer           OSAL_Timers
+     000086F1  _osal_stop_timerEx                 OSAL_Timers
+     00008711  _osal_get_timeoutEx                OSAL_Timers
+     0000873C  _osal_timer_num_active             OSAL_Timers
+     0000874C  _osalTimerUpdate                   OSAL_Timers
+     0000891E  _osal_GetSystemClock               OSAL_Timers
+     00008926  _osalTimeUpdate                    OSAL_ClockBLE
+     00008981  _osal_setClock                     OSAL_ClockBLE
+     0000898D  _osal_getClock                     OSAL_ClockBLE
+     00008995  _osal_ConvertUTCTime               OSAL_ClockBLE
+     00008B41  _osal_ConvertUTCSecs               OSAL_ClockBLE
+     00008C51  __modulong                         
+ASxxxx Linker V03.00 + NoICE + sdld,  page 19.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+CODE                                0000802E    00000D88 =        3464. bytes (REL,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+     00008CC1  __divulong                         
+     00008D1B  _memset                            _memset
+     00008D3A  __mullong                          
+
+ASxxxx Linker V03.00 + NoICE + sdld,  page 20.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+SSEG                                FFFFFFFF    00000001 =           1. bytes (REL,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+ASxxxx Linker V03.00 + NoICE + sdld,  page 21.
+
+Files Linked                              [ module(s) ]
+
+out/OSAL.rel                              [ OSAL ]
+out/OSAL_App.rel                          [ OSAL_App ]
+out/OSAL_Memory.rel                       [ OSAL_Memory ]
+out/main.rel                              [ main ]
+out/OSAL_Timers.rel                       [ OSAL_Timers ]
+out/OSAL_ClockBLE.rel                     [ OSAL_ClockBLE ]
+
+
+Libraries Linked                          [ object file ]
+
+/usr/local/bin/../share/sdcc/lib/stm8/stm8.lib
+                                          [ _modulong.rel ]
+/usr/local/bin/../share/sdcc/lib/stm8/stm8.lib
+                                          [ _divulong.rel ]
+/usr/local/bin/../share/sdcc/lib/stm8/stm8.lib
+                                          [ _memset.rel ]
+/usr/local/bin/../share/sdcc/lib/stm8/stm8.lib
+                                          [ _mullong.rel ]
+
+ASxxxx Linker V03.00 + NoICE + sdld,  page 22.
+
+User Base Address Definitions
+
+HOME = 0x8000
+DATA = 0x0001
+SSEG = 0xffffffff
+
+

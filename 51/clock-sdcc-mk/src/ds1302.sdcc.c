@@ -1,6 +1,7 @@
 #include "lcd1602.sdcc.h"
 #include "ds1302.sdcc.h"
 #include "common.sdcc.h"
+#include "uart_sdcc.h"
 
 extern __bit enter_settings_flag;//进入设置的标志
 extern unsigned short idle_count;//最后一次设置开始空闲计数
@@ -87,15 +88,16 @@ unsigned char ds1302_is_running()
     return 1;
 }
 
-void ds1302_read_time(DS1302_TIME* time)
+void ds1302_read_time()
 {
-    time->year = ds1302_read(DS1302_YEAR_REG);
-    time->month = ds1302_read(DS1302_MONTH_REG);
-    time->day = ds1302_read(DS1302_DATE_REG);
-    time->week = ds1302_read(DS1302_DAY_REG);
-    time->hour = ds1302_read(DS1302_HR_REG);
-    time->minute = ds1302_read(DS1302_MIN_REG);
-    time->second = ds1302_read(DS1302_SEC_REG);
+    UART_send_string("ds1302_read_time");
+    current_time.year = ds1302_read(DS1302_YEAR_REG);
+    current_time.month = ds1302_read(DS1302_MONTH_REG);
+    current_time.day = ds1302_read(DS1302_DATE_REG);
+    current_time.week = ds1302_read(DS1302_DAY_REG);
+    current_time.hour = ds1302_read(DS1302_HR_REG);
+    current_time.minute = ds1302_read(DS1302_MIN_REG);
+    current_time.second = ds1302_read(DS1302_SEC_REG);
 }
 
 //转换成bcd

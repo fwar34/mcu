@@ -6,6 +6,8 @@
 #include "infrared.sdcc.h"
 #include "common.sdcc.h"
 #include "uart_sdcc.h"
+#include "key.sdcc.h"
+#include "task.h"
 
 void tm0_isr() __interrupt 1;
 extern void Timer0Init(void);//50毫秒@11.0592MHz
@@ -41,10 +43,11 @@ void display_idle_count()
 {
     /* unsigned char i = idle_count / 10; */
     /* unsigned char j = idle_count % 10; */
+    UART_send_string("display_idle_count");
     unsigned char i = new_value / 10;
     unsigned char j = new_value % 10;
-    write_char(0, 14, i + '0');
-    write_char(0, 15, j + '0');
+    /* write_char(0, 14, i + '0'); */
+    /* write_char(0, 15, j + '0'); */
 }
 
 
@@ -69,6 +72,13 @@ void main(void)
     CKSEL = 0x01;//选择外部晶振
     P_SW2 = 0x00;
 
+    /* AddLoopTask(10, ds1302_read_time); */
+    /* AddLoopTask(10, display); */
+    AddLoopTask(1000, display_idle_count);
+    /* AddLoopTask(20, process_key); */
+    /* AddLoopTask(2000, dht11_read_data); */
+    /* AddLoopTask(2000, display_dht11); */
+
     initLcd1602();
     ds1302_init();
     UartInit();
@@ -90,11 +100,6 @@ void main(void)
 
     while (1)
     {
-        /* ds1302_read_time(&current_time); */
-        /* display(&current_time); */
-        display_idle_count();
-
-        /* ds1302_read_time(&current_time); */
-        /* display(&current_time); */
+        ProcessTask();
     }
 }

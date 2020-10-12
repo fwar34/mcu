@@ -8,7 +8,8 @@ CC      = sdcc
 
 # CFLAGS = -m$(ARCH) -p$(MCU) 
 # CFLAGS = --verbose -V
-CFLAGS = --opt-code-size
+# CFLAGS = --opt-code-size
+CFLAGS = --model-large
 # LDFLAGS = -c -r -w -m I/usr/share/sdcc/lib/$(ARCH)/
 
 # set output folder and target name
