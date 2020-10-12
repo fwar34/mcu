@@ -277,21 +277,59 @@ void flicker_week(unsigned char x)
 //秒，分，时，日，月，星期，年
 void display()
 {
-    write_char(0, 0, '2');
-    write_char(0, 1, '0');
-    write_char(0, 4, '-');
-    write_char(0, 7, '-');
-    write_char(0, 10, '|');
-    write_char(1, 2, ':');
-    write_char(1, 5, ':');
+    static uint8_t year = 0;
+    static uint8_t month = 0;
+    static uint8_t day = 0;
+    static uint8_t week = 0;
+    static uint8_t hour = 0;
+    static uint8_t minute = 0;
+    static uint8_t second = 0;
 
-    display_sec(((current_time.second & 0x70) >> 4) * 10 + (current_time.second & 0x0F));
-    display_min(((current_time.minute & 0x70) >> 4) * 10 + (current_time.minute & 0x0F));
-    display_hour(((current_time.hour & 0x30) >> 4) * 10 + (current_time.hour & 0x0F));
-    display_day(((current_time.day & 0x30) >> 4) * 10 + (current_time.day & 0x0F));
-    display_month(((current_time.month & 0x10) >> 4) * 10 +(current_time.month & 0x0F));
-    display_week(current_time.week & 0x07);
-    display_year((current_time.year >> 4) * 10 + (current_time.year & 0x0F));
+    if (!day) {
+        //启动只显示一次
+        write_char(0, 0, '2');
+        write_char(0, 1, '0');
+        write_char(0, 4, '-');
+        write_char(0, 7, '-');
+        write_char(0, 10, '|');
+        write_char(1, 2, ':');
+        write_char(1, 5, ':');
+    }
+
+    if (second != current_time.second) {
+        display_sec(((current_time.second & 0x70) >> 4) * 10 + (current_time.second & 0x0F));
+        second = current_time.second;
+    }
+
+    if (minute != current_time.minute) {
+        display_min(((current_time.minute & 0x70) >> 4) * 10 + (current_time.minute & 0x0F));
+        minute = current_time.minute;
+    }
+
+    if (hour != current_time.hour) {
+        display_hour(((current_time.hour & 0x30) >> 4) * 10 + (current_time.hour & 0x0F));
+        hour = current_time.hour;
+    }
+
+    if (day != current_time.day) {
+        display_day(((current_time.day & 0x30) >> 4) * 10 + (current_time.day & 0x0F));
+        day = current_time.day;
+    }
+
+    if (month != current_time.month) {
+        display_month(((current_time.month & 0x10) >> 4) * 10 +(current_time.month & 0x0F));
+        month = current_time.month;
+    }
+
+    if (week != current_time.week) {
+        display_week(current_time.week & 0x07);
+        week = current_time.week;
+    }
+
+    if (year != current_time.year) {
+        display_year((current_time.year >> 4) * 10 + (current_time.year & 0x0F));
+        year = current_time.year;
+    }
 }
 
 void display_dht11()
