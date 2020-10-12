@@ -275,9 +275,8 @@ void flicker_week(unsigned char x)
 }
 
 //秒，分，时，日，月，星期，年
-void display(void* time)
+void display()
 {
-    DS1302_TIME* tm = (DS1302_TIME*)time;
     write_char(0, 0, '2');
     write_char(0, 1, '0');
     write_char(0, 4, '-');
@@ -286,13 +285,13 @@ void display(void* time)
     write_char(1, 2, ':');
     write_char(1, 5, ':');
 
-    display_sec(((tm->second & 0x70) >> 4) * 10 + (tm->second & 0x0F));
-    display_min(((tm->minute & 0x70) >> 4) * 10 + (tm->minute & 0x0F));
-    display_hour(((tm->hour & 0x30) >> 4) * 10 + (tm->hour & 0x0F));
-    display_day(((tm->day & 0x30) >> 4) * 10 + (tm->day & 0x0F));
-    display_month(((tm->month & 0x10) >> 4) * 10 + (tm->month & 0x0F));
-    display_week(tm->week & 0x07);
-    display_year((tm->year >> 4) * 10 + (tm->year & 0x0F));
+    display_sec(((current_time.second & 0x70) >> 4) * 10 + (current_time.second & 0x0F));
+    display_min(((current_time.minute & 0x70) >> 4) * 10 + (current_time.minute & 0x0F));
+    display_hour(((current_time.hour & 0x30) >> 4) * 10 + (current_time.hour & 0x0F));
+    display_day(((current_time.day & 0x30) >> 4) * 10 + (current_time.day & 0x0F));
+    display_month(((current_time.month & 0x10) >> 4) * 10 +(current_time.month & 0x0F));
+    display_week(current_time.week & 0x07);
+    display_year((current_time.year >> 4) * 10 + (current_time.year & 0x0F));
 }
 
 void display_dht11()

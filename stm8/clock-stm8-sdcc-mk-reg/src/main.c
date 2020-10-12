@@ -35,38 +35,7 @@ void uart2_isr() __interrupt(UART2_R_RXNE_vector)
 void tim4_isr() __interrupt(TIM4_OVR_UIF_vector)
 {
     TIM4_SR_UIF = 0;
-
-    loop_task_flag = 1;
-    once_task_flag = 1;
-    msg_task_flag = 1;
-
-    /* if (ch_count > 0) {//第一次点击ch按钮会把ch_count设置成1 */
-    /*     ++ch_count; */
-    /*     if (ch_count > 20) {//1s过后没有点击第二次ch按钮的话重置字段 */
-    /*         ch_count = 0; */
-    /*     } */
-    /* } */
-
-    /* if (idle_count > 0) {//每一次设置会把idle_count设置成1,所以大于0才判断是否是设置空闲超时 */
-    /*     ++idle_count; */
-    /*     if (idle_count > 20 * 10) {//设置空闲了10秒之后退出 */
-    /*         idle_count = 0; */
-    /*         exit_settings(); */
-    /*     } */
-    /* } */
-
-    /* if (++count >= 500 * 2) {//1000ms * 2 -> 2s更新一次dht11 */
-    /*     /\* lcd_light_back = !lcd_light_back; *\/ */
-    /*     count = 0;//reset counter */
-    /*     dht11_read_data(); */
-    /*     display_dht11(); */
-    /*     uart_send_string("debug ir:"); */
-    /*     uart_send_hex(debug_ir >> 8); */
-    /*     uart_send_hex((uint8_t)debug_ir); */
-    /*     debug_ir = 0; */
-    /* } */
-
-    /* process_key();//处理物理按键 */
+    CheckTask();
 }
 
 void Timer2Init(void)        //timer2@1MHz, dht11和ir在使用 每次tick为1us
@@ -122,7 +91,6 @@ void main(void)
     /* unsigned char msg[] = "hello"; */
     //初始时间20年8月16号14点16分55秒星期天
     DS1302_TIME start_time = {20, 9, 9, 3, 0, 6, 40};
-    DS1302_TIME current_time;
 
     common_gpio_init();
     lcd1602_init();
@@ -139,10 +107,11 @@ void main(void)
     beep_mute();
     IrInit();
 
-    AddLoopTask(10, ds1302_read_time, &current_time);
-    AddLoopTask(10, display, &current_time);
-    AddLoopTask(1000, dht11_read_data, 0);
-    AddLoopTask(1000, display_dht11, 0);
+    AddLoopTask(10, ds1302_read_time);
+    AddLoopTask(10, display);
+    AddLoopTask(1000, dht11_read_data);
+    AddLoopTask(1000, display_dht11);
+    AddLoopTask(10, display_idle_count);
 
     wait_for_dht11();
     lcdWriteCmd(0x01); //1602清屏
@@ -152,13 +121,7 @@ void main(void)
     enableInterrupts();
     clear_uart_recv_buf();
 
-    while (1)
-    {
-        /* display_idle_count(); */
-        /* ds1302_read_time(&current_time); */
-        /* display(&current_time); */
-        ProcessLoopTask();
-        ProcessOnceTask();
-        ProcessMsgTask();
+    while (1) {
+        ProcessTask();
     }
 }

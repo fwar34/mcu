@@ -32,6 +32,7 @@ typedef struct _DS1302_TIME
     unsigned char minute;
     unsigned char second;
 } DS1302_TIME;
+extern DS1302_TIME current_time;
 
 void beep_ring_1s();
 void common_gpio_init();

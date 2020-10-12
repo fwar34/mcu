@@ -113,16 +113,15 @@ unsigned char ds1302_is_running()
     return 1;
 }
 
-void ds1302_read_time(void* time)
+void ds1302_read_time()
 {
-    DS1302_TIME* tm = (DS1302_TIME*)time;
-    tm->year = ds1302_read(DS1302_YEAR_REG);
-    tm->month = ds1302_read(DS1302_MONTH_REG);
-    tm->day = ds1302_read(DS1302_DATE_REG);
-    tm->week = ds1302_read(DS1302_DAY_REG);
-    tm->hour = ds1302_read(DS1302_HR_REG);
-    tm->minute = ds1302_read(DS1302_MIN_REG);
-    tm->second = ds1302_read(DS1302_SEC_REG);
+    current_time.year = ds1302_read(DS1302_YEAR_REG);
+    current_time.month = ds1302_read(DS1302_MONTH_REG);
+    current_time.day = ds1302_read(DS1302_DATE_REG);
+    current_time.week = ds1302_read(DS1302_DAY_REG);
+    current_time.hour = ds1302_read(DS1302_HR_REG);
+    current_time.minute = ds1302_read(DS1302_MIN_REG);
+    current_time.second = ds1302_read(DS1302_SEC_REG);
 }
 
 //转换成bcd

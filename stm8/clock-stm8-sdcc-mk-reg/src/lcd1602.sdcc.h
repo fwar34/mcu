@@ -5,7 +5,7 @@
 
 void lcd1602_init();
 void wait_for_dht11();
-void display(void* time);
+void display();
 void lcdWriteCmd(unsigned char cmd);
 void write_str(unsigned char addr_start, unsigned char* str);
 void write_char(unsigned char x, unsigned char y, unsigned char dat);

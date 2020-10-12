@@ -8,6 +8,7 @@ unsigned char beep_setting;//beep开关
 unsigned char hex_array[16] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 unsigned char uart_recv_buf[256];
 unsigned char uart_recv_buf_index = 0;
+DS1302_TIME current_time;
 
 uint16_t debug_ir = 0;
 
