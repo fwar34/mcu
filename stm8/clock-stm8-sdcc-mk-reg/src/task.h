@@ -3,8 +3,8 @@
 #define _TASK_H_
 
 typedef void (*task_func)();
-unsigned char AddLoopTask(unsigned char over_flow_count, task_func tsk);
-unsigned char AddOnceTask(unsigned char over_flow_count, task_func tsk);
+unsigned char AddLoopTask(unsigned int over_flow_count, task_func tsk);
+unsigned char AddOnceTask(unsigned int over_flow_count, task_func tsk);
 unsigned char AddMsgTask(unsigned char msg, task_func tsk);
 unsigned char PushMsg(unsigned char msg);
 

@@ -23,7 +23,7 @@ Task once_task_list[task_len];
 unsigned char msg_queue[task_len];
 MsgTask msg_task_list[task_len];
 
-unsigned char AddLoopTask(unsigned char over_flow_count, task_func tsk)
+unsigned char AddLoopTask(unsigned int over_flow_count, task_func tsk)
 {
     unsigned char i = 0;
     for (; i < task_len; ++i) {
@@ -39,7 +39,7 @@ unsigned char AddLoopTask(unsigned char over_flow_count, task_func tsk)
     return 0;
 }
 
-unsigned char AddOnceTask(unsigned char over_flow_count, task_func tsk)
+unsigned char AddOnceTask(unsigned int over_flow_count, task_func tsk)
 {
     unsigned char i = 0;
     for (; i < task_len; ++i) {
@@ -116,7 +116,7 @@ void CheckTask()
             ++loop_task_list[i].count_;
             if (loop_task_list[i].count_ >= loop_task_list[i].over_flow_count_) {
                 loop_task_list[i].count_ = 0;
-                loop_task_list[i].task_func_();
+                loop_task_list[i].ready_ = 1;
             }
         } else {
             break;

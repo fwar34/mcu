@@ -32,9 +32,15 @@ void uart2_isr() __interrupt(UART2_R_RXNE_vector)
         uart_recv_buf_index = 0;
 }
 
-void tim4_isr() __interrupt(TIM4_OVR_UIF_vector)
+/* void tim4_isr() __interrupt(TIM4_OVR_UIF_vector) */
+/* { */
+/*     TIM4_SR_UIF = 0; */
+/*     CheckTask(); */
+/* } */
+
+void tim3_isr() __interrupt(TIM3_OVR_UIF_vector)
 {
-    TIM4_SR_UIF = 0;
+    TIM3_SR1_UIF = 0;
     CheckTask();
 }
 
@@ -52,24 +58,24 @@ void Timer2Init(void)        //timer2@1MHz, dht11和ir在使用 每次tick为1us
 
 void Timer3Init(void)        //1微秒tick@16MHz
 {
-    TIM3_PSCR = 0x04;
-    TIM3_ARRH = 0xFF;
-    TIM3_ARRL = 0xFF;
+    TIM3_PSCR = 0x07;
+    TIM3_ARRH = 0x04;
+    TIM3_ARRL = 0xE1;
     TIM3_CR1_ARPE = 0; //禁止预装载来更新，立即更新TIM3_ARR成设定值
-    TIM3_IER_UIE = 0;
+    TIM3_IER_UIE = 1;
     TIM3_EGR_UG = 1;
-    TIM3_CR1_CEN = 0;
+    TIM3_CR1_CEN = 1;
 }
 
-void Timer4Init(void)        //1毫秒tick@16MHz
+void Timer4Init(void)        //1微秒tick@16MHz
 {
-    TIM4_PSCR = 0x07; //128分频
-    TIM4_ARR = 124;
+    TIM4_PSCR = 0x04; //16分频
+    TIM4_ARR = 0xFF;
     TIM4_EGR_UG = 1;//软件产生更新事件，可以立即更新预分频寄存器
     TIM4_CR1_ARPE = 0; //禁止预装载来更新TIM4_ARR，立即更新TIM4_ARR成设定值
     TIM4_SR_UIF = 0;
-    TIM4_IER_UIE = 1;
-    TIM4_CR1_CEN = 1;
+    TIM4_IER_UIE = 0;
+    TIM4_CR1_CEN = 0;
 }
 
 void display_idle_count()
@@ -109,8 +115,8 @@ void main(void)
 
     AddLoopTask(10, ds1302_read_time);
     AddLoopTask(10, display);
-    AddLoopTask(1000, dht11_read_data);
-    AddLoopTask(1000, display_dht11);
+    AddLoopTask(200, dht11_read_data);
+    AddLoopTask(200, display_dht11);
     AddLoopTask(10, display_idle_count);
 
     wait_for_dht11();
