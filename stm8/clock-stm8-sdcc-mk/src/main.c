@@ -136,6 +136,7 @@ void main(void)
     Timer4Init();
     beep_mute();
     IrInit();
+    GPIO_Init(GPIOB, GPIO_PIN_2, GPIO_MODE_OUT_PP_HIGH_FAST);
 
     wait_for_dht11();
     lcdWriteCmd(0x01); //1602清屏

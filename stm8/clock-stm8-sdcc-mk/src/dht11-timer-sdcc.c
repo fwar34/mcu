@@ -37,16 +37,19 @@ void dht11_read_data()
     GPIO_Init(DHT11_DAT_PORT, DHT11_DAT_PIN, GPIO_MODE_OUT_PP_LOW_FAST);
     TIM2_SetCounter(0x0000);
     DHT11_CLR(); //主机将总线拉低（时间>=18ms），使得DHT11能够接收到起始信号
+    GPIO_WriteReverse(GPIOB, GPIO_PIN_2);
     TIM2_Cmd(ENABLE); //开启timer1
     
     while (TIM2_GetCounter() <= 20000); //20ms
     /* Delay20ms();  //至少 18 ms */
 
     DHT11_SET(); // 主机将总线拉高（释放总线），代表起始信号结束。
+    GPIO_WriteReverse(GPIOB, GPIO_PIN_2);
     TIM2_SetCounter(0x0000);
     while (TIM2_GetCounter() <= 30); //30us
     /* Delay30us(); //延时20~40us */
 
+    GPIO_WriteReverse(GPIOB, GPIO_PIN_2);
     TIM2_SetCounter(0x0000);
     GPIO_Init(DHT11_DAT_PORT, DHT11_DAT_PIN, GPIO_MODE_IN_PU_NO_IT);
     /* 主机接收dht11响应信号ACK */
@@ -58,6 +61,7 @@ void dht11_read_data()
         }
     }
 
+    GPIO_WriteReverse(GPIOB, GPIO_PIN_2);
     TIM2_SetCounter(0x0000);
     while (GPIO_ReadInputPin(DHT11_DAT_PORT, DHT11_DAT_PIN)) { //DHT11将总线拉高至少80us，为发送传感器数据做准备。
         if (TIM2_GetCounter() > 98) { //98us
@@ -72,6 +76,7 @@ void dht11_read_data()
     {
         for (i = 0; i < 8; ++i) //读每个字节的8位
         {
+            GPIO_WriteReverse(GPIOB, GPIO_PIN_2);
             TIM2_SetCounter(0x0000);
             while (!GPIO_ReadInputPin(DHT11_DAT_PORT, DHT11_DAT_PIN)) { //拉低54us作为bit信号的起始标志
                 if (TIM2_GetCounter() > 60) { //60 × 1.085 = 65us
@@ -82,6 +87,7 @@ void dht11_read_data()
             }
             dht11_temp[j] <<= 1;   //从高位开始读，所以左移
 
+            GPIO_WriteReverse(GPIOB, GPIO_PIN_2);
             TIM2_SetCounter(0x0000);
             while (GPIO_ReadInputPin(DHT11_DAT_PORT, DHT11_DAT_PIN)) { //拉高。持续26~28us表示0，持续70us表示1
                 if (TIM2_GetCounter() > 100) { //64 × 1.085 = 70us
@@ -101,6 +107,7 @@ void dht11_read_data()
             }
         }
     }
+    GPIO_WriteReverse(GPIOB, GPIO_PIN_2);
 
     if (dht11_check_sum()) {
         for (i = 0; i < 4; ++i) {

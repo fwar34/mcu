@@ -41,6 +41,7 @@ void uart2_isr() __interrupt(UART2_R_RXNE_vector)
 void tim3_isr() __interrupt(TIM3_OVR_UIF_vector)
 {
     TIM3_SR1_UIF = 0;
+    PB_ODR_ODR3 = !PB_ODR_ODR3;
     CheckTask();
 }
 
@@ -56,11 +57,11 @@ void Timer2Init(void)        //timer2@1MHz, dht11和ir在使用 每次tick为1us
     TIM2_CR1_CEN = 0; //暂停TIM2
 }
 
-void Timer3Init(void)        //1微秒tick@16MHz
+void Timer3Init(void)        //3毫秒tick@16MHz
 {
-    TIM3_PSCR = 0x07;
+    TIM3_PSCR = 0x07; //128分频
     TIM3_ARRH = 0x04;
-    TIM3_ARRL = 0xE1;
+    TIM3_ARRL = 0xE2;
     TIM3_CR1_ARPE = 0; //禁止预装载来更新，立即更新TIM3_ARR成设定值
     TIM3_IER_UIE = 1;
     TIM3_EGR_UG = 1;
@@ -113,11 +114,19 @@ void main(void)
     beep_mute();
     IrInit();
 
-    AddLoopTask(10, ds1302_read_time);
-    AddLoopTask(10, display);
-    AddLoopTask(200, dht11_read_data);
-    AddLoopTask(200, display_dht11);
-    AddLoopTask(10, display_idle_count);
+    PB_DDR_DDR2 = 1;
+    PB_CR1_C12 = 1;
+    PB_CR2_C22 = 0;
+    PB_ODR_ODR2 = 1;
+    PB_DDR_DDR3 = 1;
+    PB_CR1_C13 = 1;
+    PB_CR2_C23 = 0;
+    PB_ODR_ODR3 = 1;
+
+    AddTask(10, ds1302_read_time, 1);
+    AddTask(10, display, 1);
+    AddTask(200, read_dht11_state_0, 1);
+    AddTask(10, display_idle_count, 1);
 
     wait_for_dht11();
     lcdWriteCmd(0x01); //1602清屏
