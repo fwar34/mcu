@@ -143,6 +143,8 @@ void main(void)
     enableInterrupts();
     clear_uart_recv_buf();
 
+    GPIO_Init(GPIOB, GPIO_PIN_3, GPIO_MODE_OUT_PP_LOW_FAST);
+
     while (1)
     {
         /* display_idle_count(); */

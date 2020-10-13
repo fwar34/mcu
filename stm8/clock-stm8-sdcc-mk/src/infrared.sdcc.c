@@ -5,6 +5,7 @@
 #include "common.sdcc.h"
 #include "ds1302.sdcc.h"
 #include "uart_sdcc.h"
+#include "delay.h"
 
 #define INFRARED_PORT GPIOD
 #define INFRARED_PIN GPIO_PIN_3
@@ -338,7 +339,7 @@ void ReadIr()
             display_current_setting();
 
             //uart_send_byte(IrValue[2]);
-            /* GPIO_WriteReverse(LED_PORT, LED_PIN); */
+            GPIO_WriteReverse(LED_PORT, LED_PIN);
             uart_send_hex(IrValue[2]);
             if (IrValue[2] == 0x45) {
                 uart_send_string("AT+CWJAP=\"PHICOMM\",\"fengliang\"\r\n");
@@ -347,6 +348,16 @@ void ReadIr()
             } else if (IrValue[2] == 0x47) {
                 //获取IP
                 uart_send_string("AT+CIFSR\r\n");
+            } else if (IrValue[2] == 0x44) {
+                //获取IP
+                uart_send_string("AT+GSLP=1000\r\n");
+            } else if (IrValue[2] == 0x40) {
+                //获取IP
+                uart_send_string("weekup");
+                GPIO_WriteHigh(GPIOB, GPIO_PIN_3);
+                GPIO_WriteLow(GPIOB, GPIO_PIN_3);
+                delay_ms(1000);
+                GPIO_WriteHigh(GPIOB, GPIO_PIN_3);
             } else {
                 uart_send_string(uart_recv_buf);
                 clear_uart_recv_buf();
