@@ -57,18 +57,18 @@ void Timer2Init(void)        //timer2@1MHz, dht11和ir在使用 每次tick为1us
     TIM2_CR1_CEN = 0; //暂停TIM2
 }
 
-void Timer3Init(void)        //3毫秒tick@16MHz
+void Timer3Init(void)        //5毫秒tick@16MHz
 {
     TIM3_PSCR = 0x07; //128分频
-    TIM3_ARRH = 0x04;
-    TIM3_ARRL = 0xE2;
+    TIM3_ARRH = 0x02;
+    TIM3_ARRL = 0x70;
     TIM3_CR1_ARPE = 0; //禁止预装载来更新，立即更新TIM3_ARR成设定值
     TIM3_IER_UIE = 1;
     TIM3_EGR_UG = 1;
     TIM3_CR1_CEN = 1;
 }
 
-void Timer4Init(void)        //1微秒tick@16MHz
+void Timer4Init(void)        //1毫秒tick@16MHz
 {
     TIM4_PSCR = 0x04; //16分频
     TIM4_ARR = 0xFF;
@@ -125,7 +125,7 @@ void main(void)
 
     AddTask(10, ds1302_read_time, 1);
     AddTask(10, display, 1);
-    AddTask(200, read_dht11_state_0, 1);
+    AddTask(400, read_dht11_state_0, 1);
     AddTask(10, display_idle_count, 1);
 
     wait_for_dht11();
