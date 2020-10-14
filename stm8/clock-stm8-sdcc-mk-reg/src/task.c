@@ -1,5 +1,4 @@
 #include "task.h"
-#include "uart_sdcc.h"
 
 #define task_len 20
 
@@ -19,7 +18,6 @@ typedef struct _MsgTask {
 } MsgTask;
 
 Task task_list[task_len];
-
 unsigned char msg_queue[task_len];
 MsgTask msg_task_list[task_len];
 
@@ -28,15 +26,17 @@ unsigned char AddTask(unsigned int over_flow_count, task_func tsk, unsigned char
     unsigned char i = 1;
     for (; i < task_len; ++i) {
         if (!task_list[i].is_vaild_) {
-            task_list[i].is_vaild_ = 1;
             task_list[i].count_ = 0;
             task_list[i].over_flow_count_ = over_flow_count;
             task_list[i].task_func_ = tsk;
             task_list[i].ready_ = 0;
             task_list[i].repeat_ = repeat;
+            //设置is_vaild_标志必须放到最后，防止函数指针和其他信息还没有设置，定时器都已经开始++count_了
+            task_list[i].is_vaild_ = 1; 
             return i;
         }
     }
+
     return 0;
 }
 
@@ -75,11 +75,16 @@ void ProcessTask()
     unsigned char i = 0;
     for (; i < task_len; ++i) {
         if (task_list[i].is_vaild_ && task_list[i].ready_) {
-            task_list[i].ready_ = 0;
-            task_list[i].task_func_();
+            
             if (!task_list[i].repeat_) {
+                //这个is_vaild_状态设置必须放到下面的task_list[i].task_func_();前面，
+                //因为在task_func_()中有可能刚添加一个非周期任务，
+                //如果放到task_func_()的前面，就会把刚添加的这个非周期任务设置成无效的，
+                //导致这个非周期任务添加了也不会执行
                 task_list[i].is_vaild_ = 0;
             }
+            task_list[i].ready_ = 0;
+            task_list[i].task_func_();
         }
     }
 
@@ -95,8 +100,9 @@ void CheckTask()
 {
     unsigned char i = 0;
     unsigned char j = 0;
+
     //check task
-    for (i = 0; i < task_len; ++i) {
+    for (i = 1; i < task_len; ++i) {
         if (task_list[i].is_vaild_) {
             ++task_list[i].count_;
             if (task_list[i].count_ >= task_list[i].over_flow_count_) {
