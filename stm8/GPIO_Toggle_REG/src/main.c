@@ -13,6 +13,10 @@ void gpio_init()
     PD_ODR |= MASK_PD_ODR_ODR4; //输出高电平
 }
 
+void delay(unsigned int count)
+{
+    while (--count);
+}
 
 void main()
 {
@@ -20,5 +24,8 @@ void main()
     /* PA_ODR_ODR2 = 0; */
     /* PA_ODR &= ~(1 << 2); //初始输出低电平 */
     /* PA_ODR &= ~MASK_PA_ODR_ODR2; */
-    while (1);
+    while (1) {
+        PA_ODR_ODR2 = !PA_ODR_ODR2;
+        delay(6000);
+    }
 }

@@ -15,7 +15,7 @@
 
 # STM8 device (for supported devices see stm8s.h)
 DEVICE=STM8S105
-DEVICE_FLASH=stm8s105k4
+DEVICE_FLASH=stm8s105k6
 
 # set compiler path & parameters 
 CC_ROOT =
@@ -36,7 +36,7 @@ PRJ_OBJECTS := $(addprefix $(OUTPUT_DIR)/, $(PRJ_SOURCE:.c=.rel))
 
 # set SPL paths
 # SPL_ROOT    = ../../..
-SPL_ROOT    = $(HOME)/mine/mcu/stm8/framework-ststm8spl-platformio
+SPL_ROOT    = $(HOME)/Chip/mcu/stm8/framework-ststm8spl-platformio
 SPL_SRC_DIR = $(SPL_ROOT)/Libraries/STM8S_StdPeriph_Driver/src
 SPL_INC_DIR = $(SPL_ROOT)/Libraries/STM8S_StdPeriph_Driver/inc
 SPL_SOURCE  = stm8s_gpio.c

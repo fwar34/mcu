@@ -24,11 +24,11 @@ CFLAGS  = -mstm8 -lstm8 --opt-code-size
 
 # set output folder and target name
 # OUTPUT_DIR = ./$(DEVICE)
-OUTPUT_DIR = ./out
+OUTPUT_DIR = ../out
 TARGET     = $(OUTPUT_DIR)/$(DEVICE).hex
 
 # set project folder and files (all *.c)
-PRJ_ROOT    = .
+PRJ_ROOT    = ..
 PRJ_SRC_DIR = $(PRJ_ROOT)/src
 PRJ_INC_DIR = $(PRJ_ROOT)/src
 PRJ_SOURCE  = $(notdir $(wildcard $(PRJ_SRC_DIR)/*.c))
@@ -36,7 +36,7 @@ PRJ_OBJECTS := $(addprefix $(OUTPUT_DIR)/, $(PRJ_SOURCE:.c=.rel))
 
 # set SPL paths
 # SPL_ROOT    = ../../..
-SPL_ROOT    = $(HOME)/mine/mcu/stm8/framework-ststm8spl-platformio
+SPL_ROOT    = $(HOME)/Chip/mcu/stm8/framework-ststm8spl-platformio
 SPL_SRC_DIR = $(SPL_ROOT)/Libraries/STM8S_StdPeriph_Driver/src
 SPL_INC_DIR = $(SPL_ROOT)/Libraries/STM8S_StdPeriph_Driver/inc
 SPL_SOURCE  = stm8s_gpio.c
