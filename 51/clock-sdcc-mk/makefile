@@ -15,11 +15,11 @@ CFLAGS = --model-large
 
 # set output folder and target name
 # OUTPUT_DIR = ./$(DEVICE)
-OUTPUT_DIR = ./out
+OUTPUT_DIR = ../out
 TARGET     = $(OUTPUT_DIR)/$(DEVICE).hex
 
 # set project folder and files (all *.c)
-PRJ_ROOT    = .
+PRJ_ROOT    = ..
 PRJ_SRC_DIR = $(PRJ_ROOT)/src
 PRJ_INC_DIR = $(PRJ_ROOT)/src
 # all project sources included by default
@@ -52,8 +52,7 @@ $(TARGET): $(PRJ_OBJECTS)
 	$(CC) $(CFLAGS) -o $(TARGET) $^
 
 flash: $(TARGET)
-	stcflash $(TARGET)
+	python3 /usr/local/bin/stcflash $(TARGET)
 
 clean:
 	rm -rf $(OUTPUT_DIR)/*
-# rm -rf $(OUTPUT_DIR)
