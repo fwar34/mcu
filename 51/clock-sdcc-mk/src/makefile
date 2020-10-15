@@ -51,7 +51,7 @@ $(OUTPUT_DIR)/%.rel: %.c #匹配符 %
 $(TARGET): $(PRJ_OBJECTS)
 	$(CC) $(CFLAGS) -o $(TARGET) $^
 
-flash: $(TARGET)
+stcflash: $(TARGET)
 	python3 /usr/local/bin/stcflash $(TARGET)
 
 clean:

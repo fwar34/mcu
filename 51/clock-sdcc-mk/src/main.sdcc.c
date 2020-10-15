@@ -72,12 +72,12 @@ void main(void)
     CKSEL = 0x01;//选择外部晶振
     P_SW2 = 0x00;
 
-    /* AddLoopTask(10, ds1302_read_time); */
-    /* AddLoopTask(10, display); */
-    AddLoopTask(1000, display_idle_count);
-    /* AddLoopTask(20, process_key); */
-    /* AddLoopTask(2000, dht11_read_data); */
-    /* AddLoopTask(2000, display_dht11); */
+    AddTask(10, ds1302_read_time, 1);
+    AddTask(10, display, 1);
+    AddTask(1000, display_idle_count, 1);
+    AddTask(20, process_key, 1);
+    AddTask(2000, dht11_read_data, 1);
+    AddTask(2000, display_dht11, 1);
 
     initLcd1602();
     ds1302_init();
