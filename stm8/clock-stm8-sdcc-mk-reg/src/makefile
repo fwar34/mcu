@@ -69,5 +69,8 @@ $(TARGET): $(PRJ_OBJECTS) $(SPL_OBJECTS)
 flash: $(TARGET)
 	stm8flash -c stlinkv2 -p $(DEVICE_FLASH) -s flash -w $(TARGET)
 
+stcflash: $(TARGET)
+	python3 /usr/local/bin/stcflash $(TARGET)
+
 clean: 
 	rm -fr $(OUTPUT_DIR)
