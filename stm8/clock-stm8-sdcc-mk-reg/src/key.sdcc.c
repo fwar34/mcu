@@ -12,14 +12,17 @@ unsigned char column = 0;
 
 void key_init()
 {
-    PB_DDR &= ~(MASK_PB_DDR_DDR2 | MASK_PB_DDR_DDR3);
-    PB_CR1 |= MASK_PB_CR1_C12 | MASK_PB_CR1_C13;
-    PB_CR2 |= MASK_PB_CR2_C22 | MASK_PB_CR2_C23;
+    //sw
+    PB_DDR &= ~(MASK_PB_DDR_DDR3);
+    PB_CR1 |= MASK_PB_CR1_C13;
+    PB_CR2 |= MASK_PB_CR2_C23;
 
+    //sw
     PD_DDR_DDR7 = 0;
     PD_CR1_C17 = 1;
     PD_CR2_C27 = 1;
 
+    //sw
     PA_DDR_DDR1 = 0;
     PA_CR1_C11 = 1;
     PA_CR2_C21 = 1;
