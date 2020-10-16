@@ -78,6 +78,11 @@ space:
 	@grep REL,CON $(MAP) | uniq
 
 clean: 
-	rm -fr $(OUTPUT_DIR)
+
+# makefile中的shell命令前加
+# @	使命令在被执行前不被回显。
+# -	使任何命令行的任何非零退出状态都被忽略。
+# +	使命令行可以通过指定 -n、-q 或 -t 选项来执行。
+	-rm -fr $(OUTPUT_DIR)
 
 rebuild: clean all
