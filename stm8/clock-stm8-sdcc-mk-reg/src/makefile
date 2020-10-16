@@ -26,6 +26,7 @@ CFLAGS  = -mstm8 -lstm8 --opt-code-size
 # OUTPUT_DIR = ./$(DEVICE)
 OUTPUT_DIR = ../out
 TARGET     = $(OUTPUT_DIR)/$(DEVICE).hex
+MAP        = $(OUTPUT_DIR)/$(DEVICE).map
 
 # set project folder and files (all *.c)
 PRJ_ROOT    = ..
@@ -53,9 +54,10 @@ VPATH=$(PRJ_SRC_DIR):$(SPL_SRC_DIR)
 .PHONY: clean
 
 all: $(OUTPUT_DIR) $(TARGET)
+	@grep REL,CON $(MAP) | uniq
 
 $(OUTPUT_DIR):
-	mkdir -p $(OUTPUT_DIR)
+	@mkdir -p $(OUTPUT_DIR)
 
 # $(OUTPUT_DIR)/%.rel: %.c
 # 	$(CC) $(CFLAGS) $(INCLUDE) -D$(DEVICE) -c $?
@@ -72,5 +74,10 @@ flash: $(TARGET)
 stcflash: $(TARGET)
 	python3 /usr/local/bin/stcflash $(TARGET)
 
+space:
+	@grep REL,CON $(MAP) | uniq
+
 clean: 
 	rm -fr $(OUTPUT_DIR)
+
+rebuild: clean all
