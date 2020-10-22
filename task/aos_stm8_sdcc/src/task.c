@@ -30,8 +30,8 @@ void task_switch()
     register unsigned int* new_s = cur_s;
     register unsigned char* d = task_sleep + task_id;
 
-    register unsigned char cc = get_cc();
     disableInterrupts();
+    register unsigned char cc = get_cc();
 
     while (1) {
         if (task_id == 0) {
@@ -55,6 +55,7 @@ void task_switch()
     }
 
     set_cc(cc);
+    enableInterrupts();
 }
 
 //寻找一个空任务,并将任务装入.无空任务时等待.do-while循环中不作任务切换,所以无需支持重入
@@ -104,6 +105,7 @@ void clock_timer() __interrupt 15
     register unsigned char* p;
     register unsigned char i;
 
+    TIM3_SR1_UIF = 0;
     //任务延迟处理
     i = MAX_TASKS;
     p = task_sleep; 

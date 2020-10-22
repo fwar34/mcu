@@ -54,7 +54,7 @@ extern unsigned int task_sp[MAX_TASKS];
 //预估方法:以2为基数,每增加一层函数调用,加2字节.如果其间可能发生中断,则还要再加上中断需要的栈深.
 //减小栈深的方法:1.尽量少嵌套子程序 2.调子程序前关中断.
 extern unsigned char  task_stack[MAX_TASKS][MAX_TASK_DEP];//任务堆栈.
-extern unsigned char  task_sleep[MAX_TASKS];//任务睡眠定时器
+extern unsigned int  task_sleep[MAX_TASKS];//任务睡眠定时器
 
 extern unsigned char task_id;//当前活动任务
 
@@ -67,7 +67,7 @@ void task_switch();
 unsigned char task_load(unsigned int fn);
 
 //设置指定的进程为休眠状态.
-#define task_setsuspend(tid) task_sleep[tid] = -1
+#define task_setsuspend(tid) task_sleep[tid] = 0xFF;
 
 //设置指定的进程为延时状态
 #define task_setsleep(tid, timer) task_sleep[tid] = timer

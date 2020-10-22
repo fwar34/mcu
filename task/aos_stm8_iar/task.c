@@ -10,7 +10,7 @@ unsigned char  event_vector[MAX_EVENT_VECTOR];//消息钩子
 unsigned char task_id;
 unsigned int task_sp[MAX_TASKS];//任务的栈指针
 unsigned char task_stack[MAX_TASKS][MAX_TASK_DEP];//任务堆栈.
-unsigned char task_sleep[MAX_TASKS];//任务睡眠定时器
+unsigned int task_sleep[MAX_TASKS];//任务睡眠定时器
 
 
 
@@ -38,14 +38,10 @@ void task_switch()
 {
     register unsigned int* cur_s = task_sp + task_id;
     register unsigned int* new_s = cur_s;
-    register unsigned char* d = task_sleep + task_id;
+    register unsigned int* d = task_sleep + task_id;
 
-    __istate_t _istate = __get_interrupt_state(); 
     __disable_interrupt();
-//    unsigned int* ss;
-//    unsigned char* dd;
-    
-    
+    __istate_t _istate = __get_interrupt_state();    
 
     while (1) {
         if (task_id == 0) {
@@ -62,7 +58,6 @@ void task_switch()
     } 
     
     if (*new_s && cur_s != new_s) {
-        //*s = (unsigned int)_get_SP(); //保存当前任务的堆栈指针
       if (*cur_s)                                                                                                             
                archContextSwitch(cur_s, new_s);                                                                                    
       else //当前的任务已经退出，只切换到新的任务就行                                                                                                                   
@@ -70,6 +65,7 @@ void task_switch()
     }
    
     __set_interrupt_state(_istate);
+    __enable_interrupt();
 }
 
 //寻找一个空任务,并将任务装入.无空任务时等待.do-while循环中不作任务切换,所以无需支持重入
@@ -115,12 +111,18 @@ void timer3_init()        //5毫秒tick@16MHz
 /* #pragma SAVE */
 /* #pragma NOAREGS */
 /* void clock_timer(void) __interrupt 1 using 1 */
-#pragma vector=15
+unsigned int count = 0;
+#pragma vector=TIM3_OVR_UIF_vector
 __interrupt void clock_timer()
 {
-    register unsigned char* p;
+    register unsigned int* p;
     register unsigned char i;
 
+    TIM3_SR1_UIF = 0;
+//    if (++count == 50) {
+//      count = 0;
+//      PD_ODR_ODR2 = !PD_ODR_ODR2;
+//    };
     //任务延迟处理
     i = MAX_TASKS;
     p = task_sleep; 

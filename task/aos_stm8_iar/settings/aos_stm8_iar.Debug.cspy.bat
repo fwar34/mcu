@@ -25,7 +25,7 @@ if not "%~1" == "" goto debugFile
 
 @echo on 
 
-"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.3\common\bin\cspybat" -f "D:\fengliang\task\aos_stm8_iar\settings\aos_stm8_iar.Debug.general.xcl" --backend -f "D:\fengliang\task\aos_stm8_iar\settings\aos_stm8_iar.Debug.driver.xcl" 
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.3\common\bin\cspybat" -f "H:\MCU\mcu\task\aos_stm8_iar\settings\aos_stm8_iar.Debug.general.xcl" --backend -f "H:\MCU\mcu\task\aos_stm8_iar\settings\aos_stm8_iar.Debug.driver.xcl" 
 
 @echo off 
 goto end 
@@ -34,7 +34,7 @@ goto end
 
 @echo on 
 
-"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.3\common\bin\cspybat" -f "D:\fengliang\task\aos_stm8_iar\settings\aos_stm8_iar.Debug.general.xcl" "--debug_file=%~1" --backend -f "D:\fengliang\task\aos_stm8_iar\settings\aos_stm8_iar.Debug.driver.xcl" 
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.3\common\bin\cspybat" -f "H:\MCU\mcu\task\aos_stm8_iar\settings\aos_stm8_iar.Debug.general.xcl" "--debug_file=%~1" --backend -f "H:\MCU\mcu\task\aos_stm8_iar\settings\aos_stm8_iar.Debug.driver.xcl" 
 
 @echo off 
 :end

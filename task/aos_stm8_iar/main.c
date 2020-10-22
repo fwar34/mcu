@@ -3,28 +3,29 @@
 */
 
 #include <stdio.h>
+#include <intrinsics.h>
 #include "task.h"
 #include "uart.h"
 /*============================以下为测试代码============================*/
 void led_init()
 {
-    PG_DDR |= 1 << 1;
-    PG_CR1 |= 1 << 1;
-    PG_CR2 &= ~(1 << 1);
+    PD_DDR |= 1 << 2;
+    PD_CR1 |= 1 << 2;
+    PD_CR2 &= ~(1 << 2);
 }
 
 void task1(){//无关紧要的任务
     while(1){
         //PD_ODR ^= 1 << 2;
-      PG_ODR_ODR1 = !PG_ODR_ODR1;
+      //PD_ODR_ODR2 = !PD_ODR_ODR2;
       uart_send_byte(0x1);
-      task_sleep(200);
+      task_sleep(1000);
         //printf("task1 reserver\n");
     }
 }
 
 unsigned char stra[3], strb[3];
-
+unsigned int count1 = 0;
 //测试任务之主任务:
 void task2(){
     static unsigned char i;
@@ -36,6 +37,11 @@ void task2(){
         
         task_switch();
     }while(--i);
+    
+    if (++count1 == 5000) {
+      count1 = 0;
+      PD_ODR_ODR2 = !PD_ODR_ODR2;
+    }
         
     event_push(EVENT_RF_PULS_SENT);//发送消息(其实质是唤醒监听该消息的进程)
 
@@ -63,7 +69,8 @@ void task3(){
     //如果进程所等待的消息产生于中断中,则要用该宏来完成.否则有可能丢失信息,进程将无法再醒过来.详细说明见头文件说明.
     //括号中的语句为,可能触发中断的语句.
     task_wait_interrupt(
-        strb[0] = 3, strb[1] = 2, strb[2] = 1;
+        strb[0] = 3; strb[1] = 2; strb[2] = 1;
+        task_load((unsigned int)task2);
         );
 #endif
 
@@ -75,6 +82,7 @@ void task3(){
 }
 
 void main(){
+    __disable_interrupt();
     task_init();
 
     //装载任务,成功后返回值为装载的任务槽号(示例中没有用到返回值).没有空槽可用则一直等待.
@@ -88,6 +96,5 @@ void main(){
     led_init();
     
     uart_send_byte(0xff);
-
      os_start();
 }
