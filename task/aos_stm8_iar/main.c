@@ -39,9 +39,7 @@ void task2(){
         
     event_push(EVENT_RF_PULS_SENT);//发送消息(其实质是唤醒监听该消息的进程)
 
-    //task_exit();//结束任务.
-    task_sp[task_id] = 0;
-    task_switch();
+    task_exit();//结束任务.
 }
 
 //测试任务之主任务:将数据放入缓冲区strb[]内,然后在创建子任务task2后进入休眠,等待EVENT_RF_PULS_SENT消息.
