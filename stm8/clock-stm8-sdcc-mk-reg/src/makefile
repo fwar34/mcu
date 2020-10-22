@@ -20,12 +20,17 @@ DEVICE_FLASH=stm8s105k4
 # set compiler path & parameters 
 CC_ROOT =
 CC      = sdcc
-CFLAGS  = -mstm8 -lstm8 --opt-code-size
+CFLAGS  = -mstm8 -lstm8 --opt-code-size --debug
+
+ASM     = sdasstm8
+ASMFLAGS= -loff
+
+STVP    = STVP_CmdLine.exe -BoardName=ST-LINK -Port=USB -ProgMode=SWIM -Device=STM8S105x6 -verif -no_loop -no_log 
 
 # set output folder and target name
 # OUTPUT_DIR = ./$(DEVICE)
 OUTPUT_DIR = ../out
-TARGET     = $(OUTPUT_DIR)/$(DEVICE).hex
+TARGET     = $(OUTPUT_DIR)/$(DEVICE).ihx
 MAP        = $(OUTPUT_DIR)/$(DEVICE).map
 
 # set project folder and files (all *.c)
@@ -33,6 +38,7 @@ PRJ_ROOT    = ..
 PRJ_SRC_DIR = $(PRJ_ROOT)/src
 PRJ_INC_DIR = $(PRJ_ROOT)/src
 PRJ_SOURCE  = $(notdir $(wildcard $(PRJ_SRC_DIR)/*.c))
+# PRJ_OBJECTS := $(addprefix $(OUTPUT_DIR)/, $(PRJ_SOURCE:.c=.rel)) (addprefix $(OUTPUT_DIR)/, $(PRJ_SOURCE:.s=.rel))
 PRJ_OBJECTS := $(addprefix $(OUTPUT_DIR)/, $(PRJ_SOURCE:.c=.rel))
 
 # set SPL paths
@@ -65,17 +71,31 @@ $(OUTPUT_DIR):
 $(OUTPUT_DIR)/%.rel: %.c
 	$(CC) $(CFLAGS) $(INCLUDE) -D$(DEVICE) -c $? -o $@
 
+$(OUTPUT_DIR)/%.rel: %.s
+	$(ASM) $(ASMFLAGS) $? -o $@
+
+# $(APP_ASM_OBJECTS): %.rel: ./$(APP_DIR)/%.s
+# 	$(ASM) $(ASMFLAGS) $(BUILD_DIR)/$(notdir $@) $<
+
 $(TARGET): $(PRJ_OBJECTS) $(SPL_OBJECTS)
 	$(CC) $(CFLAGS) -o $(TARGET) $^
 
+# shell命令每一行是在一个子进程中执行
 flash: $(TARGET)
-	stm8flash -c stlinkv2 -p $(DEVICE_FLASH) -s flash -w $(TARGET)
+	@$(STVP) -help >/dev/null 2>&1; \
+	if [[ "$$?" == "0" ]]; then \
+	    $(STVP) -FileProg=$(TARGET); \
+	else \
+	    stm8flash -c stlinkv2 -p $(DEVICE_FLASH) -s flash -w $(TARGET);\
+	fi
 
 stcflash: $(TARGET)
 	python3 /usr/local/bin/stcflash $(TARGET)
 
 space:
 	@grep REL,CON $(MAP) | uniq
+
+stvp:
 
 clean: 
 
