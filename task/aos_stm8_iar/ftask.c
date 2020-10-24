@@ -1,18 +1,49 @@
-/* #include <iostm8.h> */
-/* #include <absacc.h> */
 #include <intrinsics.h>
-#include "task.h"
+#include <stdint.h>
+#include "ftask.h"
 
-/*============================以下为任务管理器代码============================*/
+extern void archContextSwitch (unsigned int *cur_s, unsigned int *new_s);                                                   
+extern void archFirstThreadRestore(unsigned int *sp);
 
-unsigned char  event_vector[MAX_EVENT_VECTOR];//消息钩子
+extern unsigned char  event_vector[MAX_EVENT_VECTOR];//消息向量,每项保存一个task_id号,指向监听它的进程(task_id).无监者时应置为0xFF
 
+//任务的栈指针
+extern unsigned int task_sp[MAX_TASKS];
+                                                                                
+//预估方法:以2为基数,每增加一层函数调用,加2字节.如果其间可能发生中断,则还要再加上中断需要的栈深.
+//减小栈深的方法:1.尽量少嵌套子程序 2.调子程序前关中断.
+extern unsigned char  task_stack[MAX_TASKS][MAX_TASK_DEP];//任务堆栈.
+extern unsigned int  task_sleep[MAX_TASKS];//任务睡眠定时器
+
+extern unsigned char task_id;//当前活动任务
+
+void clock_init();
+void timer3_init();
+
+typedef struct {
+    uint8_t current_tid;
+    uint8_t is_init;
+} FOS_Info;
+
+typedef enum {
+    TASK_BLOCK,
+    TASK_READY,
+    TASK_RUNNING
+} TaskStatus;
+
+typedef struct {
+    uint8_t pid;
+    task_func task;
+    uint8_t stack[MAX_TASK_STACK_LENGTH];
+    uint8_t status;
+    uint8_t 
+} TCB_Info;
+
+unsigned char event_vector[MAX_EVENT_VECTOR];//消息钩子
 unsigned char task_id;
 unsigned int task_sp[MAX_TASKS];//任务的栈指针
 unsigned char task_stack[MAX_TASKS][MAX_TASK_DEP];//任务堆栈.
 unsigned int task_sleep[MAX_TASKS];//任务睡眠定时器
-
-
 
 void task_init()
 {
@@ -20,7 +51,6 @@ void task_init()
     i = MAX_EVENT_VECTOR;
     do
     {
-        /* event_vector[i-1] = -1; */
         event_vector[i - 1] = 0xFF;
         
     } while (--i);
@@ -28,11 +58,10 @@ void task_init()
     i = MAX_TASKS;
     do
     {
-      task_sleep[i - 1] = 0;
+        task_sleep[i - 1] = 0;
     } while (--i);
 }
 
-//任务切换函数(任务调度器)
 //任务切换函数(任务调度器)
 void task_switch()
 {
@@ -58,10 +87,10 @@ void task_switch()
     } 
     
     if (*new_s && cur_s != new_s) {
-      if (*cur_s)                                                                                                             
-               archContextSwitch(cur_s, new_s);                                                                                    
-      else //当前的任务已经退出，只切换到新的任务就行                                                                                                                   
-               archFirstThreadRestore(new_s);
+        if (*cur_s)
+            archContextSwitch(cur_s, new_s);
+        else //当前的任务已经退出，只切换到新的任务就行
+            archFirstThreadRestore(new_s);
     }
    
     __set_interrupt_state(_istate);
@@ -108,30 +137,19 @@ void timer3_init()        //5毫秒tick@16MHz
 } 
 
 //========时钟中断函数========================================================
-/* #pragma SAVE */
-/* #pragma NOAREGS */
-/* void clock_timer(void) __interrupt 1 using 1 */
-unsigned int count = 0;
-#pragma vector=TIM3_OVR_UIF_vector
+#pragma vector = TIM3_OVR_UIF_vector
 __interrupt void clock_timer()
 {
     register unsigned int* p;
     register unsigned char i;
 
     TIM3_SR1_UIF = 0;
-//    if (++count == 50) {
-//      count = 0;
-//      PD_ODR_ODR2 = !PD_ODR_ODR2;
-//    };
     //任务延迟处理
     i = MAX_TASKS;
     p = task_sleep; 
     do {
-        /* if(*p != 0 && *p != -1)//不为0,也不为0xff,则将任务延时值减1.为0xff表示任务已挂起,不由定时器唤醒 */
         if (*p != 0 && *p != 0xFF)//不为0,也不为0xff,则将任务延时值减1.为0xff表示任务已挂起,不由定时器唤醒
             (*p)--;
         p++;
     } while (--i);
 }
-
-/* #pragma RESTORE */

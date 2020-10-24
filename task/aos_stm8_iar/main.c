@@ -2,6 +2,7 @@
   增强的简易多任务操作系统,具有简单的消息机制和休眠/睡眠机制,支持任务动态装入和结束.
 */
 
+#include <iostm8.h>
 #include <stdio.h>
 #include <intrinsics.h>
 #include "task.h"
