@@ -16,3 +16,4 @@
 **/*.dep
 **/*.ewt
 **/*.ewd
+**/settings/*
