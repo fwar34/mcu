@@ -13,3 +13,7 @@
 **/*.log
 **/log
 *nohup.out
+**/*.dep
+**/*.ewt
+**/*.ewd
+**/settings/*
