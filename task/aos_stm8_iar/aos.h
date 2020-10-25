@@ -1,5 +1,5 @@
-#ifndef _FTASK_H_
-#define _FTASK_H_
+#ifndef _AOS_H_
+#define _AOS_H_
 /*
   关于消息机制:
   该系统的消息机制其实并不是真正的消息机制,其过程是依靠休眠和唤醒来实现的.机制是这样的:

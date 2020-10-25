@@ -31,30 +31,26 @@
 
 /* -------------------------------------------------------------------------- */
 
-//void *_get_SP( void )
-//{
-//	asm("popw   y");
-//	asm("ldw    x, sp");
-//	asm("pushw  y");
-//	asm("ret");
-  //asm("ldw x, sp");
-  //asm("ret");
-//}
+void *get_sp()
+{
+    asm("popw y"); //将sp-2就是函数调用之间的sp值（2字节的调用函数下个指令的地址）
+    asm("ldw x, sp");
+    asm("pushw y");
+    asm("ret");
+}
 
 /* -------------------------------------------------------------------------- */
 
-//void _set_SP( void *sp )
-//{
-//	asm("popw   y");
-//	asm("popw   x");
-//	asm("ldw    sp, x");
-//	asm("pushw  x");
-//	asm("pushw  y");
-//
-//	asm("ret");
-  //asm("ldw sp, x");
-  //asm("ret");
-//}
+void set_sp(void* sp)
+{
+    asm("popw y");
+    asm("popw x");
+    asm("ldw sp, x");
+    asm("pushw x");
+    asm("pushw y");
+
+    asm("ret");
+}
 
 /* -------------------------------------------------------------------------- */
 
