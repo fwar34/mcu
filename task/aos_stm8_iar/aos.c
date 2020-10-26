@@ -181,6 +181,7 @@ __interrupt void clock_timer()
 
     TASK_SAVE();
     aos.tcb_info[aos.current_tid].stack_ptr = stack_temp;
+    aos.tcb_info[aos.current_tid].status = TASK_READY;
 
     uint8_t i;
     for (i = 0; i < MAX_TASKS; ++i) {
