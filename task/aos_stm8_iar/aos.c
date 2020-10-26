@@ -2,7 +2,6 @@
 #include <stdint.h>
 #include "aos.h"
 
-
 static uint16_t stack_temp = 0;
 
 #define IDLE_TASK_TID MAX_TASKS
@@ -40,7 +39,7 @@ typedef enum {
 
 typedef struct {
     uint16_t stack_ptr;
-    uint8_t pid;
+    uint8_t tid;
     task_func task;
     uint8_t status;
     uint16_t delay_ticks;
@@ -53,15 +52,10 @@ typedef struct {
     uint8_t current_tid;
     uint8_t is_init;
     TCB_Info tcb_info[MAX_TASKS + 1]; //最后一个是空闲任务
-    uint8_t event_vector[MAX_EVENT_VECTOR];//消息向量,每项保存一个task_id号
+    uint8_t event_vector[MAX_EVENT_VECTOR + 1];//消息向量,每项保存一个task_id号
 } AOS_Info;
 
 AOS_Info aos;
-
-/* unsigned char task_id; */
-/* unsigned int task_sp[MAX_TASKS];//任务的栈指针 */
-/* unsigned char task_stack[MAX_TASKS][MAX_TASK_DEP];//任务堆栈. */
-/* unsigned int task_sleep[MAX_TASKS];//任务睡眠定时器 */
 
 void aos_task_idle()
 {
@@ -70,9 +64,12 @@ void aos_task_idle()
 
 void aos_init()
 {
-    uint8_t i = 0;
-    for (; i < MAX_TASKS; ++i) {
+    uint8_t i;
+    for (i = 0; i < MAX_TASKS + 1; ++i) {
         memset(aos.tcb_info, 0, sizeof(TCB_Info));
+    }
+    for (i = 0; i < MAX_EVENT_VECTOR + 1; ++i) {
+        aos.event_vector[i] = 0xFF;
     }
     //tid为MAX_TASKS(即最后一个)的是空闲任务
     TCB_Info* info = &aos.tcb_info[MAX_TASKS];
@@ -80,7 +77,6 @@ void aos_init()
     info->stack_ptr = info->stack + MAX_TASK_STACK_LENGTH - 1;
     *(info->stack_ptr)-- = aos_task_idle & 0xFF;
     *(info->stack_ptr)-- = aos_task_idle >> 8;
-
     *(info->stack_ptr)-- = 0; //?b8 
     *(info->stack_ptr)-- = 0; //?b9
     *(info->stack_ptr)-- = 0; //?b10
@@ -89,19 +85,22 @@ void aos_init()
     *(info->stack_ptr)-- = 0; //?b13
     *(info->stack_ptr)-- = 0; //?b14
     *(info->stack_ptr)-- = 0; //?b15
+
+    info->tid = MAX_TASKS;
+    info->status = TASK_READY;
 }
 
 uint8_t aos_get_next_task()
 {
     uint8_t tid = aos.current_tid;
     while (1) {
-        if (++tid > MAX_TASKS) {
+        if (++tid >= MAX_TASKS) { //跳过idle_task
             tid = 0;
         }
 
         //当前其他任务都没有就绪则切换到空闲任务
         if (tid == aos.current_tid) {
-            aos.current_tid = IDLE_TASK_TID;
+            aos.current_tid = MAX_TASKS;
             break;
         }
 
@@ -113,6 +112,29 @@ uint8_t aos_get_next_task()
     return aos.current_tid;
 }
 
+uint8_t event_reg(uint8_t event)
+{
+    if (!event || event > MAX_EVENT_VECTOR) {
+        return 0;
+    }
+
+    if (aos.event_vector[event] != 0xFF) {
+        return 0;
+    }
+
+    aos.event_vector[event] = aos.current_tid;
+    return 1;
+}
+
+void event_unreg(uint8_t event)
+{
+    if (!event || event > MAX_EVENT_VECTOR) {
+        return;
+    }
+
+    aos.event_vector[event] = 0xFF;
+}
+
 uint8_t event_push(uint8_t event)
 {
     if (event == 0 || event > MAX_EVENT_VECTOR) {
@@ -122,9 +144,26 @@ uint8_t event_push(uint8_t event)
     return 1;
 }
 
+uint8_t event_pop(uint8_t* event)
+{
+    if (aos.tcb_info[aos.current_tid].event_queue.empty()) {
+        return 0;
+    }
+
+    *event = pop(aos.tcb_info[aos.current_tid].event_queue, &event);
+    return 1;
+}
+
+void event_wait()
+{
+    aos.tcb_info[current_tid].status = TASK_BLOCK;
+    task_switch();
+}
+
 void aos_task_start()
 {
-    stack_temp = aos.tcb_info[0].stack_ptr;
+    aos.tcb_info.current_tid = 0;
+    stack_temp = aos.tcb_info[aos.tcb_info.current_tid].stack_ptr;
     TASK_RESTORE();
     __enable_interrupt();   
 }
@@ -138,7 +177,7 @@ void aos_task_exit()
 void aos_task_switch()
 {
     __istate_t _istate = __get_interrupt_state();    
-    __disable_interrupt(); //由于关闭全局中断会影响cc寄存器，所以先获取cc的值再关闭全局中断
+    __disable_interrupt();
 
     //如果当前任务已经删除则不保存当前任务的上下文
     if (aos.tcb_info[aos.current_tid].status != TASK_INVALID) {
@@ -161,10 +200,10 @@ unsigned char aos_task_load(task_func task)
     for (i = 0; i < MAX_TASKS; ++i) {
         info = &aos.tcb_info;
         if (info->status == TASK_INVALID) {
+            memset(&info, 0, sizeof(TCB_Info));
             info->stack_ptr = info->stack + MAX_TASK_STACK_LENGTH - 1;
             *(info->stack_ptr)-- = task & 0xFF;
             *(info->stack_ptr)-- = task >> 8;
-
             *(info->stack_ptr)-- = 0; //?b8 
             *(info->stack_ptr)-- = 0; //?b9
             *(info->stack_ptr)-- = 0; //?b10
@@ -173,12 +212,37 @@ unsigned char aos_task_load(task_func task)
             *(info->stack_ptr)-- = 0; //?b13
             *(info->stack_ptr)-- = 0; //?b14
             *(info->stack_ptr)-- = 0; //?b15
+            info->tid = i;
             info->status = TASK_READY;
-            return i + 1;
+            return i;
         }
     }
 }
 
+void aos_task_weakup(uint8_t tid)
+{
+    if (tid >= MAX_TASKS) {
+        return;
+    }
+    aos.tcb_info[tid].status = TASK_READY;
+}
+
+void aos_task_suspend()
+{
+    aos.tcb_info[current_tid].status = TASK_BLOCK;
+    task_switch();
+}
+
+void aos_task_sleep(uint16_t ticks)
+{
+    if (!ticks) {
+        return;
+    }
+
+    aos.tcb_info[aos.current_tid].delay_ticks = ticks;
+    aos.tcb_info[aos.current_tid].status = TASK_BLOCK;
+    aos_task_switch();
+}
 
 //========时钟中断函数========================================================
 #pragma vector = TIM3_OVR_UIF_vector

@@ -21,7 +21,7 @@ void task1()
         //PD_ODR ^= 1 << 2;
         //PD_ODR_ODR2 = !PD_ODR_ODR2;
         uart_send_byte(0x1);
-        task_sleep(1000);
+        aos_task_sleep(1000);
         //printf("task1 reserver\n");
     }
 }
@@ -38,8 +38,7 @@ void task2()
     do
     {
         stra[i-1] = strb[i-1];
-        
-        task_switch();
+        aos_task_switch();
     } while (--i);
     
     if (++count1 == 5000) {
@@ -48,8 +47,7 @@ void task2()
     }
         
     event_push(EVENT_RF_PULS_SENT);//发送消息(其实质是唤醒监听该消息的进程)
-
-    task_exit();//结束任务.
+    aos_task_exit();//结束任务.
 }
 
 //测试任务之主任务:将数据放入缓冲区strb[]内,然后在创建子任务task2后进入休眠,等待EVENT_RF_PULS_SENT消息.
@@ -58,29 +56,31 @@ void task2()
 //注意:为了演示能持续进行,任务在结束前重新装入了它自已.这种用法没错误,但在实际应用中不大可能出现.
 void task3()
 {
-    static unsigned char event_backup;//用于保存信号EVENT_RF_PULS_SENT原来的值.在这个例子里实际上是不需要保存的,因为EVENT_RF_PULS_SENT未被其它进程监听.但在真实应用中则不一定能预知.
+    /* static unsigned char event_backup;//用于保存信号EVENT_RF_PULS_SENT原来的值.在这个例子里实际上是不需要保存的,因为EVENT_RF_PULS_SENT未被其它进程监听.但在真实应用中则不一定能预知. */
 
-    event_reg(EVENT_RF_PULS_SENT, event_backup);//注册消息,原值保存在event_backup中(该变量必须申明为静态)
+    /* event_reg(EVENT_RF_PULS_SENT, event_backup);//注册消息,原值保存在event_backup中(该变量必须申明为静态) */
+    event_reg(EVENT_RF_PULS_SENT);
 
 #if 1
     //如果等待的消息产生于另一任务进程中,则使用task_suspend()就可以了.
     strb[0] = 3, strb[1] = 2, strb[2] = 1;
     uart_send_byte(0x3);
     task_load((unsigned int)task2);//装载子任务
-    task_suspend();
+    event_wait();
 #else
     //跟中断打交道时最好使用task_wait_interrupt().
     //这里的例子是假定中断服务程序发现strb[]全部不为0时,送出EVENT_RF_PULS_SENT消息.
     //如果进程所等待的消息产生于中断中,则要用该宏来完成.否则有可能丢失信息,进程将无法再醒过来.详细说明见头文件说明.
     //括号中的语句为,可能触发中断的语句.
-    task_wait_interrupt(
-        strb[0] = 3; strb[1] = 2; strb[2] = 1;
-        task_load((unsigned int)task2);
-        );
+    /* task_wait_interrupt( */
+    /*     strb[0] = 3; strb[1] = 2; strb[2] = 1; */
+    /*     task_load((unsigned int)task2); */
+    /*     ); */
 #endif
 
-    event_unreg(EVENT_RF_PULS_SENT, event_backup);
-    aos_task_load((unsigned int)task3);//演示如何在任务中载入其它任务.这里载入的是它自已,实际应用中不大可能装载自已.
+    /* event_unreg(EVENT_RF_PULS_SENT, event_backup); */
+    event_unreg(EVENT_RF_PULS_SENT);
+    aos_task_load(task3);//演示如何在任务中载入其它任务.这里载入的是它自已,实际应用中不大可能装载自已.
     aos_task_exit();//结束任务.
 }
 

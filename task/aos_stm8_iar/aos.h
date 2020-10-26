@@ -14,18 +14,21 @@
 
 typedef void (*task_func)();
 //注册指定消息.当该消息发生时,系统将唤醒注册者.
-#define event_replace(eid) event_vector[eid] = task_id
+/* #define event_replace(eid) event_vector[eid] = task_id */
 //清除指定消息
-#define event_clear(eid) event_vector[eid] = -1
+/* #define event_clear(eid) event_vector[eid] = 0xFF */
 //保存指定消息到reg中(unsigned char类型)的原注册者,并监听该消息.
-#define event_reg(eid, reg) reg = event_vector[eid], event_vector[eid] = task_id
+/* #define event_reg(eid, reg) reg = event_vector[eid], event_vector[eid] = task_id */
+//保存指定消息到reg中(unsigned char类型)的原注册者,并监听该消息.
+uint8_t event_reg(uint8_t event);
 //从reg中(unsigned char类型)恢复指定消息的原注册者
-#define event_unreg(eid, reg) event_vector[eid] = reg
+/* #define event_unreg(eid, reg) event_vector[eid] = reg */
+void event_unreg(uint8_t event);
 //发送消息(严格地说,是唤醒监听者)
 /* #define event_push(eid) { if(event_vector[eid] != 0xFF) task_wakeup(event_vector[eid]); } */
-
 //发送消息(严格地说,是唤醒监听者)
 uint8_t event_push(uint8_t event);
+uint8_t event_pop(uint8_t* event);
 //初始化
 void aos_init();
 //启动任务调度.从最先添加的任务开始执行.
@@ -37,17 +40,22 @@ void aos_task_switch();
 //装载进程.如果任务槽满,则延时两个定时器中断周期,直到有空槽为止
 unsigned char aos_task_load(task_func task);
 //设置指定的进程为休眠状态.
-#define task_setsuspend(tid) task_sleep[tid] = 0xFF;
+/* #define task_setsuspend(tid) task_sleep[tid] = 0xFF; */
 //设置指定的进程为延时状态
-#define task_setsleep(tid, timer) task_sleep[tid] = timer
+/* #define task_setsleep(tid, timer) task_sleep[tid] = timer */
+void aos_task_sleep(uint16_t ticks);
 //唤醒指定的进程.
-#define task_wakeup(tid) task_sleep[tid] = 0
+/* #define task_wakeup(tid) task_sleep[tid] = 0 */
+void aos_task_weakup(uint8_t tid);
 //进程立即进入延时
-#define task_sleep(timer) task_sleep[task_id] = timer, task_switch()
+/* #define task_sleep(timer) task_sleep[task_id] = timer, task_switch() */
 //进程立即进入休眠
-#define task_suspend() task_sleep[task_id] = 0xFF, task_switch()
+/* #define task_suspend() task_sleep[task_id] = 0xFF, task_switch() */
+//进程立即进入休眠
+void aos_task_suspend();
+void event_wait();
 //执行指定语句后进入休眠.与直接调用task_suspend()相比,可防止中断中的消息在提前到达于进入休眠等待前.
-#define task_wait_interrupt(prog) { task_setsuspend(task_id); prog; task_switch(); }
+/* #define task_wait_interrupt(prog) { task_setsuspend(task_id); prog; task_switch(); } */
 /*task_wait_interrupt()的详细说明:
   出于执行效率的考虑,该系统的消息发送是有"BUG"的:进程必须未在活动中("未活动"是指 1.进入休眠 2.延时状态后)才能收到消息.
   具休地说就是,如果进程监听的消息产生于中断中,而该监听者当前正处于活动状态,则进程无法收到消息,
@@ -68,7 +76,7 @@ unsigned char aos_task_load(task_func task);
   task_switch();
 */
 //与task_wait_interrupt()类似,但只在指定的时间内等待,而task_wait_interrupt()会永远等待.
-#define task_sleep_interrupt(prog) task_setsleep(task_id), prog, task_switch()
+/* #define task_sleep_interrupt(prog) task_setsleep(task_id), prog, task_switch() */
 //结束指定的进程
 /* #define task_delete(tid) task_sp[tid] = 0 */
 
