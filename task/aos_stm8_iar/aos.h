@@ -24,11 +24,15 @@ typedef void (*task_func)();
 //发送消息(严格地说,是唤醒监听者)
 #define event_push(eid) { if(event_vector[eid] != 0xFF) task_wakeup(event_vector[eid]); }
 //初始化
-void task_init();
+void aos_init();
+//启动任务调度.从最先添加的任务开始执行.
+void aos_start();
+//退出当前任务.如该任务注册了信号,则必须在退出前恢复/清理
+void aos_task_exit();
 //立即释放CPU,并在执行过其它全部未休眠的进程后回到释放点
-void task_switch();
+void aos_task_switch();
 //装载进程.如果任务槽满,则延时两个定时器中断周期,直到有空槽为止
-unsigned char task_load(unsigned int fn);
+unsigned char aos_task_load(unsigned int fn);
 //设置指定的进程为休眠状态.
 #define task_setsuspend(tid) task_sleep[tid] = 0xFF;
 //设置指定的进程为延时状态
@@ -62,11 +66,7 @@ unsigned char task_load(unsigned int fn);
 */
 //与task_wait_interrupt()类似,但只在指定的时间内等待,而task_wait_interrupt()会永远等待.
 #define task_sleep_interrupt(prog) task_setsleep(task_id), prog, task_switch()
-//退出当然进程.如该进程注册了信号,则必须在退出前恢复/清理
-#define task_exit() task_sp[task_id] = 0, task_switch()
 //结束指定的进程
-#define task_delete(tid) task_sp[tid] = 0
-//启动任务调度.从最先压入的任务开始执行.
-#define os_start() task_id = MAX_TASKS - 1, archFirstThreadRestore(task_sp + MAX_TASKS - 1) __enable_interrupt();
+/* #define task_delete(tid) task_sp[tid] = 0 */
 
 #endif

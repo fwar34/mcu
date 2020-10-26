@@ -5,7 +5,7 @@
 #include <iostm8.h>
 #include <stdio.h>
 #include <intrinsics.h>
-#include "task.h"
+#include "aos.h"
 #include "uart.h"
 /*============================以下为测试代码============================*/
 void led_init()
@@ -15,12 +15,13 @@ void led_init()
     PD_CR2 &= ~(1 << 2);
 }
 
-void task1(){//无关紧要的任务
-    while(1){
+void task1()
+{
+    while (1) {
         //PD_ODR ^= 1 << 2;
-      //PD_ODR_ODR2 = !PD_ODR_ODR2;
-      uart_send_byte(0x1);
-      task_sleep(1000);
+        //PD_ODR_ODR2 = !PD_ODR_ODR2;
+        uart_send_byte(0x1);
+        task_sleep(1000);
         //printf("task1 reserver\n");
     }
 }
@@ -28,20 +29,22 @@ void task1(){//无关紧要的任务
 unsigned char stra[3], strb[3];
 unsigned int count1 = 0;
 //测试任务之主任务:
-void task2(){
+void task2()
+{
     static unsigned char i;
 
     i = sizeof(stra);
     uart_send_byte(0x2);
-    do{
+    do
+    {
         stra[i-1] = strb[i-1];
         
         task_switch();
-    }while(--i);
+    } while (--i);
     
     if (++count1 == 5000) {
-      count1 = 0;
-      PD_ODR_ODR2 = !PD_ODR_ODR2;
+        count1 = 0;
+        PD_ODR_ODR2 = !PD_ODR_ODR2;
     }
         
     event_push(EVENT_RF_PULS_SENT);//发送消息(其实质是唤醒监听该消息的进程)
@@ -53,7 +56,8 @@ void task2(){
 //task2在处理完缓冲区strb[]中的数据后发送EVENT_RF_PULS_SENT消息唤醒主任务,然后结束自已.
 //主任务被唤醒后,解除对EVENT_RF_PULS_SENT的监听,并结束任务.
 //注意:为了演示能持续进行,任务在结束前重新装入了它自已.这种用法没错误,但在实际应用中不大可能出现.
-void task3(){
+void task3()
+{
     static unsigned char event_backup;//用于保存信号EVENT_RF_PULS_SENT原来的值.在这个例子里实际上是不需要保存的,因为EVENT_RF_PULS_SENT未被其它进程监听.但在真实应用中则不一定能预知.
 
     event_reg(EVENT_RF_PULS_SENT, event_backup);//注册消息,原值保存在event_backup中(该变量必须申明为静态)
@@ -76,20 +80,34 @@ void task3(){
 #endif
 
     event_unreg(EVENT_RF_PULS_SENT, event_backup);
-
-    task_load((unsigned int)task3);//演示如何在任务中载入其它任务.这里载入的是它自已,实际应用中不大可能装载自已.
-
-    task_exit();//结束任务.
+    aos_task_load((unsigned int)task3);//演示如何在任务中载入其它任务.这里载入的是它自已,实际应用中不大可能装载自已.
+    aos_task_exit();//结束任务.
 }
 
-void main(){
-    __disable_interrupt();
-    task_init();
+//==================系统时钟初始化=================================
+void clock_init()
+{
+    CLK_CKDIVR = 0x00;//HSI 不分频，主时钟 16M
+}
 
-    //装载任务,成功后返回值为装载的任务槽号(示例中没有用到返回值).没有空槽可用则一直等待.
+//==================系统时钟初始化=================================
+void timer3_init()        //5毫秒tick@16MHz
+{
+    TIM3_PSCR = 0x07; //128分频
+    TIM3_ARRH = 0x02;
+    TIM3_ARRL = 0x70;
+    TIM3_CR1_ARPE = 0; //禁止预装载来更新，立即更新TIM3_ARR成设定值
+    TIM3_IER_UIE = 1;
+    TIM3_EGR_UG = 1;
+    TIM3_CR1_CEN = 1;
+} 
 
-    task_load((unsigned int)task1);//task1为无关任务,模拟实际使用中的其它任务.在这里不需理睬.
-    task_load((unsigned int)task3);//主任务
+void main()
+{
+    aos_init();
+
+    aos_task_load(task1);//task1为无关任务,模拟实际使用中的其它任务.在这里不需理睬.
+    aos_task_load(task3);//主任务
     
     clock_init();
     uart_init();
@@ -97,5 +115,5 @@ void main(){
     led_init();
     
     uart_send_byte(0xff);
-     os_start();
+    aos_start();
 }

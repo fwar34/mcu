@@ -2,27 +2,37 @@
 #include <stdint.h>
 #include "aos.h"
 
-extern void archContextSwitch (unsigned int *cur_s, unsigned int *new_s);                                                   
-extern void archFirstThreadRestore(unsigned int *sp);
-
 /* extern unsigned char  event_vector[MAX_EVENT_VECTOR];//消息向量,每项保存一个task_id号,指向监听它的进程(task_id).无监者时应置为0xFF */
 
-//任务的栈指针
-/* extern unsigned int task_sp[MAX_TASKS]; */
-                                                                                
-//预估方法:以2为基数,每增加一层函数调用,加2字节.如果其间可能发生中断,则还要再加上中断需要的栈深.
-//减小栈深的方法:1.尽量少嵌套子程序 2.调子程序前关中断.
-/* extern unsigned char  task_stack[MAX_TASKS][MAX_TASK_DEP];//任务堆栈. */
-/* extern unsigned int  task_sleep[MAX_TASKS];//任务睡眠定时器 */
-
-/* extern unsigned char task_id;//当前活动任务 */
+static uint16_t stack_temp = 0;
 
 #define IDLE_TASK_TID MAX_TASKS
+#define TASK_SAVE()                             \
+    asm("ldw Y, 0x07"); /*?b8,?b9*/             \
+    asm("pushw Y");                             \
+    asm("ldw Y, 0x09"); /*?b10,?b11*/           \
+    asm("pushw Y");                             \
+    asm("ldw Y, 0x0A"); /*?b12,?b13*/           \
+    asm("pushw Y");                             \
+    asm("ldw Y, 0x0C"); /*?b14,?b15*/           \
+    asm("pushw Y");                             \
+    asm("ldw Y, SP");                           \
+    asm("ldw l:stack_temp, Y");
 
-void clock_init();
-void timer3_init();
+#define TASK_RESTORE()                          \
+    asm("ldw Y, l:stack_temp")                  \
+    asm("ldw SP, Y");                           \
+    asm("popw Y");                              \
+    asm("ldw 0x0C, Y"); /*?b14,?b15*/           \
+    asm("popw Y");                              \
+    asm("ldw 0x0A, Y"); /*?b12,?b13*/           \
+    asm("popw Y");                              \
+    asm("ldw 0x09, Y"); /*?b10,?b11*/           \
+    asm("popw Y");                              \
+    asm("ldw 0x07, Y"); /*?b8,?b9*/
 
 typedef enum {
+    TASK_INVALID,
     TASK_BLOCK,
     TASK_READY,
     TASK_RUNNING
@@ -33,7 +43,7 @@ typedef struct {
     uint8_t pid;
     task_func task;
     uint8_t status;
-    uint16_t delay;
+    uint16_t delay_ticks;
     uint8_t event;
     uint8_t semaphore;
     uint8_t stack[MAX_TASK_STACK_LENGTH];
@@ -89,36 +99,35 @@ uint8_t aos_get_next_task()
     return aos.current_tid;
 }
 
+void aos_task_start()
+{
+    stack_temp = aos.tcb_info[0].stack_ptr;
+    TASK_RESTORE();
+    __enable_interrupt();   
+}
+
+void aos_task_exit()
+{
+    aos.tcb_info[aos.current_tid].status = TASK_INVALID;
+    aos_task_switch()
+}
+
 void aos_task_switch()
 {
-     unsigned int* cur_s = task_sp + task_id;
-     unsigned int* new_s = cur_s;
-     unsigned int* d = task_sleep + task_id;
-
     __istate_t _istate = __get_interrupt_state();    
     __disable_interrupt(); //由于关闭全局中断会影响cc寄存器，所以先获取cc的值再关闭全局中断
 
-    while (1) {
-        if (task_id == 0) {
-            task_id = MAX_TASKS - 1;
-            new_s = task_sp + MAX_TASKS - 1;
-            d = task_sleep + MAX_TASKS - 1;
-        } else {
-            task_id--;
-            new_s--;
-            d--;
-        }
-        if (*d == 0 && *new_s != 0)
-            break;
-    } 
-    
-    if (*new_s && cur_s != new_s) {
-        if (*cur_s)
-            archContextSwitch(cur_s, new_s); //这里切换到新的任务后在新的任务里面会开中断，详细的描述看atom-port-iar.s
-        else //当前的任务已经退出，只切换到新的任务就行
-            archFirstThreadRestore(new_s); //这里切换到新的任务后在新的任务里面会开中断，详细的描述看atom-port-iar.s
+    //如果当前任务已经删除则不保存上下文
+    if (aos.tcb_info[aos.current_tid].status != TASK_INVALID) {
+        TASK_SAVE();
+        aos.tcb_info[aos.current_tid].stack_ptr = stack_temp;
     }
-   
+
+    uint8_t next_tid = aos_get_next_task();
+    aos.tcb_info[next_tid].status = TASK_RUNNING;
+    stack_temp = aos.tcb_info[next_tid].stack_ptr;
+    TASK_RESTORE();
+
     __set_interrupt_state(_istate);
 }
 
@@ -128,7 +137,8 @@ unsigned char aos_task_load(task_func task)
     uint8_t i = 0;
     while (1) {
         for (i = MAX_TASKS; i >= 0; --i) {
-            if (aos.tcb_info.stack_ptr == NULL) {
+            if (aos.tcb_info.status == TASK_INVALID) {
+                aos.tcb_info.status = TASK_READY;
                 aos.tcb_info.stack_ptr = aos.tcb_info.stack + MAX_TASK_STACK_LENGTH - 1;
                 *(aos.tcb_info.stack_ptr)-- = task & 0xFF;
                 *(aos.tcb_info.stack_ptr)-- = task >> 8;
@@ -148,37 +158,31 @@ unsigned char aos_task_load(task_func task)
     }
 }
 
-//==================系统时钟初始化=================================
-void clock_init()
-{
-    CLK_CKDIVR = 0x00;//HSI 不分频，主时钟 16M
-}
-//==================系统时钟初始化=================================
-void timer3_init()        //5毫秒tick@16MHz
-{
-    TIM3_PSCR = 0x07; //128分频
-    TIM3_ARRH = 0x02;
-    TIM3_ARRL = 0x70;
-    TIM3_CR1_ARPE = 0; //禁止预装载来更新，立即更新TIM3_ARR成设定值
-    TIM3_IER_UIE = 1;
-    TIM3_EGR_UG = 1;
-    TIM3_CR1_CEN = 1;
-} 
 
 //========时钟中断函数========================================================
 #pragma vector = TIM3_OVR_UIF_vector
 __interrupt void clock_timer()
 {
-     unsigned int* p;
-     unsigned char i;
-
+    __disable_interrupt();
     TIM3_SR1_UIF = 0;
-    //任务延迟处理
-    i = MAX_TASKS;
-    p = task_sleep; 
-    do {
-        if (*p != 0 && *p != 0xFF)//不为0,也不为0xff,则将任务延时值减1.为0xff表示任务已挂起,不由定时器唤醒
-            (*p)--;
-        p++;
-    } while (--i);
+
+    uint8_t i = 0;
+    for (; i < MAX_TASKS; ++i) {
+        if (aos.tcb_info[i].status == TASK_BLOCK) {
+            if (aos.tcb_info[i].)
+        }
+    }
+
+    /* unsigned int* p; */
+    /* unsigned char i; */
+
+    /* //任务延迟处理 */
+    /* i = MAX_TASKS; */
+    /* p = task_sleep;  */
+    /* do { */
+    /*     if (*p != 0 && *p != 0xFF)//不为0,也不为0xff,则将任务延时值减1.为0xff表示任务已挂起,不由定时器唤醒 */
+    /*         (*p)--; */
+    /*     p++; */
+    /* } while (--i); */
+    __enable_interrupt();
 }
