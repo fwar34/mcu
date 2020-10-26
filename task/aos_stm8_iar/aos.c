@@ -113,6 +113,15 @@ uint8_t aos_get_next_task()
     return aos.current_tid;
 }
 
+uint8_t event_push(uint8_t event)
+{
+    if (event == 0 || event > MAX_EVENT_VECTOR) {
+        return 0;
+    }
+    aos.tcb_info[aos.event_vector[event]].event_queue.push(event);
+    return 1;
+}
+
 void aos_task_start()
 {
     stack_temp = aos.tcb_info[0].stack_ptr;
@@ -145,7 +154,6 @@ void aos_task_switch()
     __set_interrupt_state(_istate);
 }
 
-//寻找一个空任务,并将任务装入.无空任务时等待.do-while循环中不作任务切换,所以无需支持重入
 unsigned char aos_task_load(task_func task)
 {
     uint8_t i;

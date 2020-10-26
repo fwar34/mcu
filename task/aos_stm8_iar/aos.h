@@ -22,7 +22,10 @@ typedef void (*task_func)();
 //从reg中(unsigned char类型)恢复指定消息的原注册者
 #define event_unreg(eid, reg) event_vector[eid] = reg
 //发送消息(严格地说,是唤醒监听者)
-#define event_push(eid) { if(event_vector[eid] != 0xFF) task_wakeup(event_vector[eid]); }
+/* #define event_push(eid) { if(event_vector[eid] != 0xFF) task_wakeup(event_vector[eid]); } */
+
+//发送消息(严格地说,是唤醒监听者)
+uint8_t event_push(uint8_t event);
 //初始化
 void aos_init();
 //启动任务调度.从最先添加的任务开始执行.
@@ -32,7 +35,7 @@ void aos_task_exit();
 //立即释放CPU,并在执行过其它全部未休眠的进程后回到释放点
 void aos_task_switch();
 //装载进程.如果任务槽满,则延时两个定时器中断周期,直到有空槽为止
-unsigned char aos_task_load(unsigned int fn);
+unsigned char aos_task_load(task_func task);
 //设置指定的进程为休眠状态.
 #define task_setsuspend(tid) task_sleep[tid] = 0xFF;
 //设置指定的进程为延时状态
