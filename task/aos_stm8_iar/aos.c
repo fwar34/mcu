@@ -2,7 +2,6 @@
 #include <stdint.h>
 #include "aos.h"
 
-/* extern unsigned char  event_vector[MAX_EVENT_VECTOR];//消息向量,每项保存一个task_id号,指向监听它的进程(task_id).无监者时应置为0xFF */
 
 static uint16_t stack_temp = 0;
 
@@ -31,6 +30,7 @@ static uint16_t stack_temp = 0;
     asm("popw Y");                              \
     asm("ldw 0x07, Y"); /*?b8,?b9*/
 
+
 typedef enum {
     TASK_INVALID,
     TASK_BLOCK,
@@ -44,7 +44,7 @@ typedef struct {
     task_func task;
     uint8_t status;
     uint16_t delay_ticks;
-    uint8_t event;
+    CircleQueue event_queue;
     uint8_t semaphore;
     uint8_t stack[MAX_TASK_STACK_LENGTH];
 } TCB_Info;
@@ -53,6 +53,7 @@ typedef struct {
     uint8_t current_tid;
     uint8_t is_init;
     TCB_Info tcb_info[MAX_TASKS + 1]; //最后一个是空闲任务
+    uint8_t event_vector[MAX_EVENT_VECTOR];//消息向量,每项保存一个task_id号
 } AOS_Info;
 
 AOS_Info aos;
@@ -74,7 +75,20 @@ void aos_init()
         memset(aos.tcb_info, 0, sizeof(TCB_Info));
     }
     //tid为MAX_TASKS(即最后一个)的是空闲任务
-    aos_task_load(aos_task_idle);
+    TCB_Info* info = &aos.tcb_info[MAX_TASKS];
+
+    info->stack_ptr = info->stack + MAX_TASK_STACK_LENGTH - 1;
+    *(info->stack_ptr)-- = aos_task_idle & 0xFF;
+    *(info->stack_ptr)-- = aos_task_idle >> 8;
+
+    *(info->stack_ptr)-- = 0; //?b8 
+    *(info->stack_ptr)-- = 0; //?b9
+    *(info->stack_ptr)-- = 0; //?b10
+    *(info->stack_ptr)-- = 0; //?b11
+    *(info->stack_ptr)-- = 0; //?b12
+    *(info->stack_ptr)-- = 0; //?b13
+    *(info->stack_ptr)-- = 0; //?b14
+    *(info->stack_ptr)-- = 0; //?b15
 }
 
 uint8_t aos_get_next_task()
@@ -117,7 +131,7 @@ void aos_task_switch()
     __istate_t _istate = __get_interrupt_state();    
     __disable_interrupt(); //由于关闭全局中断会影响cc寄存器，所以先获取cc的值再关闭全局中断
 
-    //如果当前任务已经删除则不保存上下文
+    //如果当前任务已经删除则不保存当前任务的上下文
     if (aos.tcb_info[aos.current_tid].status != TASK_INVALID) {
         TASK_SAVE();
         aos.tcb_info[aos.current_tid].stack_ptr = stack_temp;
@@ -134,27 +148,26 @@ void aos_task_switch()
 //寻找一个空任务,并将任务装入.无空任务时等待.do-while循环中不作任务切换,所以无需支持重入
 unsigned char aos_task_load(task_func task)
 {
-    uint8_t i = 0;
-    while (1) {
-        for (i = MAX_TASKS; i >= 0; --i) {
-            if (aos.tcb_info.status == TASK_INVALID) {
-                aos.tcb_info.status = TASK_READY;
-                aos.tcb_info.stack_ptr = aos.tcb_info.stack + MAX_TASK_STACK_LENGTH - 1;
-                *(aos.tcb_info.stack_ptr)-- = task & 0xFF;
-                *(aos.tcb_info.stack_ptr)-- = task >> 8;
+    uint8_t i;
+    TCB_Info* info = NULL;
+    for (i = 0; i < MAX_TASKS; ++i) {
+        info = &aos.tcb_info;
+        if (info->status == TASK_INVALID) {
+            info->stack_ptr = info->stack + MAX_TASK_STACK_LENGTH - 1;
+            *(info->stack_ptr)-- = task & 0xFF;
+            *(info->stack_ptr)-- = task >> 8;
 
-                *(aos.tcb_info.stack_ptr)-- = 0; //?b8 
-                *(aos.tcb_info.stack_ptr)-- = 0; //?b9
-                *(aos.tcb_info.stack_ptr)-- = 0; //?b10
-                *(aos.tcb_info.stack_ptr)-- = 0; //?b11
-                *(aos.tcb_info.stack_ptr)-- = 0; //?b12
-                *(aos.tcb_info.stack_ptr)-- = 0; //?b13
-                *(aos.tcb_info.stack_ptr)-- = 0; //?b14
-                *(aos.tcb_info.stack_ptr)-- = 0; //?b15
-                return i;
-            }
+            *(info->stack_ptr)-- = 0; //?b8 
+            *(info->stack_ptr)-- = 0; //?b9
+            *(info->stack_ptr)-- = 0; //?b10
+            *(info->stack_ptr)-- = 0; //?b11
+            *(info->stack_ptr)-- = 0; //?b12
+            *(info->stack_ptr)-- = 0; //?b13
+            *(info->stack_ptr)-- = 0; //?b14
+            *(info->stack_ptr)-- = 0; //?b15
+            info->status = TASK_READY;
+            return i + 1;
         }
-        task_sleep(2);//无空闲任务可用,进程休眠2周期
     }
 }
 
@@ -166,23 +179,29 @@ __interrupt void clock_timer()
     __disable_interrupt();
     TIM3_SR1_UIF = 0;
 
-    uint8_t i = 0;
-    for (; i < MAX_TASKS; ++i) {
-        if (aos.tcb_info[i].status == TASK_BLOCK) {
-            if (aos.tcb_info[i].)
+    TASK_SAVE();
+    aos.tcb_info[aos.current_tid].stack_ptr = stack_temp;
+
+    uint8_t i;
+    for (i = 0; i < MAX_TASKS; ++i) {
+        TCB_Info* info = &aos.tcb_info[i];
+        if (info->status == TASK_BLOCK) {
+            if (info->delay_ticks > 0) {
+                if (--info->delay_ticks == 0) {
+                    info->status = TASK_READY;
+                }
+            }
+
+            if (!info->event_queue.empty()) {
+                info->status = TASK_READY;
+            }
         }
     }
 
-    /* unsigned int* p; */
-    /* unsigned char i; */
+    uint8_t next_tid = aos_get_next_task();
+    aos.tcb_info[next_tid].status = TASK_RUNNING;
+    stack_temp = aos.tcb_info[next_tid].stack_ptr;
+    TASK_RESTORE();
 
-    /* //任务延迟处理 */
-    /* i = MAX_TASKS; */
-    /* p = task_sleep;  */
-    /* do { */
-    /*     if (*p != 0 && *p != 0xFF)//不为0,也不为0xff,则将任务延时值减1.为0xff表示任务已挂起,不由定时器唤醒 */
-    /*         (*p)--; */
-    /*     p++; */
-    /* } while (--i); */
     __enable_interrupt();
 }
