@@ -1638,7 +1638,13 @@
     <group>
         <name>Src</name>
         <file>
+            <name>$PROJ_DIR$\aos.c</name>
+        </file>
+        <file>
             <name>$PROJ_DIR$\atomport-asm-iar.s</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\circle_queue.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\main.c</name>
@@ -1647,16 +1653,7 @@
             <name>$PROJ_DIR$\oscore.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\task.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\task.h</name>
-        </file>
-        <file>
             <name>$PROJ_DIR$\uart.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\uart.h</name>
         </file>
     </group>
 </project>

@@ -1,6 +1,9 @@
 #include <intrinsics.h>
 #include <stdint.h>
+#include <string.h>
 #include "aos.h"
+#include "aos_config.h"
+#include "circle_queue.h"
 
 static uint16_t stack_temp = 0;
 
@@ -73,19 +76,10 @@ void aos_init()
     }
     //tid为MAX_TASKS(即最后一个)的是空闲任务
     TCB_Info* info = &aos.tcb_info[MAX_TASKS];
-
     info->stack_ptr = info->stack + MAX_TASK_STACK_LENGTH - 1;
     *(info->stack_ptr)-- = aos_task_idle & 0xFF;
     *(info->stack_ptr)-- = aos_task_idle >> 8;
-    *(info->stack_ptr)-- = 0; //?b8 
-    *(info->stack_ptr)-- = 0; //?b9
-    *(info->stack_ptr)-- = 0; //?b10
-    *(info->stack_ptr)-- = 0; //?b11
-    *(info->stack_ptr)-- = 0; //?b12
-    *(info->stack_ptr)-- = 0; //?b13
-    *(info->stack_ptr)-- = 0; //?b14
-    *(info->stack_ptr)-- = 0; //?b15
-
+    info->stack_ptr -= 8; //?b8->?b15
     info->tid = MAX_TASKS;
     info->status = TASK_READY;
 }
@@ -202,16 +196,9 @@ unsigned char aos_task_load(task_func task)
         if (info->status == TASK_INVALID) {
             memset(&info, 0, sizeof(TCB_Info));
             info->stack_ptr = info->stack + MAX_TASK_STACK_LENGTH - 1;
-            *(info->stack_ptr)-- = task & 0xFF;
+            *((uint8_t*)(info->stack_ptr))-- = task & 0xFF;
             *(info->stack_ptr)-- = task >> 8;
-            *(info->stack_ptr)-- = 0; //?b8 
-            *(info->stack_ptr)-- = 0; //?b9
-            *(info->stack_ptr)-- = 0; //?b10
-            *(info->stack_ptr)-- = 0; //?b11
-            *(info->stack_ptr)-- = 0; //?b12
-            *(info->stack_ptr)-- = 0; //?b13
-            *(info->stack_ptr)-- = 0; //?b14
-            *(info->stack_ptr)-- = 0; //?b15
+            info->stack_ptr -= 8; //?b8->?b15
             info->tid = i;
             info->status = TASK_READY;
             return i;
