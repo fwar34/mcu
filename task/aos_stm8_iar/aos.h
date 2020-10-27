@@ -1,5 +1,7 @@
 #ifndef _AOS_H_
 #define _AOS_H_
+
+#include <stdint.h>
 /*
   关于消息机制:
   该系统的消息机制其实并不是真正的消息机制,其过程是依靠休眠和唤醒来实现的.机制是这样的:
@@ -38,7 +40,7 @@ void aos_task_exit();
 //立即释放CPU,并在执行过其它全部未休眠的进程后回到释放点
 void aos_task_switch();
 //装载进程.如果任务槽满,则延时两个定时器中断周期,直到有空槽为止
-unsigned char aos_task_load(task_func task);
+int8_t aos_task_load(task_func task);
 //设置指定的进程为休眠状态.
 /* #define task_setsuspend(tid) task_sleep[tid] = 0xFF; */
 //设置指定的进程为延时状态

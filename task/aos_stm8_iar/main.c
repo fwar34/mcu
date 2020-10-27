@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <intrinsics.h>
 #include "aos.h"
+#include "aos_config.h"
 #include "uart.h"
 /*============================以下为测试代码============================*/
 void led_init()
@@ -65,7 +66,7 @@ void task3()
     //如果等待的消息产生于另一任务进程中,则使用task_suspend()就可以了.
     strb[0] = 3, strb[1] = 2, strb[2] = 1;
     uart_send_byte(0x3);
-    task_load((unsigned int)task2);//装载子任务
+    aos_task_load(task2);//装载子任务
     event_wait();
 #else
     //跟中断打交道时最好使用task_wait_interrupt().
@@ -111,7 +112,7 @@ void main()
     
     clock_init();
     uart_init();
-    timer3_init();
+    //timer3_init();
     led_init();
     
     uart_send_byte(0xff);

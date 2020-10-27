@@ -1,11 +1,12 @@
 #include <intrinsics.h>
 #include <stdint.h>
 #include <string.h>
+#include <iostm8.h>
 #include "aos.h"
 #include "aos_config.h"
 #include "circle_queue.h"
 
-static uint16_t stack_temp = 0;
+static uint8_t* stack_temp = NULL;
 
 #define IDLE_TASK_TID MAX_TASKS
 #define TASK_SAVE()                             \
@@ -21,7 +22,7 @@ static uint16_t stack_temp = 0;
     asm("ldw l:stack_temp, Y");
 
 #define TASK_RESTORE()                          \
-    asm("ldw Y, l:stack_temp")                  \
+    asm("ldw Y, l:stack_temp");                 \
     asm("ldw SP, Y");                           \
     asm("popw Y");                              \
     asm("ldw 0x0C, Y"); /*?b14,?b15*/           \
@@ -41,7 +42,7 @@ typedef enum {
 } TaskStatus;
 
 typedef struct {
-    uint16_t stack_ptr;
+    uint8_t* stack_ptr;
     uint8_t tid;
     task_func task;
     uint8_t status;
@@ -77,8 +78,8 @@ void aos_init()
     //tid为MAX_TASKS(即最后一个)的是空闲任务
     TCB_Info* info = &aos.tcb_info[MAX_TASKS];
     info->stack_ptr = info->stack + MAX_TASK_STACK_LENGTH - 1;
-    *(info->stack_ptr)-- = aos_task_idle & 0xFF;
-    *(info->stack_ptr)-- = aos_task_idle >> 8;
+    *(info->stack_ptr)-- = (uint16_t)aos_task_idle & 0xFF;
+    *(info->stack_ptr)-- = (uint16_t)aos_task_idle >> 8;
     info->stack_ptr -= 8; //?b8->?b15
     info->tid = MAX_TASKS;
     info->status = TASK_READY;
@@ -134,30 +135,33 @@ uint8_t event_push(uint8_t event)
     if (event == 0 || event > MAX_EVENT_VECTOR) {
         return 0;
     }
-    aos.tcb_info[aos.event_vector[event]].event_queue.push(event);
+    push(&aos.tcb_info[aos.event_vector[event]].event_queue, &event);
     return 1;
 }
 
 uint8_t event_pop(uint8_t* event)
 {
-    if (aos.tcb_info[aos.current_tid].event_queue.empty()) {
+    if (empty(&aos.tcb_info[aos.current_tid].event_queue)) {
         return 0;
     }
 
-    *event = pop(aos.tcb_info[aos.current_tid].event_queue, &event);
+    if (!pop(&aos.tcb_info[aos.current_tid].event_queue, event)) {
+      return 0;
+    }
+    
     return 1;
 }
 
 void event_wait()
 {
-    aos.tcb_info[current_tid].status = TASK_BLOCK;
-    task_switch();
+    aos.tcb_info[aos.current_tid].status = TASK_BLOCK;
+    aos_task_switch();
 }
 
-void aos_task_start()
+void aos_start()
 {
-    aos.tcb_info.current_tid = 0;
-    stack_temp = aos.tcb_info[aos.tcb_info.current_tid].stack_ptr;
+    aos.current_tid = 0;
+    stack_temp = aos.tcb_info[aos.current_tid].stack_ptr;
     TASK_RESTORE();
     __enable_interrupt();   
 }
@@ -165,7 +169,7 @@ void aos_task_start()
 void aos_task_exit()
 {
     aos.tcb_info[aos.current_tid].status = TASK_INVALID;
-    aos_task_switch()
+    aos_task_switch();
 }
 
 void aos_task_switch()
@@ -187,23 +191,24 @@ void aos_task_switch()
     __set_interrupt_state(_istate);
 }
 
-unsigned char aos_task_load(task_func task)
+int8_t aos_task_load(task_func task)
 {
     uint8_t i;
     TCB_Info* info = NULL;
     for (i = 0; i < MAX_TASKS; ++i) {
-        info = &aos.tcb_info;
+        info = &aos.tcb_info[i];
         if (info->status == TASK_INVALID) {
-            memset(&info, 0, sizeof(TCB_Info));
+            memset(info, 0, sizeof(TCB_Info));
             info->stack_ptr = info->stack + MAX_TASK_STACK_LENGTH - 1;
-            *((uint8_t*)(info->stack_ptr))-- = task & 0xFF;
-            *(info->stack_ptr)-- = task >> 8;
+            *(info->stack_ptr)-- = (uint16_t)task & 0xFF;
+            *(info->stack_ptr)-- = (uint16_t)task >> 8;
             info->stack_ptr -= 8; //?b8->?b15
             info->tid = i;
             info->status = TASK_READY;
             return i;
         }
     }
+    return -1;
 }
 
 void aos_task_weakup(uint8_t tid)
@@ -216,8 +221,8 @@ void aos_task_weakup(uint8_t tid)
 
 void aos_task_suspend()
 {
-    aos.tcb_info[current_tid].status = TASK_BLOCK;
-    task_switch();
+    aos.tcb_info[aos.current_tid].status = TASK_BLOCK;
+    aos_task_switch();
 }
 
 void aos_task_sleep(uint16_t ticks)
@@ -252,7 +257,7 @@ __interrupt void clock_timer()
                 }
             }
 
-            if (!info->event_queue.empty()) {
+            if (!empty(&info->event_queue)) {
                 info->status = TASK_READY;
             }
         }
