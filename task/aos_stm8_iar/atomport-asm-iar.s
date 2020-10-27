@@ -162,7 +162,7 @@ archContextSwitch:
 
     ; Pull the first entry out of new_tcb_ptr (the new thread's
     ; stack pointer) into X register.
-    ldw X,(X)
+    ;ldw X,(X)
 
     ; Switch our current stack pointer to that of the new thread.
     ldw SP,X
@@ -371,7 +371,7 @@ archFirstThreadRestore:
     ; new_tcb_ptr is stored in the parameter register X. The stack
     ; pointer it conveniently located at the top of the TCB so no
     ; indexing is required to pull it out.
-    ldw X,(X)
+    ;ldw X,(X)
 
     ; Switch our current stack pointer to that of the new thread.
     ldw SP,X

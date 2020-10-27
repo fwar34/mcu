@@ -16,7 +16,7 @@
                 <debug>1</debug>
                 <option>
                     <name>GenDeviceSelectMenu</name>
-                    <state>STM8S105C6	STM8S105C6</state>
+                    <state>STM8S105K4	STM8S105K4</state>
                 </option>
                 <option>
                     <name>GenCodeModel</name>
@@ -606,7 +606,7 @@
                 </option>
                 <option>
                     <name>IlinkIcfFile</name>
-                    <state>$TOOLKIT_DIR$\config\lnkstm8s105k4.icf</state>
+                    <state>$TOOLKIT_DIR$\config\lnkstm8s105c6.icf</state>
                 </option>
                 <option>
                     <name>IlinkIcfFileSlave</name>

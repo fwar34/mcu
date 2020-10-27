@@ -9,7 +9,7 @@
 extern void archFirstThreadRestore(uint8_t* new_stack_ptr);
 extern void archContextSwitch(uint8_t* old_stack_ptr, uint8_t* new_stack_ptr);
 
-static uint8_t* stack_temp = NULL;
+//static uint8_t* stack_temp = NULL;
 
 #define IDLE_TASK_TID MAX_TASKS
 #define TASK_SAVE()                             \
@@ -64,6 +64,15 @@ typedef struct {
 
 AOS_Info aos;
 
+void task_shell()
+{
+    __enable_interrupt();
+    if (aos.tcb_info[aos.current_tid].status == TASK_RUNNING &&
+        aos.tcb_info[aos.current_tid].task) {
+        (aos.tcb_info[aos.current_tid].task)();
+    }
+}
+
 void aos_task_idle()
 {
     while (1);
@@ -91,23 +100,39 @@ void aos_init()
 
 uint8_t aos_get_next_task()
 {
-    uint8_t tid = aos.current_tid;
-    while (1) {
-        if (++tid >= MAX_TASKS) { //跳过idle_task
-            tid = 0;
+    //当前任务是idle_task
+    uint8_t tid = 0;
+    if (aos.current_tid == MAX_TASKS) {
+        for (tid = 0; tid < MAX_TASKS; ++tid) {
+            if (aos.tcb_info[tid].status == TASK_READY) {
+                aos.current_tid = tid;
+                break;
+            }
         }
+    } else {
+        tid = aos.current_tid;
+        while (1) {
+            if (++tid >= MAX_TASKS) { //跳过idle_task
+                tid = 0;
+            }
 
-        //当前其他任务都没有就绪则切换到空闲任务
-        if (tid == aos.current_tid) {
-            aos.current_tid = MAX_TASKS;
-            break;
-        }
+            if (aos.tcb_info[tid].status == TASK_READY) {
+                aos.current_tid = tid;
+                break;
+            }
 
-        if (aos.tcb_info[tid].status == TASK_READY) {
-            aos.current_tid = tid;
-            break;
+            if (tid == aos.current_tid) {
+                if (aos.tcb_info[tid].status == TASK_READY || aos.tcb_info[tid].status == TASK_RUNNING) {
+                    aos.current_tid = tid;
+                    break;
+                } else {
+                    aos.current_tid = MAX_TASKS;
+                    break;
+                }
+            }
         }
     }
+
     return aos.current_tid;
 }
 
@@ -167,8 +192,10 @@ void event_wait()
 void aos_start()
 {
     aos.current_tid = 0;
-    stack_temp = aos.tcb_info[aos.current_tid].stack_ptr;
-    TASK_RESTORE();
+    aos.tcb_info[aos.current_tid].status = TASK_RUNNING;
+    //stack_temp = aos.tcb_info[aos.current_tid].stack_ptr;
+    //TASK_RESTORE();
+    archFirstThreadRestore(aos.tcb_info[aos.current_tid].stack_ptr);
     __enable_interrupt();   
 }
 
@@ -180,14 +207,7 @@ void aos_task_exit()
     __enable_interrupt();
 }
 
-void task_shell()
-{
-    __enable_interrupt();
-    if (aos.tcb_info[aos.current_tid].status == TASK_READY &&
-        aos.tcb_info[aos.current_tid].task) {
-        (aos.tcb_info[aos.current_tid].task)();
-    }
-}
+
 
 void aos_task_switch()
 {
@@ -198,11 +218,13 @@ void aos_task_switch()
     uint8_t new_tid = aos_get_next_task();
     aos.tcb_info[new_tid].status = TASK_RUNNING;
 
-    if (aos.tcb_info[old_tid].status != TASK_INVALID) {
-        archContextSwitch(aos.tcb_info[old_tid].stack_ptr, aos.tcb_info[new_tid].stack_ptr);
-    } else {
-        //如果当前任务已经删除则不保存当前任务的上下文
-        archFirstThreadRestore(aos.tcb_info[new_tid].stack_ptr);
+    if (old_tid != new_tid) {
+        if (aos.tcb_info[old_tid].status != TASK_INVALID) {
+            archContextSwitch(aos.tcb_info[old_tid].stack_ptr, aos.tcb_info[new_tid].stack_ptr);
+        } else {
+            //如果当前任务已经删除则不保存当前任务的上下文
+            archFirstThreadRestore(aos.tcb_info[new_tid].stack_ptr);
+        }
     }
 
     __set_interrupt_state(_istate);
@@ -262,7 +284,7 @@ void aos_task_sleep(uint16_t ticks)
 
 //========时钟中断函数========================================================
 #pragma vector = TIM3_OVR_UIF_vector
-__interrupt void clock_timer()
+__interrupt void tim_isr()
 {
     TIM3_SR1_UIF = 0;
     //https://mp.weixin.qq.com/s/ScX5Y50K9jD6VUnORkWsmw?
@@ -291,7 +313,9 @@ __interrupt void clock_timer()
 
     uint8_t new_tid = aos_get_next_task();
     aos.tcb_info[new_tid].status = TASK_RUNNING;
-    archContextSwitch(aos.tcb_info[old_tid].stack_ptr, aos.tcb_info[new_tid].stack_ptr);
+    if (old_tid != new_tid) {
+        archContextSwitch(aos.tcb_info[old_tid].stack_ptr, aos.tcb_info[new_tid].stack_ptr);
+    }
 
     //__set_interrupt_state(_istate);
 }
