@@ -6,6 +6,9 @@
 #include "aos_config.h"
 #include "circle_queue.h"
 
+extern void archFirstThreadRestore(uint8_t* new_stack_ptr);
+extern void archContextSwitch(uint8_t* old_stack_ptr, uint8_t* new_stack_ptr);
+
 static uint8_t* stack_temp = NULL;
 
 #define IDLE_TASK_TID MAX_TASKS
@@ -77,9 +80,10 @@ void aos_init()
     }
     //tid为MAX_TASKS(即最后一个)的是空闲任务
     TCB_Info* info = &aos.tcb_info[MAX_TASKS];
+    info->task = aos_task_idle;
     info->stack_ptr = info->stack + MAX_TASK_STACK_LENGTH - 1;
-    *(info->stack_ptr)-- = (uint16_t)aos_task_idle & 0xFF;
-    *(info->stack_ptr)-- = (uint16_t)aos_task_idle >> 8;
+    *(info->stack_ptr)-- = (uint16_t)task_shell & 0xFF;
+    *(info->stack_ptr)-- = (uint16_t)task_shell >> 8;
     info->stack_ptr -= 8; //?b8->?b15
     info->tid = MAX_TASKS;
     info->status = TASK_READY;
@@ -154,8 +158,10 @@ uint8_t event_pop(uint8_t* event)
 
 void event_wait()
 {
+    __disable_interrupt();
     aos.tcb_info[aos.current_tid].status = TASK_BLOCK;
     aos_task_switch();
+    __enable_interrupt();
 }
 
 void aos_start()
@@ -168,8 +174,19 @@ void aos_start()
 
 void aos_task_exit()
 {
+    __disable_interrupt();
     aos.tcb_info[aos.current_tid].status = TASK_INVALID;
     aos_task_switch();
+    __enable_interrupt();
+}
+
+void task_shell()
+{
+    __enable_interrupt();
+    if (aos.tcb_info[aos.current_tid].status == TASK_READY &&
+        aos.tcb_info[aos.current_tid].task) {
+        (aos.tcb_info[aos.current_tid].task)();
+    }
 }
 
 void aos_task_switch()
@@ -177,16 +194,16 @@ void aos_task_switch()
     __istate_t _istate = __get_interrupt_state();    
     __disable_interrupt();
 
-    //如果当前任务已经删除则不保存当前任务的上下文
-    if (aos.tcb_info[aos.current_tid].status != TASK_INVALID) {
-        TASK_SAVE();
-        aos.tcb_info[aos.current_tid].stack_ptr = stack_temp;
-    }
+    uint8_t old_tid = aos.current_tid;
+    uint8_t new_tid = aos_get_next_task();
+    aos.tcb_info[new_tid].status = TASK_RUNNING;
 
-    uint8_t next_tid = aos_get_next_task();
-    aos.tcb_info[next_tid].status = TASK_RUNNING;
-    stack_temp = aos.tcb_info[next_tid].stack_ptr;
-    TASK_RESTORE();
+    if (aos.tcb_info[old_tid].status != TASK_INVALID) {
+        archContextSwitch(aos.tcb_info[old_tid].stack_ptr, aos.tcb_info[new_tid].stack_ptr);
+    } else {
+        //如果当前任务已经删除则不保存当前任务的上下文
+        archFirstThreadRestore(aos.tcb_info[new_tid].stack_ptr);
+    }
 
     __set_interrupt_state(_istate);
 }
@@ -199,9 +216,10 @@ int8_t aos_task_load(task_func task)
         info = &aos.tcb_info[i];
         if (info->status == TASK_INVALID) {
             memset(info, 0, sizeof(TCB_Info));
+            info->task = task;
             info->stack_ptr = info->stack + MAX_TASK_STACK_LENGTH - 1;
-            *(info->stack_ptr)-- = (uint16_t)task & 0xFF;
-            *(info->stack_ptr)-- = (uint16_t)task >> 8;
+            *(info->stack_ptr)-- = (uint16_t)task_shell & 0xFF;
+            *(info->stack_ptr)-- = (uint16_t)task_shell >> 8;
             info->stack_ptr -= 8; //?b8->?b15
             info->tid = i;
             info->status = TASK_READY;
@@ -216,13 +234,18 @@ void aos_task_weakup(uint8_t tid)
     if (tid >= MAX_TASKS) {
         return;
     }
+    __disable_interrupt();
     aos.tcb_info[tid].status = TASK_READY;
+    aos_task_switch();
+    __enable_interrupt();
 }
 
 void aos_task_suspend()
 {
+    __disable_interrupt();
     aos.tcb_info[aos.current_tid].status = TASK_BLOCK;
     aos_task_switch();
+    __enable_interrupt();
 }
 
 void aos_task_sleep(uint16_t ticks)
@@ -230,10 +253,11 @@ void aos_task_sleep(uint16_t ticks)
     if (!ticks) {
         return;
     }
-
+    __disable_interrupt();
     aos.tcb_info[aos.current_tid].delay_ticks = ticks;
     aos.tcb_info[aos.current_tid].status = TASK_BLOCK;
     aos_task_switch();
+    __enable_interrupt();
 }
 
 //========时钟中断函数========================================================
@@ -246,10 +270,8 @@ __interrupt void clock_timer()
     //__istate_t _istate = __get_interrupt_state();    
     //__disable_interrupt();
     
-
-    TASK_SAVE();
-    aos.tcb_info[aos.current_tid].stack_ptr = stack_temp;
-    aos.tcb_info[aos.current_tid].status = TASK_READY;
+    uint8_t old_tid = aos.current_tid;
+    aos.tcb_info[old_tid].status = TASK_READY;
 
     uint8_t i;
     for (i = 0; i < MAX_TASKS; ++i) {
@@ -267,10 +289,9 @@ __interrupt void clock_timer()
         }
     }
 
-    uint8_t next_tid = aos_get_next_task();
-    aos.tcb_info[next_tid].status = TASK_RUNNING;
-    stack_temp = aos.tcb_info[next_tid].stack_ptr;
-    TASK_RESTORE();
+    uint8_t new_tid = aos_get_next_task();
+    aos.tcb_info[new_tid].status = TASK_RUNNING;
+    archContextSwitch(aos.tcb_info[old_tid].stack_ptr, aos.tcb_info[new_tid].stack_ptr);
 
     //__set_interrupt_state(_istate);
 }
