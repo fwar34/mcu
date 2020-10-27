@@ -10,13 +10,13 @@ static uint8_t* stack_temp = NULL;
 
 #define IDLE_TASK_TID MAX_TASKS
 #define TASK_SAVE()                             \
-    asm("ldw Y, 0x07"); /*?b8,?b9*/             \
+    asm("ldw Y, 0x08"); /*?b8,?b9*/             \
     asm("pushw Y");                             \
-    asm("ldw Y, 0x09"); /*?b10,?b11*/           \
+    asm("ldw Y, 0x0A"); /*?b10,?b11*/           \
     asm("pushw Y");                             \
-    asm("ldw Y, 0x0A"); /*?b12,?b13*/           \
+    asm("ldw Y, 0x0C"); /*?b12,?b13*/           \
     asm("pushw Y");                             \
-    asm("ldw Y, 0x0C"); /*?b14,?b15*/           \
+    asm("ldw Y, 0x0E"); /*?b14,?b15*/           \
     asm("pushw Y");                             \
     asm("ldw Y, SP");                           \
     asm("ldw l:stack_temp, Y");
@@ -25,13 +25,13 @@ static uint8_t* stack_temp = NULL;
     asm("ldw Y, l:stack_temp");                 \
     asm("ldw SP, Y");                           \
     asm("popw Y");                              \
-    asm("ldw 0x0C, Y"); /*?b14,?b15*/           \
+    asm("ldw 0x0E, Y"); /*?b14,?b15*/           \
     asm("popw Y");                              \
-    asm("ldw 0x0A, Y"); /*?b12,?b13*/           \
+    asm("ldw 0x0C, Y"); /*?b12,?b13*/           \
     asm("popw Y");                              \
-    asm("ldw 0x09, Y"); /*?b10,?b11*/           \
+    asm("ldw 0x0A, Y"); /*?b10,?b11*/           \
     asm("popw Y");                              \
-    asm("ldw 0x07, Y"); /*?b8,?b9*/
+    asm("ldw 0x08, Y"); /*?b8,?b9*/
 
 
 typedef enum {
@@ -240,8 +240,12 @@ void aos_task_sleep(uint16_t ticks)
 #pragma vector = TIM3_OVR_UIF_vector
 __interrupt void clock_timer()
 {
-    __disable_interrupt();
     TIM3_SR1_UIF = 0;
+    //https://mp.weixin.qq.com/s/ScX5Y50K9jD6VUnORkWsmw?
+    //stm8这里不用关中断，因为tim3的中断优先级默认就是3，最高优先级，不会被其他可屏蔽的中断打断
+    //__istate_t _istate = __get_interrupt_state();    
+    //__disable_interrupt();
+    
 
     TASK_SAVE();
     aos.tcb_info[aos.current_tid].stack_ptr = stack_temp;
@@ -268,5 +272,5 @@ __interrupt void clock_timer()
     stack_temp = aos.tcb_info[next_tid].stack_ptr;
     TASK_RESTORE();
 
-    __enable_interrupt();
+    //__set_interrupt_state(_istate);
 }

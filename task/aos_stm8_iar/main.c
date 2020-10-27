@@ -11,16 +11,16 @@
 /*============================以下为测试代码============================*/
 void led_init()
 {
-    PD_DDR |= 1 << 2;
-    PD_CR1 |= 1 << 2;
-    PD_CR2 &= ~(1 << 2);
+    PG_DDR |= 1 << 1;
+    PG_CR1 |= 1 << 1;
+    PG_CR2 &= ~(1 << 1);
 }
 
 void task1()
 {
     while (1) {
-        //PD_ODR ^= 1 << 2;
-        //PD_ODR_ODR2 = !PD_ODR_ODR2;
+        //PG_ODR ^= 1 << 2;
+        PG_ODR_ODR1 = !PG_ODR_ODR1;
         uart_send_byte(0x1);
         aos_task_sleep(1000);
         //printf("task1 reserver\n");
@@ -44,7 +44,7 @@ void task2()
     
     if (++count1 == 5000) {
         count1 = 0;
-        PD_ODR_ODR2 = !PD_ODR_ODR2;
+        PG_ODR_ODR1 = !PG_ODR_ODR1;
     }
         
     event_push(EVENT_RF_PULS_SENT);//发送消息(其实质是唤醒监听该消息的进程)
@@ -99,7 +99,7 @@ void timer3_init()        //5毫秒tick@16MHz
     TIM3_ARRL = 0x70;
     TIM3_CR1_ARPE = 0; //禁止预装载来更新，立即更新TIM3_ARR成设定值
     TIM3_IER_UIE = 1;
-    TIM3_EGR_UG = 1;
+    //TIM3_EGR_UG = 1;
     TIM3_CR1_CEN = 1;
 } 
 
@@ -112,9 +112,11 @@ void main()
     
     clock_init();
     uart_init();
-    //timer3_init();
+    timer3_init();
     led_init();
     
     uart_send_byte(0xff);
     aos_start();
+    //__enable_interrupt();
+    //while (1);
 }
