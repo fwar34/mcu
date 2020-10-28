@@ -7,7 +7,7 @@
 #include "circle_queue.h"
 
 extern void archFirstThreadRestore(uint8_t* new_stack_ptr);
-extern void archContextSwitch(uint8_t* old_stack_ptr, uint8_t* new_stack_ptr);
+extern void archContextSwitch(uint8_t** old_stack_ptr, uint8_t* new_stack_ptr);
 
 //static uint8_t* stack_temp = NULL;
 
@@ -66,10 +66,11 @@ AOS_Info aos;
 
 void task_shell()
 {
+    uint8_t current_tid = aos.current_tid;
     __enable_interrupt();
-    if (aos.tcb_info[aos.current_tid].status == TASK_RUNNING &&
-        aos.tcb_info[aos.current_tid].task) {
-        (aos.tcb_info[aos.current_tid].task)();
+    if (aos.tcb_info[current_tid].status == TASK_RUNNING &&
+        aos.tcb_info[current_tid].task) {
+        (aos.tcb_info[current_tid].task)();
     }
 }
 
@@ -164,7 +165,10 @@ uint8_t event_push(uint8_t event)
     if (event == 0 || event > MAX_EVENT_VECTOR) {
         return 0;
     }
+
     push(&aos.tcb_info[aos.event_vector[event]].event_queue, &event);
+    aos.tcb_info[aos.event_vector[event]].status = TASK_READY;
+
     return 1;
 }
 
@@ -175,7 +179,7 @@ uint8_t event_pop(uint8_t* event)
     }
 
     if (!pop(&aos.tcb_info[aos.current_tid].event_queue, event)) {
-      return 0;
+        return 0;
     }
     
     return 1;
@@ -183,10 +187,8 @@ uint8_t event_pop(uint8_t* event)
 
 void event_wait()
 {
-    __disable_interrupt();
     aos.tcb_info[aos.current_tid].status = TASK_BLOCK;
     aos_task_switch();
-    __enable_interrupt();
 }
 
 void aos_start()
@@ -201,10 +203,8 @@ void aos_start()
 
 void aos_task_exit()
 {
-    __disable_interrupt();
     aos.tcb_info[aos.current_tid].status = TASK_INVALID;
     aos_task_switch();
-    __enable_interrupt();
 }
 
 
@@ -220,7 +220,7 @@ void aos_task_switch()
 
     if (old_tid != new_tid) {
         if (aos.tcb_info[old_tid].status != TASK_INVALID) {
-            archContextSwitch(aos.tcb_info[old_tid].stack_ptr, aos.tcb_info[new_tid].stack_ptr);
+            archContextSwitch(&aos.tcb_info[old_tid].stack_ptr, aos.tcb_info[new_tid].stack_ptr);
         } else {
             //如果当前任务已经删除则不保存当前任务的上下文
             archFirstThreadRestore(aos.tcb_info[new_tid].stack_ptr);
@@ -256,18 +256,14 @@ void aos_task_weakup(uint8_t tid)
     if (tid >= MAX_TASKS) {
         return;
     }
-    __disable_interrupt();
     aos.tcb_info[tid].status = TASK_READY;
     aos_task_switch();
-    __enable_interrupt();
 }
 
 void aos_task_suspend()
 {
-    __disable_interrupt();
     aos.tcb_info[aos.current_tid].status = TASK_BLOCK;
     aos_task_switch();
-    __enable_interrupt();
 }
 
 void aos_task_sleep(uint16_t ticks)
@@ -275,11 +271,9 @@ void aos_task_sleep(uint16_t ticks)
     if (!ticks) {
         return;
     }
-    __disable_interrupt();
     aos.tcb_info[aos.current_tid].delay_ticks = ticks;
     aos.tcb_info[aos.current_tid].status = TASK_BLOCK;
     aos_task_switch();
-    __enable_interrupt();
 }
 
 //========时钟中断函数========================================================
@@ -314,7 +308,7 @@ __interrupt void tim_isr()
     uint8_t new_tid = aos_get_next_task();
     aos.tcb_info[new_tid].status = TASK_RUNNING;
     if (old_tid != new_tid) {
-        archContextSwitch(aos.tcb_info[old_tid].stack_ptr, aos.tcb_info[new_tid].stack_ptr);
+        archContextSwitch(&aos.tcb_info[old_tid].stack_ptr, aos.tcb_info[new_tid].stack_ptr);
     }
 
     //__set_interrupt_state(_istate);
