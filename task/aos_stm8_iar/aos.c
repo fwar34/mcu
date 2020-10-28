@@ -62,7 +62,10 @@ typedef struct {
     uint8_t event_vector[MAX_EVENT_VECTOR + 1];//消息向量,每项保存一个task_id号
 } AOS_Info;
 
-AOS_Info aos;
+AOS_Info aos = {
+    .current_tid = 0,
+    .is_init = 0,
+};
 
 void task_shell()
 {
