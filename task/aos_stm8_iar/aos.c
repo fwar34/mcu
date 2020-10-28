@@ -39,6 +39,7 @@ extern void archContextSwitch(uint8_t** old_stack_ptr, uint8_t* new_stack_ptr);
 
 typedef enum {
     TASK_INVALID,
+    TASK_SUSPEND,
     TASK_BLOCK,
     TASK_READY,
     TASK_RUNNING
@@ -169,6 +170,10 @@ uint8_t event_push(uint8_t event)
         return 0;
     }
 
+    if (aos.event_vector[event] == 0xFF) {
+        return 0;
+    }
+
     push(&aos.tcb_info[aos.event_vector[event]].event_queue, &event);
     aos.tcb_info[aos.event_vector[event]].status = TASK_READY;
 
@@ -188,9 +193,21 @@ uint8_t event_pop(uint8_t* event)
     return 1;
 }
 
-void event_wait()
+void event_wait(uint16_t ticks)
 {
-    aos.tcb_info[aos.current_tid].status = TASK_BLOCK;
+    if (!empty(&aos.tcb_info[aos.current_tid].event_queue)) {
+        return;
+    }
+
+    if (delay_ticks == 0) {
+        //永久等待
+        aos.tcb_info[aos.current_tid].status = TASK_SUSPEND;
+    } else {
+        //超时等待
+        aos.tcb_info[aos.current_tid].delay_ticks = ticks;
+        aos.tcb_info[aos.current_tid].status = TASK_BLOCK;
+    }
+
     aos_task_switch();
 }
 
@@ -295,15 +312,18 @@ __interrupt void tim_isr()
     uint8_t i;
     for (i = 0; i < MAX_TASKS; ++i) {
         TCB_Info* info = &aos.tcb_info[i];
+        if (info->status == TASK_BLOCK || info->status == TASK_SUSPEND) {
+            if (!empty(&info->event_queue)) {
+                info->status = TASK_READY;
+                continue;
+            }
+        }
+
         if (info->status == TASK_BLOCK) {
             if (info->delay_ticks > 0) {
                 if (--info->delay_ticks == 0) {
                     info->status = TASK_READY;
                 }
-            }
-
-            if (!empty(&info->event_queue)) {
-                info->status = TASK_READY;
             }
         }
     }

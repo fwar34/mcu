@@ -14,6 +14,14 @@ void led_init()
     PG_DDR |= 1 << 1;
     PG_CR1 |= 1 << 1;
     PG_CR2 &= ~(1 << 1);
+
+    PD_DDR |= 1 << 2;
+    PD_CR1 |= 1 << 2;
+    PD_CR2 &= ~(1 << 2);
+
+    PC_DDR |= ((1 << 3) | (1 << 4));
+    PC_CR1 |= ((1 << 3) | (1 << 4));
+    PC_CR2 &= ~((1 << 3) | (1 << 4));
 }
 
 void task0()
@@ -21,7 +29,8 @@ void task0()
     while (1) {
         //PG_ODR ^= 1 << 2;
         PG_ODR_ODR1 = !PG_ODR_ODR1;
-        uart_send_byte(0x1);
+        PD_ODR_ODR2 = !PD_ODR_ODR2;
+        uart_send_byte(0x0);
         aos_task_sleep(200);
         //printf("task1 reserver\n");
     }
@@ -48,6 +57,7 @@ void task2()
         if (++count1 == 5000) {
             count1 = 0;
             PG_ODR_ODR1 = !PG_ODR_ODR1;
+            PC_ODR_ODR2 = !PC_ODR_ODR2;
         }
         event_push(EVENT_RF_PULS_SENT);//发送消息(其实质是唤醒监听该消息的进程)
     }
@@ -62,26 +72,33 @@ void task1()
 {
     /* static unsigned char event_backup;//用于保存信号EVENT_RF_PULS_SENT原来的值.在这个例子里实际上是不需要保存的,因为EVENT_RF_PULS_SENT未被其它进程监听.但在真实应用中则不一定能预知. */
 
+    static uint16_t count2 = 0;
     /* event_reg(EVENT_RF_PULS_SENT, event_backup);//注册消息,原值保存在event_backup中(该变量必须申明为静态) */
     event_reg(EVENT_RF_PULS_SENT);
 
     while (1) {
+        //这里先等待task2启动好（注册了EVENT_RF_PULS_RECV消息）再发数据，防止接收任务还没有注册消息，这里就
+        event_wait();
 #if 1
-    //如果等待的消息产生于另一任务进程中,则使用task_suspend()就可以了.
-    strb[0] = 3, strb[1] = 2, strb[2] = 1;
-    event_push(EVENT_RF_PULS_RECV);//发送消息(其实质是唤醒监听该消息的进程)
-    uart_send_byte(0x3);
-    /* aos_task_load(task2);//装载子任务 */
-    event_wait();
+        //如果等待的消息产生于另一任务进程中,则使用task_suspend()就可以了.
+        strb[0] = 3, strb[1] = 2, strb[2] = 1;
+        event_push(EVENT_RF_PULS_RECV);//发送消息(其实质是唤醒监听该消息的进程)
+        uart_send_byte(0x1);
+        if (++count2 == 5000) {
+            count2 = 0;
+            PG_ODR_ODR1 = !PG_ODR_ODR1;
+            PC_ODR_ODR3 = !PC_ODR_ODR3;
+        }
+        /* aos_task_load(task2);//装载子任务 */
 #else
-    //跟中断打交道时最好使用task_wait_interrupt().
-    //这里的例子是假定中断服务程序发现strb[]全部不为0时,送出EVENT_RF_PULS_SENT消息.
-    //如果进程所等待的消息产生于中断中,则要用该宏来完成.否则有可能丢失信息,进程将无法再醒过来.详细说明见头文件说明.
-    //括号中的语句为,可能触发中断的语句.
-    /* task_wait_interrupt( */
-    /*     strb[0] = 3; strb[1] = 2; strb[2] = 1; */
-    /*     task_load((unsigned int)task2); */
-    /*     ); */
+        //跟中断打交道时最好使用task_wait_interrupt().
+        //这里的例子是假定中断服务程序发现strb[]全部不为0时,送出EVENT_RF_PULS_SENT消息.
+        //如果进程所等待的消息产生于中断中,则要用该宏来完成.否则有可能丢失信息,进程将无法再醒过来.详细说明见头文件说明.
+        //括号中的语句为,可能触发中断的语句.
+        /* task_wait_interrupt( */
+        /*     strb[0] = 3; strb[1] = 2; strb[2] = 1; */
+        /*     task_load((unsigned int)task2); */
+        /*     ); */
 #endif
     }
 
