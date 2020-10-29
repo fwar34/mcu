@@ -16,7 +16,7 @@
                 <debug>1</debug>
                 <option>
                     <name>GenDeviceSelectMenu</name>
-                    <state>STM8S105C6	STM8S105C6</state>
+                    <state>STM8S105K4	STM8S105K4</state>
                 </option>
                 <option>
                     <name>GenCodeModel</name>
@@ -256,8 +256,8 @@
                 </option>
                 <option>
                     <name>CCIncludePath2</name>
-                    <state>D:\安装程序\MCU\stm8_projects\test_1602-lib</state>
-                    <state>D:\安装程序\MCU\stm8_projects\test_1602-lib\STM8S_StdPeriph_Driver\inc</state>
+                    <state>H:\MCU\mcu\stm8\test_1602-lib</state>
+                    <state>H:\MCU\mcu\stm8\test_1602-lib\STM8S_StdPeriph_Driver\inc</state>
                 </option>
                 <option>
                     <name>CCStdIncCheck</name>
@@ -524,9 +524,9 @@
         </settings>
         <settings>
             <name>ILINK</name>
-            <archiveVersion>4</archiveVersion>
+            <archiveVersion>5</archiveVersion>
             <data>
-                <version>3</version>
+                <version>4</version>
                 <wantNonLocal>1</wantNonLocal>
                 <debug>1</debug>
                 <option>
@@ -773,6 +773,22 @@
                 <option>
                     <name>IlinkLogCallGraph</name>
                     <state>0</state>
+                </option>
+                <option>
+                    <name>IlinkRawBinaryFile2</name>
+                    <state></state>
+                </option>
+                <option>
+                    <name>IlinkRawBinarySymbol2</name>
+                    <state></state>
+                </option>
+                <option>
+                    <name>IlinkRawBinarySegment2</name>
+                    <state></state>
+                </option>
+                <option>
+                    <name>IlinkRawBinaryAlign2</name>
+                    <state></state>
                 </option>
             </data>
         </settings>
@@ -1325,9 +1341,9 @@
         </settings>
         <settings>
             <name>ILINK</name>
-            <archiveVersion>4</archiveVersion>
+            <archiveVersion>5</archiveVersion>
             <data>
-                <version>3</version>
+                <version>4</version>
                 <wantNonLocal>1</wantNonLocal>
                 <debug>0</debug>
                 <option>
@@ -1574,6 +1590,22 @@
                 <option>
                     <name>IlinkLogCallGraph</name>
                     <state>0</state>
+                </option>
+                <option>
+                    <name>IlinkRawBinaryFile2</name>
+                    <state></state>
+                </option>
+                <option>
+                    <name>IlinkRawBinarySymbol2</name>
+                    <state></state>
+                </option>
+                <option>
+                    <name>IlinkRawBinarySegment2</name>
+                    <state></state>
+                </option>
+                <option>
+                    <name>IlinkRawBinaryAlign2</name>
+                    <state></state>
                 </option>
             </data>
         </settings>

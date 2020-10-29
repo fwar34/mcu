@@ -25,7 +25,7 @@ if not "%~1" == "" goto debugFile
 
 @echo on 
 
-"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\common\bin\cspybat" -f "D:\安装程序\MCU\stm8_projects\test_1602-lib\settings\test_1602.Debug.general.xcl" --backend -f "D:\安装程序\MCU\stm8_projects\test_1602-lib\settings\test_1602.Debug.driver.xcl" 
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.3\common\bin\cspybat" -f "H:\MCU\mcu\stm8\test_1602-lib\settings\test_1602.Debug.general.xcl" --backend -f "H:\MCU\mcu\stm8\test_1602-lib\settings\test_1602.Debug.driver.xcl" 
 
 @echo off 
 goto end 
@@ -34,7 +34,7 @@ goto end
 
 @echo on 
 
-"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\common\bin\cspybat" -f "D:\安装程序\MCU\stm8_projects\test_1602-lib\settings\test_1602.Debug.general.xcl" "--debug_file=%~1" --backend -f "D:\安装程序\MCU\stm8_projects\test_1602-lib\settings\test_1602.Debug.driver.xcl" 
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.3\common\bin\cspybat" -f "H:\MCU\mcu\stm8\test_1602-lib\settings\test_1602.Debug.general.xcl" "--debug_file=%~1" --backend -f "H:\MCU\mcu\stm8\test_1602-lib\settings\test_1602.Debug.driver.xcl" 
 
 @echo off 
 :end

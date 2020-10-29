@@ -13,7 +13,7 @@ void push(CircleQueue* queue, ELEMENT_TYPE* data)
     }
 
     if (queue->end == queue->front) {
-        if (++queue->front % QUEUE_LEN ==0) {
+        if (++queue->front % QUEUE_LEN == 0) {
             queue->front = 0;
         }
     }
@@ -32,12 +32,13 @@ uint8_t pop(CircleQueue* queue, ELEMENT_TYPE* data)
     }
 
     *data = queue->array[queue->front];
+    queue->array[queue->front] = 0;
     return 1;
 }
 
 uint8_t full(CircleQueue* queue)
 {
-    if (++queue->end % QUEUE_LEN == 0) {
+    if (queue->end + 1 % QUEUE_LEN == 0) {
         queue->end = 0;
     }
     return queue->end == queue->front;

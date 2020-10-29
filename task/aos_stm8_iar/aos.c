@@ -5,6 +5,7 @@
 #include "aos.h"
 #include "aos_config.h"
 #include "circle_queue.h"
+#include "uart_sdcc.h"
 
 extern void archFirstThreadRestore(uint8_t* new_stack_ptr);
 extern void archContextSwitch(uint8_t** old_stack_ptr, uint8_t* new_stack_ptr);
@@ -175,8 +176,16 @@ uint8_t event_push(uint8_t event)
         return 0;
     }
 
+    //这里必须用临界区保护，因为不保护的话在push和设置TASK_READY中间被中断ISR调度的话，
+    //当前task是SUSPEND会改成READY后可能立即被执行一次，等当前任务下次重新被切入的时候又会在这里把状态设置成READY，
+    //就可能再次被执行了一次，第二次pop就会出错，因为已经被第一次pop出去了
+    __disable_interrupt();
     push(&aos.tcb_info[aos.event_vector[event]].event_queue, &event);
+    /* if (event == 1) { */
+    /*     uart_send_string("push 1\n"); */
+    /* } */
     aos.tcb_info[aos.event_vector[event]].status = TASK_READY;
+    __enable_interrupt();
 
     return 1;
 }
@@ -184,6 +193,7 @@ uint8_t event_push(uint8_t event)
 uint8_t event_pop(uint8_t* event)
 {
     if (empty(&aos.tcb_info[aos.current_tid].event_queue)) {
+        uart_send_string("event_queue empty!\n");
         return 0;
     }
 
@@ -191,6 +201,9 @@ uint8_t event_pop(uint8_t* event)
         return 0;
     }
     
+    /* if (*event == 1) { */
+    /*     uart_send_string("pop 1\n"); */
+    /* } */
     return 1;
 }
 

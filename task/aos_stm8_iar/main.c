@@ -51,6 +51,7 @@ void task1()
     uint8_t event;
     while (1) {
         event_wait(0);
+        /* uart_send_string("1s recv\n"); */
         if (!event_pop(&event)) {
             uart_send_string("recv task pop event error!\n");
         }
@@ -68,7 +69,7 @@ void task1()
             //uart_send_byte(event);
             count1 = 0;
             PG_ODR_ODR1 = !PG_ODR_ODR1;
-            PC_ODR_ODR2 = !PC_ODR_ODR2;
+            PC_ODR_ODR4 = !PC_ODR_ODR4;
         }
     }
     /* aos_task_exit();//结束任务. */
@@ -104,6 +105,8 @@ void task2() //发送task
             if (!event_pop(&event)) {
                 uart_send_string("send task pop event error!\n");
             }
+            /* aos_task_sleep(1); */
+            /* uart_send_string("1s send\n"); */
         }
     }
 
@@ -120,11 +123,13 @@ void clock_init()
 }
 
 //==================系统时钟初始化=================================
-void timer3_init()        //5毫秒tick@16MHz
+void timer3_init()        //
 {
     TIM3_PSCR = 0x07; //128分频
-    TIM3_ARRH = 0x02;
+    TIM3_ARRH = 0x02; //5mstick@16MHz
     TIM3_ARRL = 0x70;
+    /* TIM3_ARRH = 0x00; //1mstick@16MHz */
+    /* TIM3_ARRL = 0x7D; */
     TIM3_CR1_ARPE = 0; //禁止预装载来更新，立即更新TIM3_ARR成设定值
     TIM3_IER_UIE = 1;
     //TIM3_EGR_UG = 1;
