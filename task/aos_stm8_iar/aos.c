@@ -41,6 +41,7 @@ typedef enum {
     TASK_INVALID,
     TASK_SUSPEND,
     TASK_BLOCK,
+    TASK_DELAY,
     TASK_READY,
     TASK_RUNNING
 } TaskStatus;
@@ -199,7 +200,7 @@ void event_wait(uint16_t ticks)
         return;
     }
 
-    if (delay_ticks == 0) {
+    if (ticks == 0) {
         //永久等待
         aos.tcb_info[aos.current_tid].status = TASK_SUSPEND;
     } else {
@@ -226,8 +227,6 @@ void aos_task_exit()
     aos.tcb_info[aos.current_tid].status = TASK_INVALID;
     aos_task_switch();
 }
-
-
 
 void aos_task_switch()
 {
@@ -280,11 +279,11 @@ void aos_task_weakup(uint8_t tid)
     aos_task_switch();
 }
 
-void aos_task_suspend()
-{
-    aos.tcb_info[aos.current_tid].status = TASK_BLOCK;
-    aos_task_switch();
-}
+/* void aos_task_suspend() */
+/* { */
+/*     aos.tcb_info[aos.current_tid].status = TASK_BLOCK; */
+/*     aos_task_switch(); */
+/* } */
 
 void aos_task_sleep(uint16_t ticks)
 {
@@ -292,7 +291,7 @@ void aos_task_sleep(uint16_t ticks)
         return;
     }
     aos.tcb_info[aos.current_tid].delay_ticks = ticks;
-    aos.tcb_info[aos.current_tid].status = TASK_BLOCK;
+    aos.tcb_info[aos.current_tid].status = TASK_DELAY;
     aos_task_switch();
 }
 
@@ -315,11 +314,11 @@ __interrupt void tim_isr()
         if (info->status == TASK_BLOCK || info->status == TASK_SUSPEND) {
             if (!empty(&info->event_queue)) {
                 info->status = TASK_READY;
-                continue;
+                info->delay_ticks = 0;
             }
         }
 
-        if (info->status == TASK_BLOCK) {
+        if (info->status == TASK_BLOCK || info->status == TASK_DELAY) {
             if (info->delay_ticks > 0) {
                 if (--info->delay_ticks == 0) {
                     info->status = TASK_READY;

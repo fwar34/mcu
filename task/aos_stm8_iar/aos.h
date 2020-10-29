@@ -54,7 +54,7 @@ void aos_task_weakup(uint8_t tid);
 //进程立即进入休眠
 /* #define task_suspend() task_sleep[task_id] = 0xFF, task_switch() */
 //进程立即进入休眠
-void aos_task_suspend();
+/* void aos_task_suspend(); */
 void event_wait();
 //执行指定语句后进入休眠.与直接调用task_suspend()相比,可防止中断中的消息在提前到达于进入休眠等待前.
 /* #define task_wait_interrupt(prog) { task_setsuspend(task_id); prog; task_switch(); } */

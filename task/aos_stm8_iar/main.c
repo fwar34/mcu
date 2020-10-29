@@ -30,18 +30,18 @@ void task0()
         //PG_ODR ^= 1 << 2;
         PG_ODR_ODR1 = !PG_ODR_ODR1;
         PD_ODR_ODR2 = !PD_ODR_ODR2;
-        uart_send_byte(0x0);
+        /* uart_send_byte(0x0); */
         aos_task_sleep(200);
-        //printf("task1 reserver\n");
+        printf("task1 reserver\n");
     }
 }
 
 unsigned char stra[3], strb[3];
-unsigned int count1 = 0;
 //测试任务之主任务:
-void task2()
+void task1()
 {
-    static unsigned char i;
+    static unsigned int count1 = 0;
+    unsigned char i;
     event_reg(EVENT_RF_PULS_RECV);
 
     while (1) {
@@ -68,18 +68,12 @@ void task2()
 //task2在处理完缓冲区strb[]中的数据后发送EVENT_RF_PULS_SENT消息唤醒主任务,然后结束自已.
 //主任务被唤醒后,解除对EVENT_RF_PULS_SENT的监听,并结束任务.
 //注意:为了演示能持续进行,任务在结束前重新装入了它自已.这种用法没错误,但在实际应用中不大可能出现.
-void task1()
+void task2()
 {
-    /* static unsigned char event_backup;//用于保存信号EVENT_RF_PULS_SENT原来的值.在这个例子里实际上是不需要保存的,因为EVENT_RF_PULS_SENT未被其它进程监听.但在真实应用中则不一定能预知. */
-
     static uint16_t count2 = 0;
-    /* event_reg(EVENT_RF_PULS_SENT, event_backup);//注册消息,原值保存在event_backup中(该变量必须申明为静态) */
     event_reg(EVENT_RF_PULS_SENT);
 
     while (1) {
-        //这里先等待task2启动好（注册了EVENT_RF_PULS_RECV消息）再发数据，防止接收任务还没有注册消息，这里就
-        event_wait();
-#if 1
         //如果等待的消息产生于另一任务进程中,则使用task_suspend()就可以了.
         strb[0] = 3, strb[1] = 2, strb[2] = 1;
         event_push(EVENT_RF_PULS_RECV);//发送消息(其实质是唤醒监听该消息的进程)
@@ -90,16 +84,9 @@ void task1()
             PC_ODR_ODR3 = !PC_ODR_ODR3;
         }
         /* aos_task_load(task2);//装载子任务 */
-#else
-        //跟中断打交道时最好使用task_wait_interrupt().
-        //这里的例子是假定中断服务程序发现strb[]全部不为0时,送出EVENT_RF_PULS_SENT消息.
-        //如果进程所等待的消息产生于中断中,则要用该宏来完成.否则有可能丢失信息,进程将无法再醒过来.详细说明见头文件说明.
-        //括号中的语句为,可能触发中断的语句.
-        /* task_wait_interrupt( */
-        /*     strb[0] = 3; strb[1] = 2; strb[2] = 1; */
-        /*     task_load((unsigned int)task2); */
-        /*     ); */
-#endif
+
+        //这里先等待task2启动好（注册了EVENT_RF_PULS_RECV消息）再发数据，防止接收任务还没有注册消息，这里就
+        event_wait();
     }
 
     /* event_unreg(EVENT_RF_PULS_SENT, event_backup); */
@@ -131,8 +118,8 @@ void main()
     aos_init();
 
     aos_task_load(task0);//task1为无关任务,模拟实际使用中的其它任务.在这里不需理睬.
-    aos_task_load(task1);//主任务
-    aos_task_load(task2);//主任务
+    aos_task_load(task1);//接收任务
+    aos_task_load(task2);//发送任务
     
     clock_init();
     uart_init();
