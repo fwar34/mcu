@@ -40,7 +40,7 @@ void task0()
 
 static uint8_t recv_flag = 0;
 unsigned char stra[3], strb[3];
-//测试任务之主任务:
+//接收task
 void task1()
 {
     unsigned int count1 = 0;
@@ -52,8 +52,7 @@ void task1()
     while (1) {
         event_wait(0);
         if (!event_pop(&event)) {
-            /* uart_send_byte(0xEE); */
-            uart_send_string("pop error!\n");
+            uart_send_string("recv task pop event error!\n");
         }
         i = sizeof(stra);
         do
@@ -62,6 +61,7 @@ void task1()
             aos_task_switch();
         } while (--i);
     
+        event_push(EVENT_RF_PULS_SENT);//发送消息(其实质是唤醒监听该消息的进程)
         if (++count1 == 5000) {
             /* uart_send_byte(0x1); */
             uart_send_string("recv\n");
@@ -70,7 +70,6 @@ void task1()
             PG_ODR_ODR1 = !PG_ODR_ODR1;
             PC_ODR_ODR2 = !PC_ODR_ODR2;
         }
-        event_push(EVENT_RF_PULS_SENT);//发送消息(其实质是唤醒监听该消息的进程)
     }
     /* aos_task_exit();//结束任务. */
 }
@@ -79,7 +78,7 @@ void task1()
 //task2在处理完缓冲区strb[]中的数据后发送EVENT_RF_PULS_SENT消息唤醒主任务,然后结束自已.
 //主任务被唤醒后,解除对EVENT_RF_PULS_SENT的监听,并结束任务.
 //注意:为了演示能持续进行,任务在结束前重新装入了它自已.这种用法没错误,但在实际应用中不大可能出现.
-void task2()
+void task2() //发送task
 {
     uint16_t count2 = 0;
     event_reg(EVENT_RF_PULS_SENT);
@@ -103,7 +102,7 @@ void task2()
             //这里先等待task2启动好（注册了EVENT_RF_PULS_RECV消息）再发数据，防止接收任务还没有注册消息，这里就
             event_wait(0);
             if (!event_pop(&event)) {
-                uart_send_byte(0xEE);
+                uart_send_string("send task pop event error!\n");
             }
         }
     }
