@@ -234,6 +234,9 @@ void aos_task_switch()
     __disable_interrupt();
 
     uint8_t old_tid = aos.current_tid;
+    if (aos.tcb_info[old_tid].status == TASK_RUNNING) {
+        aos.tcb_info[old_tid].status = TASK_READY;
+    }
     uint8_t new_tid = aos_get_next_task();
     aos.tcb_info[new_tid].status = TASK_RUNNING;
 
@@ -306,7 +309,9 @@ __interrupt void tim_isr()
     //__disable_interrupt();
     
     uint8_t old_tid = aos.current_tid;
-    aos.tcb_info[old_tid].status = TASK_READY;
+    if (aos.tcb_info[old_tid].status == TASK_RUNNING) {
+        aos.tcb_info[old_tid].status = TASK_READY;
+    }
 
     uint8_t i;
     for (i = 0; i < MAX_TASKS; ++i) {
