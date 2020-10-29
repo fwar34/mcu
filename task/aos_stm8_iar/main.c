@@ -30,24 +30,32 @@ void task0()
         //PG_ODR ^= 1 << 2;
         PG_ODR_ODR1 = !PG_ODR_ODR1;
         PD_ODR_ODR2 = !PD_ODR_ODR2;
+
         /* uart_send_byte(0x0); */
+        uart_send_string("task0\n");
         aos_task_sleep(200);
-        printf("task1 reserver\n");
+        /* printf("task1 reserver\n"); */
     }
 }
 
+static uint8_t recv_flag = 0;
 unsigned char stra[3], strb[3];
 //测试任务之主任务:
 void task1()
 {
-    static unsigned int count1 = 0;
+    unsigned int count1 = 0;
     unsigned char i;
     event_reg(EVENT_RF_PULS_RECV);
+    recv_flag = 1;
 
+    uint8_t event;
     while (1) {
-        event_wait();
+        event_wait(0);
+        if (!event_pop(&event)) {
+            /* uart_send_byte(0xEE); */
+            uart_send_string("pop error!\n");
+        }
         i = sizeof(stra);
-        uart_send_byte(0x2);
         do
         {
             stra[i-1] = strb[i-1];
@@ -55,6 +63,9 @@ void task1()
         } while (--i);
     
         if (++count1 == 5000) {
+            /* uart_send_byte(0x1); */
+            uart_send_string("recv\n");
+            //uart_send_byte(event);
             count1 = 0;
             PG_ODR_ODR1 = !PG_ODR_ODR1;
             PC_ODR_ODR2 = !PC_ODR_ODR2;
@@ -70,23 +81,31 @@ void task1()
 //注意:为了演示能持续进行,任务在结束前重新装入了它自已.这种用法没错误,但在实际应用中不大可能出现.
 void task2()
 {
-    static uint16_t count2 = 0;
+    uint16_t count2 = 0;
     event_reg(EVENT_RF_PULS_SENT);
 
+    uint8_t event;
     while (1) {
         //如果等待的消息产生于另一任务进程中,则使用task_suspend()就可以了.
         strb[0] = 3, strb[1] = 2, strb[2] = 1;
         event_push(EVENT_RF_PULS_RECV);//发送消息(其实质是唤醒监听该消息的进程)
-        uart_send_byte(0x1);
         if (++count2 == 5000) {
+            /* uart_send_byte(0x2); */
+            uart_send_string("send\n");
+            //uart_send_byte(event);
             count2 = 0;
             PG_ODR_ODR1 = !PG_ODR_ODR1;
             PC_ODR_ODR3 = !PC_ODR_ODR3;
         }
         /* aos_task_load(task2);//装载子任务 */
 
-        //这里先等待task2启动好（注册了EVENT_RF_PULS_RECV消息）再发数据，防止接收任务还没有注册消息，这里就
-        event_wait();
+        if (recv_flag) {
+            //这里先等待task2启动好（注册了EVENT_RF_PULS_RECV消息）再发数据，防止接收任务还没有注册消息，这里就
+            event_wait(0);
+            if (!event_pop(&event)) {
+                uart_send_byte(0xEE);
+            }
+        }
     }
 
     /* event_unreg(EVENT_RF_PULS_SENT, event_backup); */

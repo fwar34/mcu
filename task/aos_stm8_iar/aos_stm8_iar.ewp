@@ -606,7 +606,7 @@
                 </option>
                 <option>
                     <name>IlinkIcfFile</name>
-                    <state>$TOOLKIT_DIR$\config\lnkstm8s105k4.icf</state>
+                    <state>$TOOLKIT_DIR$\config\lnkstm8s105c6.icf</state>
                 </option>
                 <option>
                     <name>IlinkIcfFileSlave</name>
@@ -1653,7 +1653,7 @@
             <name>$PROJ_DIR$\oscore.c</name>
         </file>
         <file>
-            <name>$PROJ_DIR$\uart.c</name>
+            <name>$PROJ_DIR$\uart_sdcc.c</name>
         </file>
     </group>
 </project>

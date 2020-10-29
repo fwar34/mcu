@@ -46,3 +46,10 @@ int putchar (int c)
 {
     return(uart_putchar(c));
 }
+
+void uart_send_string(char* str)
+{
+    while (*str++) {
+        uart_putchar(*str);
+    }
+}
