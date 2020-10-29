@@ -45,7 +45,7 @@ uint8_t full(CircleQueue* queue)
 
 uint8_t empty(CircleQueue* queue)
 {
-    return queue->queue == queue->front;
+    return queue->end == queue->front;
 }
 
 uint8_t size(CircleQueue* queue)
