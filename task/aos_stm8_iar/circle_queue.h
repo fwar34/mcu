@@ -7,9 +7,9 @@
 #define QUEUE_LEN 10
 
 typedef struct {
-    uint8_t front;
-    uint8_t end;
-    ELEMENT_TYPE array[QUEUE_LEN];
+    uint8_t front; //第一个元素的索引是front + 1
+    uint8_t end; //最后一个元素的所以是end
+    ELEMENT_TYPE array[QUEUE_LEN + 1]; //要存QUEUE_LEN个元素数组必须是QUEUE_LEN + 1大小,因为front + 1才是第一个元素
 } CircleQueue;
 
 void init(CircleQueue* queue);

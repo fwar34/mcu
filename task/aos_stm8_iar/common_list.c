@@ -116,19 +116,28 @@ void list_remove(List* list, Node* node)
     }
 }
 
-void list_insert_ascending(List* list, Node* node)
+uint8_t list_insert_ascending(List* list, Node* node)
 {
     if (list->list_length == 0) {
         list_insert_first(list, node);
     } else {
-        if (list->end->data <= node->data) { //判断最后一个节点或者是只有一个节点
+        if (list->end->priority <= node->priority) { //判断最后一个节点或者是只有一个节点
+            if (list->end == node) {
+                return 0; //节点已经存在直接退出  
+            } 
             list_insert_end(list, node);
-        } else if (list->begin->data > node->data) { //判断第一个节点
+        } else if (list->begin->priority > node->priority) { //判断第一个节点
+            if (list->begin == node) {
+                return 0; //节点已经存在直接退出  
+            } 
             list_insert_begin(list, node);
         } else { //判断第二个到倒数第二个节点
             list->index = list->begin->next;
             while (list->index != list->end) { 
-                if (list->index->data <= node->data) {
+                if (list->index->priority <= node->priority) {
+                    if (list->index == node) {
+                        return 0; //节点已经存在直接退出  
+                    } 
                     list->index = list->index->next;
                 } else {
                     break;
@@ -143,21 +152,32 @@ void list_insert_ascending(List* list, Node* node)
             ++list->list_length;
         }
     }
+
+    return 1;
 }
 
-void list_insert_descending(List* list, Node* node)
+uint8_t list_insert_descending(List* list, Node* node)
 {
     if (list->list_length == 0) {
         list_insert_first(list, node);
     } else {
-        if (list->end->data >= node->data) { //判断最后一个节点或者是只有一个节点
+        if (list->end->priority >= node->priority) { //判断最后一个节点或者是只有一个节点
+            if (list->end == node) {
+                return 0; //节点已经存在直接退出  
+            } 
             list_insert_end(list, node);
-        } else if (list->begin->data < node->data) { //判断第一个节点
+        } else if (list->begin->priority < node->priority) { //判断第一个节点
+            if (list->begin == node) {
+                return 0; //节点已经存在直接退出  
+            } 
             list_insert_begin(list, node);
         } else { //判断第二个到倒数第二个节点
             list->index = list->begin->next;
             while (list->index != list->end) {
-                if (list->index->data >= node->data) {
+                if (list->index->priority >= node->priority) {
+                    if (list->index == node) {
+                        return 0; //节点已经存在直接退出  
+                    } 
                     list->index = list->index->next;
                 } else {
                     break;
@@ -172,4 +192,6 @@ void list_insert_descending(List* list, Node* node)
             ++list->list_length;
         }
     }
+
+    return 1;
 }

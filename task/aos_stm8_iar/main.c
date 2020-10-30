@@ -2,12 +2,15 @@
   增强的简易多任务操作系统,具有简单的消息机制和休眠/睡眠机制,支持任务动态装入和结束.
 */
 
+#include <string.h>
 #include <iostm8.h>
 #include <stdio.h>
 #include <intrinsics.h>
 #include "aos.h"
 #include "aos_config.h"
 #include "uart.h"
+#include "circle_queue.h"
+#include "common_list.h"
 /*============================以下为测试代码============================*/
 void led_init()
 {
@@ -136,6 +139,44 @@ void timer3_init()        //
     TIM3_CR1_CEN = 1;
 } 
 
+void test_circle_queue()
+{
+    CircleQueue queue;
+    uint8_t i;
+    for (i = 0; i < 255; ++i) {
+        push(&queue, &i);
+    }
+
+    uint8_t data;
+    for (i = 0; i < 20; ++i) {
+        pop(&queue, &data);
+    }
+    
+    for (i = 0; i < 255; ++i) {
+        push(&queue, &i);
+    }
+    
+    for (i = 0; i < 20; ++i) {
+        pop(&queue, &data);
+    }
+}
+
+void test_list()
+{
+    static List list;
+    static Node nodes[20];
+    list_init(&list, LIST_ASCENDING);
+    memset(nodes, 0, 20 * sizeof(Node));
+    list_insert_first(&list, &nodes[0]);
+    list_insert_end(&list, &nodes[1]);
+    uint8_t i;
+    for (i = 1; i < 19; ++i) {
+        nodes[i].priority = i % 5;
+        nodes[i].data = &nodes[i];
+        list_insert_ascending(&list, &nodes[i]);
+    }
+}
+
 void main()
 {
     aos_init();
@@ -148,6 +189,9 @@ void main()
     uart_init();
     timer3_init();
     led_init();
+    
+    /* test_circle_queue(); */
+    test_list();
     
     uart_send_byte(0xff);
     aos_start();
