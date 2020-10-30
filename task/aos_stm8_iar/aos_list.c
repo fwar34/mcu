@@ -37,25 +37,16 @@ extern void archContextSwitch(uint8_t** old_stack_ptr, uint8_t* new_stack_ptr);
     asm("popw Y");                              \
     asm("ldw 0x08, Y"); /*?b8,?b9*/
 
-
-/* typedef enum { */
-/*     TASK_INVALID, */
-/*     TASK_SUSPEND, */
-/*     TASK_BLOCK, */
-/*     TASK_DELAY, */
-/*     TASK_READY, */
-/*     TASK_RUNNING */
-/* } TaskStatus; */
-
 typedef struct {
     uint8_t semaphore;
-    List tcb_list;
+    List wait_tasks;
 } Semaphore;
 
 typedef struct {
-    uint8_t event;
-    List tcb_list;
-} Event;
+    CircleQueue queue;
+    List send_tasks;
+    List recv_tasks;
+} MessageQueue;
 
 typedef struct {
     uint8_t* stack_ptr;
@@ -63,15 +54,16 @@ typedef struct {
     task_func task;
     uint16_t delay_ticks;
     uint8_t stack[MAX_TASK_STACK_LENGTH];
+    Node* task_node;
 } TCB_Info;
 
 typedef struct {
     uint8_t is_init;
     TCB_Info* current_tcb;
-    List ready_list;
-    List event_list;
-    List semaphore_list;
-    List delay_list;
+    List ready_tasks;
+    List message_queues;
+    List semaphores;
+    List delay_tasks;
     uint16_t tid;
 } AOS_Info;
 
@@ -198,9 +190,9 @@ void aos_start()
         return;
     }
 
-    aos.current_tcb = list_get_min(&aos.ready_list)->data;
-    archFirstThreadRestore(aos.current_tcb->stack_ptr);
+    aos.current_tcb = list_get_max(&aos.ready_list)->data;
     __enable_interrupt();   
+    archFirstThreadRestore(aos.current_tcb->stack_ptr);
 }
 
 void aos_task_exit()

@@ -231,8 +231,8 @@ void aos_start()
     aos.tcb_info[aos.current_tid].status = TASK_RUNNING;
     //stack_temp = aos.tcb_info[aos.current_tid].stack_ptr;
     //TASK_RESTORE();
-    archFirstThreadRestore(aos.tcb_info[aos.current_tid].stack_ptr);
     __enable_interrupt();   
+    archFirstThreadRestore(aos.tcb_info[aos.current_tid].stack_ptr);
 }
 
 void aos_task_exit()
