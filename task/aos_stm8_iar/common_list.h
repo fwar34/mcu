@@ -3,14 +3,15 @@
 
 #include <stdint.h>
 
-typedef struct {
-    void* data;
-    Node* prev;
-    Node* next;
-    List* list;
+struct _List;
+typedef struct _Node {
+    uint8_t data;
+    struct _Node* prev;
+    struct _Node* next;
+    struct _List* list;
 } Node;
 
-typedef struct {
+typedef struct _List {
     uint8_t list_type;
     uint16_t list_length;
     Node* begin;

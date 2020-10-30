@@ -4,9 +4,9 @@ void list_init(List* list, uint8_t list_type)
 {
     list->list_type = list_type;
     list->list_length = 0;
-    list->begin = NULL;
-    list->end = NULL;
-    list->index = NULL;
+    list->begin = 0;
+    list->end = 0;
+    list->index = 0;
 }
 
 void list_insert_first(List* list, Node* node)
@@ -49,12 +49,12 @@ void list_insert_begin(List* list, Node* node)
     }
 }
 
-void list_remove_last()
+void list_remove_last(List* list)
 {
     list->list_length = 0;
-    list->begin = NULL;
-    list->end = NULL;
-    list->index = NULL;
+    list->begin = 0;
+    list->end = 0;
+    list->index = 0;
 }
 
 void list_remove_begin(List* list)
@@ -76,7 +76,7 @@ void list_remove_end(List* list)
 Node* list_get_max(List* list)
 {
     if (list->list_type == LIST_NORMAL) {
-        return NULL;
+        return 0;
     } else if (list->list_type == LIST_ASCENDING) {
         return list->end;
     } else {
@@ -87,7 +87,7 @@ Node* list_get_max(List* list)
 Node* list_get_min(List* list)
 {
     if (list->list_type == LIST_NORMAL) {
-        return NULL;
+        return 0;
     } else if (list->list_type == LIST_ASCENDING) {
         return list->begin;
     } else {
@@ -121,14 +121,14 @@ void list_insert_ascending(List* list, Node* node)
     if (list->list_length == 0) {
         list_insert_first(list, node);
     } else {
-        if (*list->end->data <= *node->data) { //判断最后一个节点或者是只有一个节点
+        if (list->end->data <= node->data) { //判断最后一个节点或者是只有一个节点
             list_insert_end(list, node);
-        } else if (*list->first->data > *node->data) { //判断第一个节点
+        } else if (list->begin->data > node->data) { //判断第一个节点
             list_insert_begin(list, node);
         } else { //判断第二个到倒数第二个节点
             list->index = list->begin->next;
             while (list->index != list->end) { 
-                if (*list->index->data <= *node->data) {
+                if (list->index->data <= node->data) {
                     list->index = list->index->next;
                 } else {
                     break;
@@ -150,14 +150,14 @@ void list_insert_descending(List* list, Node* node)
     if (list->list_length == 0) {
         list_insert_first(list, node);
     } else {
-        if (*list->end->data >= *node->data) { //判断最后一个节点或者是只有一个节点
+        if (list->end->data >= node->data) { //判断最后一个节点或者是只有一个节点
             list_insert_end(list, node);
-        } else if (*list->begin->data < *node->data) { //判断第一个节点
+        } else if (list->begin->data < node->data) { //判断第一个节点
             list_insert_begin(list, node);
         } else { //判断第二个到倒数第二个节点
-            list->index = list->begin->next
+            list->index = list->begin->next;
             while (list->index != list->end) {
-                if (*list->index->data >= *node->data) {
+                if (list->index->data >= node->data) {
                     list->index = list->index->next;
                 } else {
                     break;
@@ -167,7 +167,7 @@ void list_insert_descending(List* list, Node* node)
             node->next = list->index;
             node->prev = list->index->prev;
             list->index->prev->next = node;
-            list->prev = node;
+            list->index->prev = node;
             node->list = list;
             ++list->list_length;
         }
