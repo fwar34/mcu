@@ -1,6 +1,29 @@
 #include <string.h>
 #include <stdio.h>
 #include "common_list.h"
+#include "circle_queue.h"
+
+void test_circle_queue()
+{
+    CircleQueue queue;
+    uint8_t i;
+    for (i = 0; i < 255; ++i) {
+        push(&queue, &i);
+    }
+
+    uint8_t data;
+    for (i = 0; i < 20; ++i) {
+        pop(&queue, &data);
+    }
+    
+    for (i = 0; i < 255; ++i) {
+        push(&queue, &i);
+    }
+    
+    for (i = 0; i < 20; ++i) {
+        pop(&queue, &data);
+    }
+}
 
 void list_output(List* list)
 {
