@@ -54,16 +54,17 @@ typedef struct {
     task_func task;
     uint16_t delay_ticks;
     uint8_t stack[MAX_TASK_STACK_LENGTH];
-    Node* task_node;
+    Node task_node;
 } TCB_Info;
 
 typedef struct {
     uint8_t is_init;
     TCB_Info* current_tcb;
-    List ready_tasks;
+    List ready_tasks[MAX_PRIORITY];
     List message_queues;
     List semaphores;
     List delay_tasks;
+    List delay_overflow_tasks;
     uint16_t tid;
 } AOS_Info;
 
@@ -91,7 +92,11 @@ void aos_init()
         return;
     }
 
-    list_init(&aos.ready_list, LIST_ASCENDING);
+    uint8_t i;
+    for (i = 0; i < MAX_PRIORITY; ++i) {
+        list_init(&ready_tasks[i], LIST_NORMAL);
+    }
+
     list_init(&aos.delay_list, LIST_ASCENDING);
     list_init(&aos.event_list, LIST_ASCENDING);
     list_init(&aos.semaphore_list, LIST_ASCENDING);

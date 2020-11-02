@@ -2,6 +2,7 @@
 #define _FCONFIG_H_
 
 #define MAX_TASKS 3
+#define MAX_PRIORITY 8
 #define MAX_TASK_STACK_LENGTH 64 //最大栈深
 
 #define MESSAGE_QUEUE_MAX_NUM 3
