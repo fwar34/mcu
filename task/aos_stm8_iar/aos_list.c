@@ -6,9 +6,11 @@
 #include "aos_config.h"
 #include "circle_queue.h"
 #include "uart_sdcc.h"
+#include "heap_1.h"
 
 extern void archFirstThreadRestore(uint8_t* new_stack_ptr);
 extern void archContextSwitch(uint8_t** old_stack_ptr, uint8_t* new_stack_ptr);
+extern void* pvPortMalloc(size_t xWantedSize);
 
 //static uint8_t* stack_temp = NULL;
 
@@ -53,16 +55,18 @@ typedef struct {
     uint8_t tid;
     task_func task;
     uint16_t delay_ticks;
-    uint8_t stack[MAX_TASK_STACK_LENGTH];
+    uint8_t* stack;
     Node task_node;
 } TCB_Info;
 
 typedef struct {
     uint8_t is_init;
+    uint8_t schedule_lock_count;
+    uint16_t current_tick_count;
+    uint16_t unblock_tick_count;
+    uint8_t current_priority;
     TCB_Info* current_tcb;
     List ready_tasks[MAX_PRIORITY];
-    List message_queues;
-    List semaphores;
     List delay_tasks;
     List delay_overflow_tasks;
     uint16_t tid;
@@ -98,6 +102,7 @@ void aos_init()
     }
 
     list_init(&aos.delay_list, LIST_ASCENDING);
+    list_init(&aos.delay_overflow_list, LIST_ASCENDING);
     list_init(&aos.event_list, LIST_ASCENDING);
     list_init(&aos.semaphore_list, LIST_ASCENDING);
 

@@ -11,6 +11,9 @@
 #include "uart.h"
 #include "circle_queue.h"
 #include "common_list.h"
+
+#define EVENT_RF_PULS_RECV 1
+#define EVENT_RF_PULS_SENT 2
 /*============================以下为测试代码============================*/
 void led_init()
 {

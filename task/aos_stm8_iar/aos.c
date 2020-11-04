@@ -10,6 +10,8 @@
 extern void archFirstThreadRestore(uint8_t* new_stack_ptr);
 extern void archContextSwitch(uint8_t** old_stack_ptr, uint8_t* new_stack_ptr);
 
+#define MAX_EVENT_VECTOR 10//向量表的尺寸.最大消息号
+
 //static uint8_t* stack_temp = NULL;
 
 #define IDLE_TASK_TID MAX_TASKS
